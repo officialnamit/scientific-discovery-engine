@@ -1,18 +1,17 @@
 {
   "id": "H4",
-  "equation": "u_t = D * u_xx + r * u * (1.0 - u / K)",
+  "equation": "u_t = D * u_xx + r * u * (1 - u)",
   "params": {
-    "D": 0.10089311003684998,
-    "r": 0.01741105504333973,
-    "K": 1.4593983888626099
+    "D": 0.09918752312660217,
+    "r": -0.028543656691908836
   },
-  "train_rmse": 0.01140859036306263,
-  "val_rmse": 0.012193039544239314,
-  "ood_obs_rmse": 0.011712124039429036,
-  "physics_residual": 2.9014903702773154e-05,
-  "data_loss": 0.0001301559095736593,
-  "bc_loss": 1.6743616697567631e-06,
-  "ic_loss": 7.020800012469408e-07,
+  "train_rmse": 0.011417081104182172,
+  "val_rmse": 0.012233806447593533,
+  "ood_obs_rmse": 0.011916350492663985,
+  "physics_residual": 4.720877404906787e-05,
+  "data_loss": 0.0001303497119806707,
+  "bc_loss": 2.2037304461264284e-06,
+  "ic_loss": 9.463859100833361e-07,
   "physical_bounds": {
     "passed": true,
     "violations": []
@@ -28,29 +27,27 @@
   "failed_checks": [],
   "status": "supported by the available observations and physics constraints",
   "contributions": {
-    "D": 1.0034118475256635,
-    "r": 0.0050352360834671275,
-    "K": 0.003985819700350026
+    "D": 0.9969598579324174,
+    "r": 0.005781565746659759
   },
   "inactive_parameters": [
-    "r",
-    "K"
+    "r"
   ],
   "reduced_equation_if_inactive_terms_dropped": "-D*u_xx + u_t = 0",
-  "signature": "-_p0*u_xx - 1.0*_p2*u + u_t + _p2*u**2/_p1",
+  "signature": "-_p0*u_xx + _p1*u**2 - _p1*u + u_t",
   "reduced_signature": "-_p0*u_xx + u_t",
   "complexity": {
     "n_terms": 3,
-    "n_free_parameters": 3,
+    "n_free_parameters": 2,
     "max_derivative_order": 2,
     "n_nonlinear_terms": 1,
-    "expression_ops": 8,
-    "complexity_score": 10.8,
-    "rhs_expanded": "D*u_xx + 1.0*r*u - r*u**2/K"
+    "expression_ops": 6,
+    "complexity_score": 9.6,
+    "rhs_expanded": "D*u_xx - r*u**2 + r*u"
   },
-  "bic": -2202.2604924602524,
+  "bic": -2207.4049149499683,
   "n_train": 248,
-  "k_params": 3,
+  "k_params": 2,
   "decision_data": "held-out noisy observations only (no oracle)",
-  "complexity_score": 10.8
+  "complexity_score": 9.6
 }

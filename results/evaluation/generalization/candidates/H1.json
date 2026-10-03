@@ -2,15 +2,15 @@
   "id": "H1",
   "equation": "u_t = D*u_xx",
   "params": {
-    "D": 0.07515005767345428
+    "D": 0.07508827745914459
   },
-  "train_rmse": 0.09033649218735508,
-  "val_rmse": 0.09575517316539446,
-  "ood_obs_rmse": 0.1152629418652047,
-  "physics_residual": 0.0016336605185642838,
-  "data_loss": 0.008160681463778019,
-  "bc_loss": 0.00012530043022707105,
-  "ic_loss": 0.00038418028270825744,
+  "train_rmse": 0.0903223307282119,
+  "val_rmse": 0.09573468576441604,
+  "ood_obs_rmse": 0.11532250034977244,
+  "physics_residual": 0.001633201609365642,
+  "data_loss": 0.00815812312066555,
+  "bc_loss": 0.0001265532773686573,
+  "ic_loss": 0.00038444154779426754,
   "physical_bounds": {
     "passed": true,
     "violations": []
@@ -28,7 +28,7 @@
   ],
   "status": "rejected under the tested conditions",
   "contributions": {
-    "D": 1.0309337535588265
+    "D": 1.0309076851552743
   },
   "inactive_parameters": [],
   "reduced_equation_if_inactive_terms_dropped": null,
@@ -43,7 +43,7 @@
     "complexity_score": 4.1,
     "rhs_expanded": "D*u_xx"
   },
-  "bic": -1172.5634932633895,
+  "bic": -1172.6403133697356,
   "n_train": 245,
   "k_params": 1,
   "decision_data": "held-out noisy observations only (no oracle)",

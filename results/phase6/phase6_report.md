@@ -36,25 +36,25 @@ Trained on t <= 0.8 (train split only). Gate uses the held-out in-distribution s
 
 | ID | Params | Val RMSE | Physics residual | IC loss | Bounds OK | Status | Failed checks |
 |---|---|---|---|---|---|---|---|
-| H1 | D=0.10002 | 0.0121 | 1.44e-05 | 9.94e-07 | True | supported by the available observations and physics constraints | - |
-| H2 | c=0.0089478 | 0.2269 | 8.03e-03 | 2.47e-02 | True | rejected under the tested conditions | val_rmse, ic_loss |
-| H3 | D=0.10098, r=0.023358, K=1.1753 | 0.0122 | 3.21e-05 | 1.11e-06 | True | supported by the available observations and physics constraints | - |
-| H4 | c=-0.00024386, D=0.099951 | 0.0121 | 5.53e-05 | 7.01e-07 | True | supported by the available observations and physics constraints | - |
-| K3 | K=6.6739, r=-1.4357 | 0.1176 | 1.80e-03 | 5.44e-03 | True | rejected under the tested conditions | val_rmse |
+| H1 | D=0.10015 | 0.0122 | 2.22e-05 | 9.01e-07 | True | supported by the available observations and physics constraints | - |
+| H2 | c=0.0082094 | 0.2267 | 7.74e-03 | 2.53e-02 | True | rejected under the tested conditions | val_rmse, ic_loss |
+| H3 | D=0.10076, r=0.018832, K=1.1822 | 0.0121 | 3.05e-05 | 8.50e-07 | True | supported by the available observations and physics constraints | - |
+| H4 | c=-0.0017795, D=0.10002 | 0.0121 | 2.90e-05 | 1.08e-06 | True | supported by the available observations and physics constraints | - |
+| K3 | K=6.9792, r=-1.4332 | 0.1169 | 1.80e-03 | 5.35e-03 | True | rejected under the tested conditions | val_rmse |
 
 ## 7. Model selection
 
 Rule: gate -> val_rmse within 5% of best -> lowest complexity -> lowest BIC.
 
-Best held-out RMSE 0.01214; equivalence cutoff 0.01274; equivalence set ['H1', 'H4', 'H3'].
+Best held-out RMSE 0.01211; equivalence cutoff 0.01271; equivalence set ['H1', 'H4', 'H3'].
 
 | ID | Complexity | BIC | Per-parameter contribution (RMS share of u_t) | Inactive | Reduced form | Bootstrap sign-stable |
 |---|---|---|---|---|---|---|
-| H1 | 4.1 | -2214.6 | D:1.000 | - | - | True |
-| H2 | 3.2 | -806.0 | c:0.260 | - | - | False |
-| H3 | 10.7 | -2204.0 | D:1.004, r:0.006, K:0.007 | ['r', 'K'] | `-D*u_xx + u_t = 0` | True |
-| H4 | 6.3 | -2209.0 | c:0.000, D:1.000 | ['c'] | `-D*u_xx + u_t = 0` | False |
-| K3 | 6.5 | -1012.3 | K:0.109, r:0.998 | - | - | True |
+| H1 | 4.1 | -2214.7 | D:1.000 | - | - | True |
+| H2 | 3.2 | -805.6 | c:0.243 | - | - | False |
+| H3 | 10.7 | -2204.1 | D:1.003, r:0.005, K:0.005 | ['r', 'K'] | `-D*u_xx + u_t = 0` | True |
+| H4 | 6.3 | -2209.1 | c:0.003, D:1.000 | ['c'] | `-D*u_xx + u_t = 0` | False |
+| K3 | 6.5 | -1011.3 | K:0.104, r:0.999 | - | - | True |
 
 **Selected: H1** (`u_t = D*u_xx`). BIC minimizer: H1 (agrees with selection: True).
 
@@ -81,18 +81,18 @@ Held-out observations with t > 0.8 were never used for training or selection.
 
 | Model | In-dist held-out RMSE (noisy obs) | OOD RMSE (noisy obs) | OOD RMSE vs clean field (oracle, eval only) |
 |---|---|---|---|
-| H1 | 0.01214 | 0.01144 | 0.00181 |
-| H2 | 0.22688 | 0.32486 | 0.33371 |
-| H3 | 0.01217 | 0.01210 | 0.00381 |
-| H4 | 0.01214 | 0.01177 | 0.00308 |
-| K3 | 0.11765 | 0.10259 | 0.09853 |
-| MLP_data_only | 0.06089 | 0.07267 | 0.07123 |
-| forward_solve_H1 | nan | 0.01129 | nan |
+| H1 | 0.01215 | 0.01159 | 0.00220 |
+| H2 | 0.22667 | 0.32473 | 0.33177 |
+| H3 | 0.01212 | 0.01200 | 0.00361 |
+| H4 | 0.01211 | 0.01179 | 0.00305 |
+| K3 | 0.11694 | 0.10262 | 0.09899 |
+| MLP_data_only | 0.02139 | 0.01780 | 0.01389 |
+| forward_solve_H1 | nan | 0.01131 | nan |
 
 Noisy-observation RMSE has a floor at the measurement noise (~0.012); the oracle column shows error against the noise-free field.
 
-**Novel prediction** (selected law solved forward from the known IC to t = 1.5, beyond the observed window, using no observations at all): oracle RMSE 0.00033 on (0.8, 1.0] and 0.00025 on (1.0, 1.5].
-Selected-parameter relative error vs hidden truth (oracle): 0.00021205842494959048
+**Novel prediction** (selected law solved forward from the known IC to t = 1.5, beyond the observed window, using no observations at all): oracle RMSE 0.00003 on (0.8, 1.0] and 0.00013 on (1.0, 1.5].
+Selected-parameter relative error vs hidden truth (oracle): 0.0015328228473662775
 
 ![summary](phase6_summary.png)
 

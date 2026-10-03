@@ -33,7 +33,7 @@
       "survives": true
     },
     "H2": {
-      "equation": "u_t = D * u_xx - r * u",
+      "equation": "u_t = D * u_xx - k * u",
       "structural": {
         "id": "H2",
         "valid": true,
@@ -46,7 +46,7 @@
         ],
         "used_params": [
           "D",
-          "r"
+          "k"
         ],
         "dimensional_completeness": 1.0
       },
@@ -61,7 +61,7 @@
             "upper": null,
             "source": "config_fallback"
           },
-          "r": {
+          "k": {
             "lower": null,
             "upper": null,
             "source": "unconstrained"
@@ -72,20 +72,22 @@
       "survives": true
     },
     "H3": {
-      "equation": "u_t + c * u_x = D * u_xx",
+      "equation": "u_t + c * u_x = D * u_xx - gamma * u",
       "structural": {
         "id": "H3",
         "valid": true,
         "errors": [],
         "warnings": [],
         "used_fields": [
+          "u",
           "u_t",
           "u_x",
           "u_xx"
         ],
         "used_params": [
           "c",
-          "D"
+          "D",
+          "gamma"
         ],
         "dimensional_completeness": 1.0
       },
@@ -104,6 +106,11 @@
             "lower": 0.0,
             "upper": null,
             "source": "config_fallback"
+          },
+          "gamma": {
+            "lower": null,
+            "upper": null,
+            "source": "unconstrained"
           }
         },
         "max_spatial_derivative_order": 2
@@ -111,7 +118,7 @@
       "survives": true
     },
     "H4": {
-      "equation": "u_t = D * u_xx + r * u * (1.0 - u / K)",
+      "equation": "u_t = D * u_xx + r * u * (1 - u)",
       "structural": {
         "id": "H4",
         "valid": true,
@@ -124,8 +131,7 @@
         ],
         "used_params": [
           "D",
-          "r",
-          "K"
+          "r"
         ],
         "dimensional_completeness": 1.0
       },
@@ -144,11 +150,6 @@
             "lower": null,
             "upper": null,
             "source": "unconstrained"
-          },
-          "K": {
-            "lower": 0.0,
-            "upper": null,
-            "source": "config_fallback"
           }
         },
         "max_spatial_derivative_order": 2

@@ -72,7 +72,7 @@
   "llm_candidates": [
     {
       "id": "H1",
-      "name": "Pure Diffusion Model",
+      "name": "Pure Linear Diffusion",
       "domain": "1D scalar-field transport/reaction",
       "equation": "u_t = D * u_xx",
       "latex": "\\frac{\\partial u}{\\partial t} = D \\frac{\\partial^2 u}{\\partial x^2}",
@@ -86,7 +86,7 @@
       "parameters": [
         {
           "name": "D",
-          "description": "Diffusion coefficient governing spatial spreading and amplitude decay",
+          "description": "Diffusion coefficient governing the rate of spatial smoothing and amplitude decay",
           "trainable": true,
           "initial_value": 0.05,
           "units": "m^2/s",
@@ -101,25 +101,25 @@
       "required_initial_conditions": true,
       "required_boundary_conditions": true,
       "assumptions": [
-        "The medium is isotropic and homogeneous",
-        "No advection or bulk translation is present",
-        "No active local reaction or source/sink terms are present",
-        "Boundary values remain near zero"
+        "Medium is isotropic and homogeneous",
+        "No active advection or bulk flow is present",
+        "No internal source or decay reaction terms operate independently of spatial gradients",
+        "Zero Dirichlet boundary conditions apply at domain edges"
       ],
-      "mechanism": "Diffusion, which smooths fine spatial structures, causes amplitude decay over time, and preserves spatial center of mass without strong bulk translation.",
-      "rationale": "Observations show significant amplitude decay from 0.983 to 0.395, smoothing of fine spatial structure into a simpler profile, and minimal bulk translation of the spatial centroid (shifting only from ~0.53 to ~0.41), while boundaries remain near zero. This aligns qualitatively with a diffusive decay process.",
+      "mechanism": "Diffusion spreads spatial concentrations outward, smoothing fine-grained structures and reducing peak amplitude over time while keeping the center of mass relatively stable.",
+      "rationale": "Observations show significant peak amplitude decay (0.983 to 0.395), smoothing of fine-grained spatial structure over time, and minimal bulk translation of the centroid (moving only slightly from 0.53 to 0.41), which is characteristic of diffusive spreading with near-zero boundary values.",
       "testable_predictions": [
-        "The peak amplitude will decay monotonically over time following a power law or exponential decay characteristic of 1D heat equations.",
-        "Higher-order spatial frequency components will dissipate faster than lower-order components."
+        "The total integral of u(x,t) over x should remain approximately conserved if boundary losses are negligible.",
+        "Higher spatial frequency components of u will decay faster than lower frequency components."
       ],
       "confidence": 0.85
     },
     {
       "id": "H2",
-      "name": "Reaction-Diffusion Model with Decay",
+      "name": "Reaction-Diffusion with Linear Decay",
       "domain": "1D scalar-field transport/reaction",
-      "equation": "u_t = D * u_xx - r * u",
-      "latex": "\\frac{\\partial u}{\\partial t} = D \\frac{\\partial^2 u}{\\partial x^2} - r u",
+      "equation": "u_t = D * u_xx - k * u",
+      "latex": "\\frac{\\partial u}{\\partial t} = D \\frac{\\partial^2 u}{\\partial x^2} - k u",
       "dependent_variables": [
         "u"
       ],
@@ -138,8 +138,8 @@
           "upper_bound": null
         },
         {
-          "name": "r",
-          "description": "Linear decay or absorption rate",
+          "name": "k",
+          "description": "Linear decay or absorption rate constant",
           "trainable": true,
           "initial_value": 0.5,
           "units": "1/s",
@@ -154,24 +154,24 @@
       "required_initial_conditions": true,
       "required_boundary_conditions": true,
       "assumptions": [
-        "Diffusion acts concurrently with a first-order decay reaction",
-        "No significant advective transport",
+        "Scalar field undergoes simultaneous diffusive spreading and exponential local decay",
+        "Decay rate is directly proportional to local field amplitude",
         "Boundary values remain near zero"
       ],
-      "mechanism": "Combined diffusion and linear exponential decay, accounting for both spatial smoothing and accelerated overall amplitude reduction beyond what diffusion alone might cause.",
-      "rationale": "While pure diffusion smooths and lowers amplitude, a combined reaction term allows independent control over the rate of total mass/amplitude loss versus spatial spreading.",
+      "mechanism": "Combines spatial smoothing via second-order derivatives with an exponential amplitude reduction via a linear sink term.",
+      "rationale": "While pure diffusion explains smoothing and amplitude decrease, the rapid drop in peak amplitude from 0.983 to 0.395 coupled with fixed low boundary values may be accelerated by a distributed volume-absorption or decay mechanism.",
       "testable_predictions": [
-        "The total integral of u across the domain will decay exponentially faster than under pure diffusion.",
-        "Spatial variance expansion will be constrained by the decay term."
+        "Total integrated mass of u over the domain will decay faster than expected from diffusion alone due to the volume sink term.",
+        "Logarithmic peak amplitude should decrease approximately linearly with time if diffusion effects become secondary."
       ],
-      "confidence": 0.75
+      "confidence": 0.7
     },
     {
       "id": "H3",
-      "name": "Advection-Diffusion Model",
+      "name": "Advection-Diffusion with Damping",
       "domain": "1D scalar-field transport/reaction",
-      "equation": "u_t + c * u_x = D * u_xx",
-      "latex": "\\frac{\\partial u}{\\partial t} + c \\frac{\\partial u}{\\partial x} = D \\frac{\\partial^2 u}{\\partial x^2}",
+      "equation": "u_t + c * u_x = D * u_xx - gamma * u",
+      "latex": "\\frac{\\partial u}{\\partial t} + c \\frac{\\partial u}{\\partial x} = D \\frac{\\partial^2 u}{\\partial x^2} - \\gamma u",
       "dependent_variables": [
         "u"
       ],
@@ -182,7 +182,7 @@
       "parameters": [
         {
           "name": "c",
-          "description": "Constant advective transport velocity",
+          "description": "Advection velocity",
           "trainable": true,
           "initial_value": -0.1,
           "units": "m/s",
@@ -197,6 +197,15 @@
           "units": "m^2/s",
           "lower_bound": null,
           "upper_bound": null
+        },
+        {
+          "name": "gamma",
+          "description": "Damping coefficient",
+          "trainable": true,
+          "initial_value": 0.4,
+          "units": "1/s",
+          "lower_bound": null,
+          "upper_bound": null
         }
       ],
       "required_derivatives": [
@@ -207,24 +216,24 @@
       "required_initial_conditions": true,
       "required_boundary_conditions": true,
       "assumptions": [
-        "Medium exhibits uniform directional flow at velocity c",
-        "Diffusion is isotropic",
-        "No internal source or sink terms"
+        "Constant transport velocity exists across the domain",
+        "Medium exhibits both diffusion and bulk damping",
+        "Boundary constraints are maintained"
       ],
-      "mechanism": "Simultaneous transport of the scalar field by a constant velocity field and spreading via diffusion.",
-      "rationale": "Although the centroid only shifts slightly from 0.53 to 0.41 over a long time window, a small advection velocity coupled with diffusion could explain both the minor drift and the amplitude reduction due to boundary leakage or spreading.",
+      "mechanism": "Field undergoes simultaneous directional drift (advection), spatial spreading (diffusion), and overall amplitude shrinkage (damping).",
+      "rationale": "The centroid shifts slightly from 0.53 to 0.41 over the time window, which could indicate a weak advective velocity component combined with diffusive smoothing and amplitude decay.",
       "testable_predictions": [
-        "Asymmetric spreading of the wavepacket over time.",
-        "Centroid drift rate will remain strictly constant proportional to c."
+        "Asymmetry will develop in the spatial profile over time due to the combined advection and diffusion terms.",
+        "The centroid shift rate will remain constant proportional to the advection velocity c."
       ],
       "confidence": 0.5
     },
     {
       "id": "H4",
-      "name": "Damped Fisher-KPP Type Reaction-Diffusion Model",
+      "name": "Nonlinear Fisher-KPP Type Reaction-Diffusion",
       "domain": "1D scalar-field transport/reaction",
-      "equation": "u_t = D * u_xx + r * u * (1.0 - u / K)",
-      "latex": "\\frac{\\partial u}{\\partial t} = D \\frac{\\partial^2 u}{\\partial x^2} + r u \\left(1 - \\frac{u}{K}\\right)",
+      "equation": "u_t = D * u_xx + r * u * (1 - u)",
+      "latex": "\\frac{\\partial u}{\\partial t} = D \\frac{\\partial^2 u}{\\partial x^2} + r u (1 - u)",
       "dependent_variables": [
         "u"
       ],
@@ -237,7 +246,7 @@
           "name": "D",
           "description": "Diffusion coefficient",
           "trainable": true,
-          "initial_value": 0.02,
+          "initial_value": 0.04,
           "units": "m^2/s",
           "lower_bound": null,
           "upper_bound": null
@@ -246,17 +255,8 @@
           "name": "r",
           "description": "Reaction rate parameter",
           "trainable": true,
-          "initial_value": 0.1,
+          "initial_value": -0.5,
           "units": "1/s",
-          "lower_bound": null,
-          "upper_bound": null
-        },
-        {
-          "name": "K",
-          "description": "Carrying capacity or saturation parameter",
-          "trainable": true,
-          "initial_value": 1.0,
-          "units": "1",
           "lower_bound": null,
           "upper_bound": null
         }
@@ -268,15 +268,15 @@
       "required_initial_conditions": true,
       "required_boundary_conditions": true,
       "assumptions": [
-        "Nonlinear local growth or decay kinetics governed by logistic-type feedback",
-        "Isotropic spatial diffusion",
-        "Zero-flux or absorbing boundaries near domain edges"
+        "Nonlinear self-interaction reaction dynamics govern local growth or decay",
+        "Carrying capacity normalization is embedded in the reaction term",
+        "Diffusion acts alongside the local reaction"
       ],
-      "mechanism": "Nonlinear reaction-diffusion where local amplitude dynamics interact with spatial diffusion, capable of stabilizing or reshaping localized structures.",
-      "rationale": "Given that the amplitude drops from near 1.0 to ~0.4, a nonlinear reaction term that drives the field toward an equilibrium (or decays when above/below certain thresholds) combined with diffusion provides a structurally rich alternative to linear models.",
+      "mechanism": "Combines diffusive spatial smoothing with a nonlinear reaction polynomial that alters the rate of amplitude change depending on current field values.",
+      "rationale": "The observed drop in amplitude from near 1.0 to approximately 0.4 might follow nonlinear dynamics where high-amplitude states decay or adjust non-exponentially while spatial structures smooth out.",
       "testable_predictions": [
-        "Non-exponential decay rates where the rate of amplitude decrease changes non-linearly as u approaches specific intermediate values.",
-        "Self-regularization of steep gradients."
+        "The rate of amplitude decay will vary non-linearly with respect to the local magnitude of u.",
+        "Spatial profile steepness will evolve differently compared to linear diffusion due to the nonlinear reaction feedback."
       ],
       "confidence": 0.4
     }
@@ -414,7 +414,7 @@
       "equation": "u_t = D * u_xx",
       "hypothesis": {
         "id": "H1",
-        "name": "Pure Diffusion Model",
+        "name": "Pure Linear Diffusion",
         "domain": "1D scalar-field transport/reaction",
         "equation": "u_t = D * u_xx",
         "latex": "\\frac{\\partial u}{\\partial t} = D \\frac{\\partial^2 u}{\\partial x^2}",
@@ -428,7 +428,7 @@
         "parameters": [
           {
             "name": "D",
-            "description": "Diffusion coefficient governing spatial spreading and amplitude decay",
+            "description": "Diffusion coefficient governing the rate of spatial smoothing and amplitude decay",
             "trainable": true,
             "initial_value": 0.05,
             "units": "m^2/s",
@@ -443,16 +443,16 @@
         "required_initial_conditions": true,
         "required_boundary_conditions": true,
         "assumptions": [
-          "The medium is isotropic and homogeneous",
-          "No advection or bulk translation is present",
-          "No active local reaction or source/sink terms are present",
-          "Boundary values remain near zero"
+          "Medium is isotropic and homogeneous",
+          "No active advection or bulk flow is present",
+          "No internal source or decay reaction terms operate independently of spatial gradients",
+          "Zero Dirichlet boundary conditions apply at domain edges"
         ],
-        "mechanism": "Diffusion, which smooths fine spatial structures, causes amplitude decay over time, and preserves spatial center of mass without strong bulk translation.",
-        "rationale": "Observations show significant amplitude decay from 0.983 to 0.395, smoothing of fine spatial structure into a simpler profile, and minimal bulk translation of the spatial centroid (shifting only from ~0.53 to ~0.41), while boundaries remain near zero. This aligns qualitatively with a diffusive decay process.",
+        "mechanism": "Diffusion spreads spatial concentrations outward, smoothing fine-grained structures and reducing peak amplitude over time while keeping the center of mass relatively stable.",
+        "rationale": "Observations show significant peak amplitude decay (0.983 to 0.395), smoothing of fine-grained spatial structure over time, and minimal bulk translation of the centroid (moving only slightly from 0.53 to 0.41), which is characteristic of diffusive spreading with near-zero boundary values.",
         "testable_predictions": [
-          "The peak amplitude will decay monotonically over time following a power law or exponential decay characteristic of 1D heat equations.",
-          "Higher-order spatial frequency components will dissipate faster than lower-order components."
+          "The total integral of u(x,t) over x should remain approximately conserved if boundary losses are negligible.",
+          "Higher spatial frequency components of u will decay faster than lower frequency components."
         ],
         "confidence": 0.85
       }
@@ -460,13 +460,13 @@
     {
       "id": "H2",
       "origin": "llm",
-      "equation": "u_t = D * u_xx - r * u",
+      "equation": "u_t = D * u_xx - k * u",
       "hypothesis": {
         "id": "H2",
-        "name": "Reaction-Diffusion Model with Decay",
+        "name": "Reaction-Diffusion with Linear Decay",
         "domain": "1D scalar-field transport/reaction",
-        "equation": "u_t = D * u_xx - r * u",
-        "latex": "\\frac{\\partial u}{\\partial t} = D \\frac{\\partial^2 u}{\\partial x^2} - r u",
+        "equation": "u_t = D * u_xx - k * u",
+        "latex": "\\frac{\\partial u}{\\partial t} = D \\frac{\\partial^2 u}{\\partial x^2} - k u",
         "dependent_variables": [
           "u"
         ],
@@ -485,8 +485,8 @@
             "upper_bound": null
           },
           {
-            "name": "r",
-            "description": "Linear decay or absorption rate",
+            "name": "k",
+            "description": "Linear decay or absorption rate constant",
             "trainable": true,
             "initial_value": 0.5,
             "units": "1/s",
@@ -501,29 +501,29 @@
         "required_initial_conditions": true,
         "required_boundary_conditions": true,
         "assumptions": [
-          "Diffusion acts concurrently with a first-order decay reaction",
-          "No significant advective transport",
+          "Scalar field undergoes simultaneous diffusive spreading and exponential local decay",
+          "Decay rate is directly proportional to local field amplitude",
           "Boundary values remain near zero"
         ],
-        "mechanism": "Combined diffusion and linear exponential decay, accounting for both spatial smoothing and accelerated overall amplitude reduction beyond what diffusion alone might cause.",
-        "rationale": "While pure diffusion smooths and lowers amplitude, a combined reaction term allows independent control over the rate of total mass/amplitude loss versus spatial spreading.",
+        "mechanism": "Combines spatial smoothing via second-order derivatives with an exponential amplitude reduction via a linear sink term.",
+        "rationale": "While pure diffusion explains smoothing and amplitude decrease, the rapid drop in peak amplitude from 0.983 to 0.395 coupled with fixed low boundary values may be accelerated by a distributed volume-absorption or decay mechanism.",
         "testable_predictions": [
-          "The total integral of u across the domain will decay exponentially faster than under pure diffusion.",
-          "Spatial variance expansion will be constrained by the decay term."
+          "Total integrated mass of u over the domain will decay faster than expected from diffusion alone due to the volume sink term.",
+          "Logarithmic peak amplitude should decrease approximately linearly with time if diffusion effects become secondary."
         ],
-        "confidence": 0.75
+        "confidence": 0.7
       }
     },
     {
       "id": "H3",
       "origin": "llm",
-      "equation": "u_t + c * u_x = D * u_xx",
+      "equation": "u_t + c * u_x = D * u_xx - gamma * u",
       "hypothesis": {
         "id": "H3",
-        "name": "Advection-Diffusion Model",
+        "name": "Advection-Diffusion with Damping",
         "domain": "1D scalar-field transport/reaction",
-        "equation": "u_t + c * u_x = D * u_xx",
-        "latex": "\\frac{\\partial u}{\\partial t} + c \\frac{\\partial u}{\\partial x} = D \\frac{\\partial^2 u}{\\partial x^2}",
+        "equation": "u_t + c * u_x = D * u_xx - gamma * u",
+        "latex": "\\frac{\\partial u}{\\partial t} + c \\frac{\\partial u}{\\partial x} = D \\frac{\\partial^2 u}{\\partial x^2} - \\gamma u",
         "dependent_variables": [
           "u"
         ],
@@ -534,7 +534,7 @@
         "parameters": [
           {
             "name": "c",
-            "description": "Constant advective transport velocity",
+            "description": "Advection velocity",
             "trainable": true,
             "initial_value": -0.1,
             "units": "m/s",
@@ -549,6 +549,15 @@
             "units": "m^2/s",
             "lower_bound": null,
             "upper_bound": null
+          },
+          {
+            "name": "gamma",
+            "description": "Damping coefficient",
+            "trainable": true,
+            "initial_value": 0.4,
+            "units": "1/s",
+            "lower_bound": null,
+            "upper_bound": null
           }
         ],
         "required_derivatives": [
@@ -559,15 +568,15 @@
         "required_initial_conditions": true,
         "required_boundary_conditions": true,
         "assumptions": [
-          "Medium exhibits uniform directional flow at velocity c",
-          "Diffusion is isotropic",
-          "No internal source or sink terms"
+          "Constant transport velocity exists across the domain",
+          "Medium exhibits both diffusion and bulk damping",
+          "Boundary constraints are maintained"
         ],
-        "mechanism": "Simultaneous transport of the scalar field by a constant velocity field and spreading via diffusion.",
-        "rationale": "Although the centroid only shifts slightly from 0.53 to 0.41 over a long time window, a small advection velocity coupled with diffusion could explain both the minor drift and the amplitude reduction due to boundary leakage or spreading.",
+        "mechanism": "Field undergoes simultaneous directional drift (advection), spatial spreading (diffusion), and overall amplitude shrinkage (damping).",
+        "rationale": "The centroid shifts slightly from 0.53 to 0.41 over the time window, which could indicate a weak advective velocity component combined with diffusive smoothing and amplitude decay.",
         "testable_predictions": [
-          "Asymmetric spreading of the wavepacket over time.",
-          "Centroid drift rate will remain strictly constant proportional to c."
+          "Asymmetry will develop in the spatial profile over time due to the combined advection and diffusion terms.",
+          "The centroid shift rate will remain constant proportional to the advection velocity c."
         ],
         "confidence": 0.5
       }
@@ -575,13 +584,13 @@
     {
       "id": "H4",
       "origin": "llm",
-      "equation": "u_t = D * u_xx + r * u * (1.0 - u / K)",
+      "equation": "u_t = D * u_xx + r * u * (1 - u)",
       "hypothesis": {
         "id": "H4",
-        "name": "Damped Fisher-KPP Type Reaction-Diffusion Model",
+        "name": "Nonlinear Fisher-KPP Type Reaction-Diffusion",
         "domain": "1D scalar-field transport/reaction",
-        "equation": "u_t = D * u_xx + r * u * (1.0 - u / K)",
-        "latex": "\\frac{\\partial u}{\\partial t} = D \\frac{\\partial^2 u}{\\partial x^2} + r u \\left(1 - \\frac{u}{K}\\right)",
+        "equation": "u_t = D * u_xx + r * u * (1 - u)",
+        "latex": "\\frac{\\partial u}{\\partial t} = D \\frac{\\partial^2 u}{\\partial x^2} + r u (1 - u)",
         "dependent_variables": [
           "u"
         ],
@@ -594,7 +603,7 @@
             "name": "D",
             "description": "Diffusion coefficient",
             "trainable": true,
-            "initial_value": 0.02,
+            "initial_value": 0.04,
             "units": "m^2/s",
             "lower_bound": null,
             "upper_bound": null
@@ -603,17 +612,8 @@
             "name": "r",
             "description": "Reaction rate parameter",
             "trainable": true,
-            "initial_value": 0.1,
+            "initial_value": -0.5,
             "units": "1/s",
-            "lower_bound": null,
-            "upper_bound": null
-          },
-          {
-            "name": "K",
-            "description": "Carrying capacity or saturation parameter",
-            "trainable": true,
-            "initial_value": 1.0,
-            "units": "1",
             "lower_bound": null,
             "upper_bound": null
           }
@@ -625,15 +625,15 @@
         "required_initial_conditions": true,
         "required_boundary_conditions": true,
         "assumptions": [
-          "Nonlinear local growth or decay kinetics governed by logistic-type feedback",
-          "Isotropic spatial diffusion",
-          "Zero-flux or absorbing boundaries near domain edges"
+          "Nonlinear self-interaction reaction dynamics govern local growth or decay",
+          "Carrying capacity normalization is embedded in the reaction term",
+          "Diffusion acts alongside the local reaction"
         ],
-        "mechanism": "Nonlinear reaction-diffusion where local amplitude dynamics interact with spatial diffusion, capable of stabilizing or reshaping localized structures.",
-        "rationale": "Given that the amplitude drops from near 1.0 to ~0.4, a nonlinear reaction term that drives the field toward an equilibrium (or decays when above/below certain thresholds) combined with diffusion provides a structurally rich alternative to linear models.",
+        "mechanism": "Combines diffusive spatial smoothing with a nonlinear reaction polynomial that alters the rate of amplitude change depending on current field values.",
+        "rationale": "The observed drop in amplitude from near 1.0 to approximately 0.4 might follow nonlinear dynamics where high-amplitude states decay or adjust non-exponentially while spatial structures smooth out.",
         "testable_predictions": [
-          "Non-exponential decay rates where the rate of amplitude decrease changes non-linearly as u approaches specific intermediate values.",
-          "Self-regularization of steep gradients."
+          "The rate of amplitude decay will vary non-linearly with respect to the local magnitude of u.",
+          "Spatial profile steepness will evolve differently compared to linear diffusion due to the nonlinear reaction feedback."
         ],
         "confidence": 0.4
       }

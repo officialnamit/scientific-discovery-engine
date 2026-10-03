@@ -19,7 +19,7 @@
     {
       "id": "H2",
       "inactive_parameters": [
-        "r"
+        "k"
       ],
       "role": "fits equivalently but is more complex",
       "reduces_to_selected": true
@@ -27,7 +27,8 @@
     {
       "id": "H3",
       "inactive_parameters": [
-        "c"
+        "c",
+        "gamma"
       ],
       "role": "fits equivalently but is more complex",
       "reduces_to_selected": true
@@ -35,8 +36,7 @@
     {
       "id": "H4",
       "inactive_parameters": [
-        "r",
-        "K"
+        "r"
       ],
       "role": "fits equivalently but is more complex",
       "reduces_to_selected": true
@@ -79,14 +79,19 @@
     "H3": {
       "monomials": {
         "u_xx": {
-          "mean": 0.11046638293105877,
-          "std": 0.0030720145824096132,
+          "mean": 0.11382991877437014,
+          "std": 0.003507155343122587,
           "sign_consistency": 1.0
         },
         "u_x": {
-          "mean": 0.008768405030751915,
-          "std": 0.02836110366386941,
+          "mean": 0.009349398702325007,
+          "std": 0.028465409367769118,
           "sign_consistency": 0.8
+        },
+        "u": {
+          "mean": 0.04389187098404354,
+          "std": 0.04372545484600235,
+          "sign_consistency": 0.85
         }
       },
       "n_boot": 20,

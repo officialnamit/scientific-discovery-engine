@@ -4,22 +4,22 @@
     "equation": "u_t = D*u_xx",
     "status": "supported by the available observations and physics constraints",
     "failed_checks": [],
-    "data_loss": 0.0001336091518169269,
-    "physics_residual": 8.240946772275493e-05,
-    "bc_loss": 2.400620360276662e-06,
-    "ic_loss": 8.415569823227997e-07,
-    "prediction_error": 0.0007813746588225919,
-    "ood_error": 0.0011457113266615199,
+    "data_loss": 0.00013357521675061435,
+    "physics_residual": 7.47517915442586e-05,
+    "bc_loss": 2.615033963593305e-06,
+    "ic_loss": 5.169196128917974e-07,
+    "prediction_error": 0.0007041422978949937,
+    "ood_error": 0.0011493099192055583,
     "parameter_estimate": {
-      "D": 0.09987153112888336
+      "D": 0.09987612813711166
     },
     "parameter_true": {
       "D": 0.1
     },
     "parameter_error": {
       "D": {
-        "absolute_error": 0.00012846887111664373,
-        "relative_error": 0.0012846887111664373
+        "absolute_error": 0.00012387186288834173,
+        "relative_error": 0.0012387186288834173
       }
     },
     "thresholds_used": {
@@ -29,8 +29,8 @@
       "ic_loss_max": 0.01,
       "prediction_error_max": 0.1
     },
-    "in_distribution_rmse": 0.0007813746588225919,
-    "ood_rmse": 0.0011457113266615199
+    "in_distribution_rmse": 0.0007041422978949937,
+    "ood_rmse": 0.0011493099192055583
   },
   "H2_advection": {
     "hypothesis": "H2_advection",
@@ -41,14 +41,14 @@
       "ic_loss",
       "prediction_error"
     ],
-    "data_loss": 0.037753600627183914,
-    "physics_residual": 0.004988372791558504,
-    "bc_loss": 1.6159336155396886e-05,
-    "ic_loss": 0.025152698159217834,
-    "prediction_error": 0.20032978495365808,
-    "ood_error": 0.33145123702889207,
+    "data_loss": 0.03752290830016136,
+    "physics_residual": 0.005191825330257416,
+    "bc_loss": 3.407384610909503e-06,
+    "ic_loss": 0.025000067427754402,
+    "prediction_error": 0.2007265452383705,
+    "ood_error": 0.334180048740711,
     "parameter_estimate": {
-      "c": -0.0011870723683387041
+      "c": -0.0021663138177245855
     },
     "parameter_true": null,
     "parameter_error": null,
@@ -59,7 +59,7 @@
       "ic_loss_max": 0.01,
       "prediction_error_max": 0.1
     },
-    "in_distribution_rmse": 0.20032978495365808,
-    "ood_rmse": 0.33145123702889207
+    "in_distribution_rmse": 0.2007265452383705,
+    "ood_rmse": 0.334180048740711
   }
 }

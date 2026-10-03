@@ -1,4 +1,4 @@
-% flowchart 'selection' -- shared by project_guide.tex and submission_report.tex
+% flowchart 'selection' -- used by docs/Report.tex
 \begin{tikzpicture}[node distance=5mm and 9mm]
   \node[io] (in) {trained candidates (val RMSE, losses, bounds, contributions, complexity, BIC)};
   \node[dec=cVal, below=of in] (g) {gate passed?\\{\tiny val RMSE $\le 0.03$, physics,}\\{\tiny BC, IC, bounds}};

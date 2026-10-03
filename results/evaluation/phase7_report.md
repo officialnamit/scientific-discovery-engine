@@ -51,7 +51,7 @@ Both failures come from top-1 retrieval returning plain 'advection' for observat
 | A08 | incorrect candidate | prose -> 0 candidates; invalid item dropped, valid kept | `{"prose_candidates": 0, "kept": ["G1"]}` | PASS |
 | A09 | degenerate equation | identifiability diagnostic flags u vs u_xx as indistinguishable | `{"max_abs_correlation": 1.0, "pair": ["u", "u_xx"]}` | PASS |
 | A10 | degenerate equation / nested model | diffusion selected; reaction terms reported inactive | `{"original_rule": "reaction-diffusion", "revised_rule": "diffusion", "reduction": {"from": "H3", "to": "H1", "` | PASS |
-| A11 | nested models | diffusion selected; nesting candidates may be supported but not selected | `{"selected": "diffusion", "nesting_candidates_supported": 1}` | PASS |
+| A11 | nested models | diffusion selected; nesting candidates may be supported but not selected | `{"selected": "diffusion", "nesting_candidates_supported": 2}` | PASS |
 | A12 | model-selection failure | full system selects advection-diffusion (not the simpler advection SINDy reports) | `{"sindy_alone": "advection", "full_system": "advection-diffusion"}` | PASS |
 | A13 | nested models | parsimony does NOT override fit: diffusion fails the gate, reaction-diffusion selected | `{"selected": "reaction-diffusion", "diffusion_gate": false, "diffusion_rel_err": 0.851}` | PASS |
 | A14 | incorrect candidate | diffusion rejected by the gate; advection selected | `{"selected": "advection", "diffusion_rel_err": 1.0, "diffusion_gate": false}` | PASS |
@@ -68,13 +68,13 @@ Both failures come from top-1 retrieval returning plain 'advection' for observat
 
 | Arm | Correct model | By family | Wrong candidates rejected | Params within 5% | Median held-out rel. error | Median OOD rel. RMSE | OOD within 5% | Runtime/dataset |
 |---|---|---|---|---|---|---|---|---|
-| discovery_only | 0.67 | {'advection': '3/3', 'advection-diffusion': '0/3', 'diffusion': '3/3', 'reaction-diffusion': '2/3'} | - | 0.67 | 0.0028 | 0.0133 | 0.50 | 0.26s |
-| rag_generation | 0.25 | {'advection': '0/3', 'advection-diffusion': '0/3', 'diffusion': '3/3', 'reaction-diffusion': '0/3'} | 0.00 | 0.25 | 0.8791 | 1.0465 | 0.25 | 0.20s |
-| rag_kg_generation | 0.25 | {'advection': '0/3', 'advection-diffusion': '0/3', 'diffusion': '3/3', 'reaction-diffusion': '0/3'} | 0.00 | 0.25 | 0.8791 | 1.0465 | 0.25 | 0.18s |
-| full_system | 1.00 | {'advection': '3/3', 'advection-diffusion': '3/3', 'diffusion': '3/3', 'reaction-diffusion': '3/3'} | 1.00 | 1.00 | 0.0025 | 0.0041 | 1.00 | 0.18s |
-| full_system_phase6_rule | 0.83 | {'advection': '3/3', 'advection-diffusion': '3/3', 'diffusion': '1/3', 'reaction-diffusion': '3/3'} | 1.00 | 0.83 | 0.0025 | 0.0040 | 1.00 | 0.19s |
-| full_without_llm | 1.00 | {'advection': '3/3', 'advection-diffusion': '3/3', 'diffusion': '3/3', 'reaction-diffusion': '3/3'} | 1.00 | 1.00 | 0.0025 | 0.0041 | 1.00 | 0.15s |
-| rag_validation_no_kg_no_llm | 1.00 | {'advection': '3/3', 'advection-diffusion': '3/3', 'diffusion': '3/3', 'reaction-diffusion': '3/3'} | 1.00 | 1.00 | 0.0025 | 0.0041 | 1.00 | 0.13s |
+| discovery_only | 0.67 | {'advection': '3/3', 'advection-diffusion': '0/3', 'diffusion': '3/3', 'reaction-diffusion': '2/3'} | - | 0.67 | 0.0028 | 0.0133 | 0.50 | 0.14s |
+| rag_generation | 0.25 | {'advection': '0/3', 'advection-diffusion': '0/3', 'diffusion': '3/3', 'reaction-diffusion': '0/3'} | 0.00 | 0.25 | 0.8791 | 1.0465 | 0.25 | 0.10s |
+| rag_kg_generation | 0.25 | {'advection': '0/3', 'advection-diffusion': '0/3', 'diffusion': '3/3', 'reaction-diffusion': '0/3'} | 0.00 | 0.25 | 0.8791 | 1.0465 | 0.25 | 0.10s |
+| full_system | 1.00 | {'advection': '3/3', 'advection-diffusion': '3/3', 'diffusion': '3/3', 'reaction-diffusion': '3/3'} | 1.00 | 1.00 | 0.0025 | 0.0041 | 1.00 | 0.10s |
+| full_system_phase6_rule | 0.83 | {'advection': '3/3', 'advection-diffusion': '3/3', 'diffusion': '1/3', 'reaction-diffusion': '3/3'} | 1.00 | 0.83 | 0.0018 | 0.0027 | 1.00 | 0.10s |
+| full_without_llm | 1.00 | {'advection': '3/3', 'advection-diffusion': '3/3', 'diffusion': '3/3', 'reaction-diffusion': '3/3'} | 1.00 | 1.00 | 0.0025 | 0.0041 | 1.00 | 0.07s |
+| rag_validation_no_kg_no_llm | 1.00 | {'advection': '3/3', 'advection-diffusion': '3/3', 'diffusion': '3/3', 'reaction-diffusion': '3/3'} | 1.00 | 1.00 | 0.0025 | 0.0041 | 1.00 | 0.07s |
 
 Without validation, arms 2-3 select `{'diffusion'}` for every dataset: generation alone repeats the top-ranked prior. Equation discovery alone (SINDy) misses all 3 advection-diffusion systems (its threshold drops the small real u_xx term) and one reaction-diffusion system. `full_without_llm` and `rag_validation_no_kg_no_llm` match the full system exactly: on this corpus the decisive ingredients are (a) a pool containing the true structure -- retrieved evidence alone supplies it -- and (b) physics validation + selection. The KG's demonstrated value is structured multi-hop querying and provenance (section 2), not discovery accuracy. The revised selection rule changes 2 of 12 outcomes (both diffusion datasets).
 
@@ -84,13 +84,13 @@ Hidden truth `u_t + c*u_x = D*u_xx`, c=0.4, D=0.02, x in [0,1.5]; 400 random poi
 
 | Candidate | Fitted params | Held-out RMSE | Status | OOD RMSE (noisy obs) | OOD RMSE vs clean (oracle) |
 |---|---|---|---|---|---|
-| H1 `u_t = D*u_xx` | D=0.07515 | 0.0958 | rejected under the tested conditions | 0.1153 | 0.1110 |
-| H2 `u_t + c*u_x = 0` | c=0.3685 | 0.0635 | rejected under the tested conditions | 0.1120 | 0.1127 |
-| H3 `u_t = D*u_xx + r*u*(1 - u/K)` | D=0.1171, r=1.217, K=1.439 | 0.0841 | rejected under the tested conditions | 0.1006 | 0.0946 |
-| H4 `u_t + c*u_x = D*u_xx` | c=0.399, D=0.02008 | 0.0099 | supported by the available observations and physics constraints | 0.0096 | 0.0010 |
-| data-only MLP | - | 0.0124 | - | 0.0119 | 0.0068 |
+| H1 `u_t = D*u_xx` | D=0.07509 | 0.0957 | rejected under the tested conditions | 0.1153 | 0.1110 |
+| H2 `u_t + c*u_x = 0` | c=0.3863 | 0.0694 | rejected under the tested conditions | 0.1122 | 0.1110 |
+| H3 `u_t = D*u_xx + r*u*(1 - u/K)` | D=0.1174, r=1.224, K=1.432 | 0.0841 | rejected under the tested conditions | 0.1007 | 0.0947 |
+| H4 `u_t + c*u_x = D*u_xx` | c=0.3984, D=0.01979 | 0.0100 | supported by the available observations and physics constraints | 0.0094 | 0.0013 |
+| data-only MLP | - | 0.0125 | - | 0.0119 | 0.0066 |
 
-Selected: **H4 (advection-diffusion)** under the revised rule and **H4** under the original rule. Parameter errors (oracle): {'c': '0.26%', 'D': '0.40%'}. Novel prediction (selected law solved to t=1.3 from the IC, no observations): relative RMSE 0.58%. SINDy on the same noisy data returned a spurious equation (see generalization/prepare.json).
+Selected: **H4 (advection-diffusion)** under the revised rule and **H4** under the original rule. Parameter errors (oracle): {'c': '0.40%', 'D': '1.04%'}. Novel prediction (selected law solved to t=1.3 from the IC, no observations): relative RMSE 0.89%. SINDy on the same noisy data returned a spurious equation (see generalization/prepare.json).
 
 ## 6. Leakage and reproducibility
 

@@ -15,9 +15,9 @@ Answer-leakage check (D_true string in corpus): none found
 | ID | Origin | Equation |
 |---|---|---|
 | H1 | llm | `u_t = D * u_xx` |
-| H2 | llm | `u_t = D * u_xx - r * u` |
-| H3 | llm | `u_t + c * u_x = D * u_xx` |
-| H4 | llm | `u_t = D * u_xx + r * u * (1.0 - u / K)` |
+| H2 | llm | `u_t = D * u_xx - k * u` |
+| H3 | llm | `u_t + c * u_x = D * u_xx - gamma * u` |
+| H4 | llm | `u_t = D * u_xx + r * u * (1 - u)` |
 | K1 | kg_template | `u_t + c*u_x = 0` |
 | K3 | kg_template | `u_t = r*u*(1-u/K)` |
 
@@ -41,9 +41,9 @@ Trained on t <= 0.8 (train split only). Gate uses the held-out in-distribution s
 | ID | Params | Val RMSE | Physics residual | IC loss | Bounds OK | Status | Failed checks |
 |---|---|---|---|---|---|---|---|
 | H1 | D=0.10001 | 0.0122 | 2.36e-05 | 1.33e-06 | True | supported by the available observations and physics constraints | - |
-| H2 | D=0.09879, r=0.013373 | 0.0122 | 5.55e-05 | 9.64e-07 | True | supported by the available observations and physics constraints | - |
-| H3 | c=0.0013918, D=0.10001 | 0.0122 | 7.29e-05 | 1.26e-06 | True | supported by the available observations and physics constraints | - |
-| H4 | D=0.10089, r=0.017411, K=1.4594 | 0.0122 | 2.90e-05 | 7.02e-07 | True | supported by the available observations and physics constraints | - |
+| H2 | D=0.09879, k=0.013373 | 0.0122 | 5.55e-05 | 9.64e-07 | True | supported by the available observations and physics constraints | - |
+| H3 | c=-0.0021957, D=0.10046, gamma=-0.005086 | 0.0123 | 7.83e-05 | 1.24e-06 | True | supported by the available observations and physics constraints | - |
+| H4 | D=0.099188, r=-0.028544 | 0.0122 | 4.72e-05 | 9.46e-07 | True | supported by the available observations and physics constraints | - |
 | K1 | c=0.0082094 | 0.2267 | 7.74e-03 | 2.53e-02 | True | rejected under the tested conditions | val_rmse, ic_loss |
 | K3 | K=6.9792, r=-1.4332 | 0.1169 | 1.80e-03 | 5.35e-03 | True | rejected under the tested conditions | val_rmse |
 
@@ -56,31 +56,31 @@ Best held-out RMSE 0.01218; equivalence cutoff 0.01279; equivalence set ['H1', '
 | ID | Complexity | BIC | Per-parameter contribution (RMS share of u_t) | Inactive | Reduced form | Bootstrap sign-stable |
 |---|---|---|---|---|---|---|
 | H1 | 4.1 | -2214.6 | D:1.000 | - | - | True |
-| H2 | 6.3 | -2208.9 | D:0.996, r:0.007 | ['r'] | `-D*u_xx + u_t = 0` | False |
-| H3 | 6.3 | -2205.9 | c:0.003, D:1.000 | ['c'] | `-D*u_xx + u_t = 0` | False |
-| H4 | 10.8 | -2202.3 | D:1.003, r:0.005, K:0.004 | ['r', 'K'] | `-D*u_xx + u_t = 0` | True |
+| H2 | 6.3 | -2208.9 | D:0.996, k:0.007 | ['k'] | `-D*u_xx + u_t = 0` | False |
+| H3 | 8.5 | -2204.4 | c:0.004, D:1.002, gamma:0.003 | ['c', 'gamma'] | `-D*u_xx + u_t = 0` | False |
+| H4 | 9.6 | -2207.4 | D:0.997, r:0.006 | ['r'] | `-D*u_xx + u_t = 0` | True |
 | K1 | 3.2 | -805.6 | c:0.243 | - | - | False |
 | K3 | 6.5 | -1011.3 | K:0.104, r:0.999 | - | - | True |
 
 **Selected: H1** (`u_t = D * u_xx`). BIC minimizer: H1 (agrees with selection: True).
 
 - H1: selected
-- H2: fits equivalently but is more complex; inactive parameters ['r']; with inactive terms removed it reduces to the selected equation
-- H3: fits equivalently but is more complex; inactive parameters ['c']; with inactive terms removed it reduces to the selected equation
-- H4: fits equivalently but is more complex; inactive parameters ['r', 'K']; with inactive terms removed it reduces to the selected equation
+- H2: fits equivalently but is more complex; inactive parameters ['k']; with inactive terms removed it reduces to the selected equation
+- H3: fits equivalently but is more complex; inactive parameters ['c', 'gamma']; with inactive terms removed it reduces to the selected equation
+- H4: fits equivalently but is more complex; inactive parameters ['r']; with inactive terms removed it reduces to the selected equation
 
 Empirical stability (bootstrap OLS on finite-difference derivatives of 20 random 80% subsets; NOT Bayesian):
 
 - H1: `u_xx` mean 0.1102 ± 0.0029, sign-consistent 100%
 - H2: `u_xx` mean 0.113 ± 0.0037, sign-consistent 100%; `u` mean 0.03621 ± 0.049, sign-consistent 75%
-- H3: `u_xx` mean 0.1105 ± 0.0031, sign-consistent 100%; `u_x` mean 0.008768 ± 0.028, sign-consistent 80%
+- H3: `u_xx` mean 0.1138 ± 0.0035, sign-consistent 100%; `u_x` mean 0.009349 ± 0.028, sign-consistent 80%; `u` mean 0.04389 ± 0.044, sign-consistent 85%
 - H4: `u_xx` mean 0.1127 ± 0.0038, sign-consistent 100%; `u` mean -0.6718 ± 0.15, sign-consistent 100%; `u**2` mean 1.155 ± 0.21, sign-consistent 100%
 - K1: `u_x` mean -0.01032 ± 0.013, sign-consistent 85%
 - K3: `u` mean -1.741 ± 0.14, sign-consistent 100%; `u**2` mean 1.203 ± 0.28, sign-consistent 100%
 
 **Methods disagree** (reported, not resolved):
-- H4: PINN finds ['r', 'K'] inactive, but the FD bootstrap gives a sign-stable `u**2` coefficient (1.16)
-- H4: PINN finds ['r', 'K'] inactive, but the FD bootstrap gives a sign-stable `u` coefficient (-0.672)
+- H4: PINN finds ['r'] inactive, but the FD bootstrap gives a sign-stable `u**2` coefficient (1.16)
+- H4: PINN finds ['r'] inactive, but the FD bootstrap gives a sign-stable `u` coefficient (-0.672)
 The same spurious `u`/`u**2` terms appear in Phase 2's noisy full-library SINDy result, which points to a finite-difference reconstruction/smoothing artifact on 400 noisy points rather than real reaction physics; the PINN analysis fits the scattered data directly without grid reconstruction. This is an interpretation, not a proof. The FD bootstrap's `u_xx` coefficient (~0.11) is also biased high relative to the PINN estimate, consistent with that artifact.
 
 ## 8. OOD prediction
@@ -91,8 +91,8 @@ Held-out observations with t > 0.8 were never used for training or selection.
 |---|---|---|---|
 | H1 | 0.01218 | 0.01160 | 0.00201 |
 | H2 | 0.01219 | 0.01183 | 0.00295 |
-| H3 | 0.01218 | 0.01149 | 0.00171 |
-| H4 | 0.01219 | 0.01171 | 0.00249 |
+| H3 | 0.01228 | 0.01206 | 0.00397 |
+| H4 | 0.01223 | 0.01192 | 0.00357 |
 | K1 | 0.22667 | 0.32473 | 0.33177 |
 | K3 | 0.11694 | 0.10262 | 0.09899 |
 | MLP_data_only | 0.02139 | 0.01780 | 0.01389 |

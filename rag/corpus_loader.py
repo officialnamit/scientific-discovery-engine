@@ -12,7 +12,7 @@ well-known, generic textbook physics (Fick's law, the advection
 equation, logistic growth, etc.) written for this project, NOT
 reproductions of any specific real publication, and they do not state
 or imply this project's specific hidden parameter values (see
-"Preventing answer leakage" in the README's Phase 5 section).
+"Preventing answer leakage" in docs/development_log.md, Phase 5).
 """
 
 import os

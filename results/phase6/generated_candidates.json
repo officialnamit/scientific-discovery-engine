@@ -17,13 +17,13 @@
         "evidence_id": "evidence_doc_advection_chunk_004",
         "document_id": "doc_advection",
         "section": "Typical observational signatures",
-        "retrieval_score": 0.5330793765177753
+        "retrieval_score": 0.5330793765177754
       },
       {
         "evidence_id": "evidence_doc_diffusion_chunk_003",
         "document_id": "doc_diffusion",
         "section": "Governing equation",
-        "retrieval_score": 0.5283236974273894
+        "retrieval_score": 0.5283236974273893
       },
       {
         "evidence_id": "evidence_doc_diffusion_chunk_004",

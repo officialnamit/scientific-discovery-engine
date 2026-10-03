@@ -10,7 +10,7 @@
     },
     "answer": {
       "family": "diffusion",
-      "ood_rel_rmse": 0.001265091097439911
+      "ood_rel_rmse": 0.0012650910974399225
     },
     "correct": true,
     "detail": {}
@@ -26,7 +26,7 @@
     },
     "answer": {
       "family": "diffusion",
-      "ood_rel_rmse": 0.0028684474238845634
+      "ood_rel_rmse": 0.0028684474238845742
     },
     "correct": true,
     "detail": {}
@@ -42,7 +42,7 @@
     },
     "answer": {
       "family": "diffusion",
-      "ood_rel_rmse": 0.009043801910902038
+      "ood_rel_rmse": 0.009043801910902049
     },
     "correct": true,
     "detail": {}
@@ -58,7 +58,7 @@
     },
     "answer": {
       "family": "advection",
-      "ood_rel_rmse": 0.009872004589361848
+      "ood_rel_rmse": 0.009872004589361851
     },
     "correct": true,
     "detail": {}
@@ -74,7 +74,7 @@
     },
     "answer": {
       "family": "advection",
-      "ood_rel_rmse": 0.0170935174894425
+      "ood_rel_rmse": 0.017093517489439762
     },
     "correct": true,
     "detail": {}
@@ -90,7 +90,7 @@
     },
     "answer": {
       "family": "advection",
-      "ood_rel_rmse": 0.013318172540018717
+      "ood_rel_rmse": 0.013318172540021031
     },
     "correct": true,
     "detail": {}
@@ -154,7 +154,7 @@
     },
     "answer": {
       "family": "advection-diffusion",
-      "ood_rel_rmse": 0.0026069212316112366
+      "ood_rel_rmse": 0.0026069212316112383
     },
     "correct": true,
     "detail": {}
@@ -170,7 +170,7 @@
     },
     "answer": {
       "family": "advection-diffusion",
-      "ood_rel_rmse": 0.005864317185956168
+      "ood_rel_rmse": 0.005864317185955959
     },
     "correct": true,
     "detail": {}
@@ -186,7 +186,7 @@
     },
     "answer": {
       "family": "advection-diffusion",
-      "ood_rel_rmse": 0.002787355099932439
+      "ood_rel_rmse": 0.0027873550999324426
     },
     "correct": true,
     "detail": {}

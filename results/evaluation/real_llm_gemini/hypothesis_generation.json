@@ -7,19 +7,21 @@
       "truth_family": "diffusion",
       "mode_a": [
         "u_t = D * u_xx - gamma * u",
-        "u_t = D * u_xx + r * u * (1 - u)"
+        "u_t + u * u_x = nu * u_xx - alpha * u"
       ],
       "mode_a_families": [
         "other",
-        "reaction-diffusion"
+        "other"
       ],
       "mode_b": [
         "u_t = D*u_xx",
-        "u_t = D*u_xx - k*u"
+        "u_t = D*u_xx - k*u",
+        "u_t = D*u_xx - r*u*(1 - u)"
       ],
       "mode_b_families": [
         "diffusion",
-        "other"
+        "other",
+        "reaction-diffusion"
       ],
       "schema_errors": [
         0,
@@ -32,7 +34,7 @@
       "dataset": "reacdiff_D0.05_r1.0_K1.0",
       "truth_family": "reaction-diffusion",
       "mode_a": [
-        "u_t = D*u_xx + r*u*(1 - u/K)"
+        "u_t = D * u_xx + r * u * (1 - u / K)"
       ],
       "mode_a_families": [
         "reaction-diffusion"
@@ -50,9 +52,9 @@
       "dataset": "advdiff_c0.4_D0.02",
       "truth_family": "advection-diffusion",
       "mode_a": [
-        "u_t + v*u_x = D*u_xx",
-        "u_t + u*u_x = nu*u_xx",
-        "u_t = D*u_xx - k*u"
+        "u_t + c*u_x = D*u_xx",
+        "u_t + c*u_x = D*u_xx - k*u",
+        "u_t + u*u_x = nu*u_xx"
       ],
       "mode_a_families": [
         "advection-diffusion",
@@ -61,7 +63,7 @@
       ],
       "mode_b": [
         "u_t + c*u_x = D*u_xx",
-        "u_t + u*u_x = nu*u_xx",
+        "u_t + u*u_x = D*u_xx",
         "u_t + c*u_x = D*u_xx - k*u"
       ],
       "mode_b_families": [

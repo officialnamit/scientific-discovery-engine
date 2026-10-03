@@ -51,7 +51,7 @@
         "no diffusive spreading",
         "no reaction/source terms"
       ],
-      "confidence": 0.5330793765177753,
+      "confidence": 0.5330793765177754,
       "provenance_type": "documented"
     },
     {
@@ -78,7 +78,7 @@
         "no reaction/source terms",
         "constant diffusion coefficient"
       ],
-      "confidence": 0.5283236974273894,
+      "confidence": 0.5283236974273893,
       "provenance_type": "documented"
     },
     {

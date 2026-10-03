@@ -1,9 +1,9 @@
 {
   "id": "H2",
-  "equation": "u_t = D * u_xx - r * u",
+  "equation": "u_t = D * u_xx - k * u",
   "params": {
     "D": 0.09878971427679062,
-    "r": 0.013373078778386116
+    "k": 0.013373078778386116
   },
   "train_rmse": 0.01138198748740537,
   "val_rmse": 0.012187821833561941,
@@ -28,10 +28,10 @@
   "status": "supported by the available observations and physics constraints",
   "contributions": {
     "D": 0.9955374306202879,
-    "r": 0.006782351629831558
+    "k": 0.006782351629831558
   },
   "inactive_parameters": [
-    "r"
+    "k"
   ],
   "reduced_equation_if_inactive_terms_dropped": "-D*u_xx + u_t = 0",
   "signature": "-_p0*u_xx + _p1*u + u_t",
@@ -43,7 +43,7 @@
     "n_nonlinear_terms": 0,
     "expression_ops": 3,
     "complexity_score": 6.3,
-    "rhs_expanded": "D*u_xx - r*u"
+    "rhs_expanded": "D*u_xx - k*u"
   },
   "bic": -2208.931858701944,
   "n_train": 248,

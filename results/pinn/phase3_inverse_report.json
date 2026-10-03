@@ -2,21 +2,21 @@
   "hypothesis": "diffusion",
   "D_init": 0.2,
   "D_true": 0.1,
-  "D_hat": 0.09988795220851898,
-  "absolute_parameter_error": 0.00011204779148102362,
-  "relative_parameter_error": 0.0011204779148102362,
+  "D_hat": 0.09990929812192917,
+  "absolute_parameter_error": 9.070187807083685e-05,
+  "relative_parameter_error": 0.0009070187807083685,
   "final_training_losses": {
     "epoch": "lbfgs_final",
-    "total": 0.00014199144789017737,
-    "data": 0.0001322756870649755,
-    "physics": 5.694201263395371e-06,
-    "bc": 2.8071319775335724e-06,
-    "ic": 1.2144211041231756e-06,
-    "D": 0.09988795220851898
+    "total": 0.00014133348304312676,
+    "data": 0.00013212642807047814,
+    "physics": 5.646857516694581e-06,
+    "bc": 2.767621253951802e-06,
+    "ic": 7.925890486149001e-07,
+    "D": 0.09990929812192917
   },
-  "physics_residual_fresh_grid": 3.3133415854536e-05,
+  "physics_residual_fresh_grid": 2.6208273993688636e-05,
   "prediction_error_vs_clean": {
-    "rmse": 0.0008795529781843732,
-    "mae": 0.0007195051892652369
+    "rmse": 0.0008489456974547785,
+    "mae": 0.0006739429320046739
   }
 }

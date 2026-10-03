@@ -16,7 +16,7 @@ value for this experiment's hidden D, and never an explicit claim like
 "this dataset follows diffusion". The hypothesis engine still has to
 decide which documented mechanism (if any) applies to the specific
 observations and estimate parameters itself via PINN validation. See
-the README's Phase 5 "preventing answer leakage" section for the full
+docs/development_log.md (Phase 5, "preventing answer leakage") for the full
 reasoning.
 """
 

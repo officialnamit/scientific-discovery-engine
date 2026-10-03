@@ -2,15 +2,15 @@
   "id": "H1",
   "equation": "u_t = D*u_xx",
   "params": {
-    "D": 0.10002120584249496
+    "D": 0.10015328228473663
   },
-  "train_rmse": 0.011377952429376129,
-  "val_rmse": 0.01214285495164107,
-  "ood_obs_rmse": 0.011440580151687385,
-  "physics_residual": 1.4429285329242703e-05,
-  "data_loss": 0.00012945776688866317,
-  "bc_loss": 1.006239131129405e-06,
-  "ic_loss": 9.935899925039848e-07,
+  "train_rmse": 0.011377165362929896,
+  "val_rmse": 0.01215311826513342,
+  "ood_obs_rmse": 0.0115904664566028,
+  "physics_residual": 2.2152014935272746e-05,
+  "data_loss": 0.00012943986803293228,
+  "bc_loss": 1.2922467931275605e-06,
+  "ic_loss": 9.00791803815082e-07,
   "physical_bounds": {
     "passed": true,
     "violations": []
@@ -26,7 +26,7 @@
   "failed_checks": [],
   "status": "supported by the available observations and physics constraints",
   "contributions": {
-    "D": 1.0002491324274614
+    "D": 1.0001697824268958
   },
   "inactive_parameters": [],
   "reduced_equation_if_inactive_terms_dropped": null,
@@ -41,7 +41,7 @@
     "complexity_score": 4.1,
     "rhs_expanded": "D*u_xx"
   },
-  "bic": -2214.6211568757776,
+  "bic": -2214.6554687137605,
   "n_train": 248,
   "k_params": 1,
   "decision_data": "held-out noisy observations only (no oracle)",

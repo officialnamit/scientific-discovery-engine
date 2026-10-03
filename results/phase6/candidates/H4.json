@@ -2,16 +2,16 @@
   "id": "H4",
   "equation": "u_t + c*u_x = D*u_xx",
   "params": {
-    "c": -0.00024385564029216766,
-    "D": 0.09995120763778687
+    "c": -0.001779451034963131,
+    "D": 0.10002370923757553
   },
-  "train_rmse": 0.011379847825022124,
-  "val_rmse": 0.012135069720070805,
-  "ood_obs_rmse": 0.011770953084384054,
-  "physics_residual": 5.528580732061528e-05,
-  "data_loss": 0.00012950091331731528,
-  "bc_loss": 1.2006149745502626e-06,
-  "ic_loss": 7.00592181601678e-07,
+  "train_rmse": 0.011378083990018308,
+  "val_rmse": 0.012108799835983253,
+  "ood_obs_rmse": 0.011787149311126356,
+  "physics_residual": 2.898458478739485e-05,
+  "data_loss": 0.00012946077913511544,
+  "bc_loss": 1.2724424323096173e-06,
+  "ic_loss": 1.08235281004454e-06,
   "physical_bounds": {
     "passed": true,
     "violations": []
@@ -27,8 +27,8 @@
   "failed_checks": [],
   "status": "supported by the available observations and physics constraints",
   "contributions": {
-    "c": 0.00045606189646952796,
-    "D": 1.0004056411548727
+    "c": 0.0033242334006700035,
+    "D": 1.0000893821998642
   },
   "inactive_parameters": [
     "c"
@@ -45,7 +45,7 @@
     "complexity_score": 6.3,
     "rhs_expanded": "D*u_xx - c*u_x"
   },
-  "bic": -2209.0251088753726,
+  "bic": -2209.1019930290604,
   "n_train": 248,
   "k_params": 2,
   "decision_data": "held-out noisy observations only (no oracle)",

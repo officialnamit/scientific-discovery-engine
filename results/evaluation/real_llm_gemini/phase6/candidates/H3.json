@@ -1,17 +1,18 @@
 {
   "id": "H3",
-  "equation": "u_t + c * u_x = D * u_xx",
+  "equation": "u_t + c * u_x = D * u_xx - gamma * u",
   "params": {
-    "c": 0.0013917958131060004,
-    "D": 0.10000923275947571
+    "c": -0.0021957207936793566,
+    "D": 0.10045705735683441,
+    "gamma": -0.005085972603410482
   },
-  "train_rmse": 0.01145280211756148,
-  "val_rmse": 0.012178500288228797,
-  "ood_obs_rmse": 0.01148815394267762,
-  "physics_residual": 7.292260852409527e-05,
-  "data_loss": 0.0001311666565015912,
-  "bc_loss": 2.4046696580626303e-06,
-  "ic_loss": 1.2572368177643511e-06,
+  "train_rmse": 0.011360234865528715,
+  "val_rmse": 0.012283591236622964,
+  "ood_obs_rmse": 0.012063914959466397,
+  "physics_residual": 7.828807429177687e-05,
+  "data_loss": 0.00012905489711556584,
+  "bc_loss": 3.4188676636404125e-06,
+  "ic_loss": 1.2433926031008014e-06,
   "physical_bounds": {
     "passed": true,
     "violations": []
@@ -27,27 +28,29 @@
   "failed_checks": [],
   "status": "supported by the available observations and physics constraints",
   "contributions": {
-    "c": 0.002599755138802691,
-    "D": 0.9996512481373987
+    "c": 0.0040976297885263815,
+    "D": 1.0023411515063911,
+    "gamma": 0.0025670354854399583
   },
   "inactive_parameters": [
-    "c"
+    "c",
+    "gamma"
   ],
   "reduced_equation_if_inactive_terms_dropped": "-D*u_xx + u_t = 0",
-  "signature": "-_p0*u_xx + _p1*u_x + u_t",
+  "signature": "-_p0*u_xx + _p1*u_x + _p2*u + u_t",
   "reduced_signature": "-_p0*u_xx + u_t",
   "complexity": {
-    "n_terms": 2,
-    "n_free_parameters": 2,
+    "n_terms": 3,
+    "n_free_parameters": 3,
     "max_derivative_order": 2,
     "n_nonlinear_terms": 0,
-    "expression_ops": 3,
-    "complexity_score": 6.3,
-    "rhs_expanded": "D*u_xx - c*u_x"
+    "expression_ops": 5,
+    "complexity_score": 8.5,
+    "rhs_expanded": "D*u_xx - c*u_x - gamma*u"
   },
-  "bic": -2205.8554853466444,
+  "bic": -2204.367264557221,
   "n_train": 248,
-  "k_params": 2,
+  "k_params": 3,
   "decision_data": "held-out noisy observations only (no oracle)",
-  "complexity_score": 6.3
+  "complexity_score": 8.5
 }

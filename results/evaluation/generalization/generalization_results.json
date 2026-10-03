@@ -1,8 +1,8 @@
 {
   "selection": {
     "selected": "H4",
-    "best_val_rmse": 0.00990743410283017,
-    "equivalence_cutoff": 0.010402805807971678,
+    "best_val_rmse": 0.010025429423245712,
+    "equivalence_cutoff": 0.010526700894407997,
     "equivalence_set": [
       "H4"
     ],
@@ -24,15 +24,15 @@
       "id": "H1",
       "equation": "u_t = D*u_xx",
       "params": {
-        "D": 0.07515005767345428
+        "D": 0.07508827745914459
       },
-      "train_rmse": 0.09033649218735508,
-      "val_rmse": 0.09575517316539446,
-      "ood_obs_rmse": 0.1152629418652047,
-      "physics_residual": 0.0016336605185642838,
-      "data_loss": 0.008160681463778019,
-      "bc_loss": 0.00012530043022707105,
-      "ic_loss": 0.00038418028270825744,
+      "train_rmse": 0.0903223307282119,
+      "val_rmse": 0.09573468576441604,
+      "ood_obs_rmse": 0.11532250034977244,
+      "physics_residual": 0.001633201609365642,
+      "data_loss": 0.00815812312066555,
+      "bc_loss": 0.0001265532773686573,
+      "ic_loss": 0.00038444154779426754,
       "physical_bounds": {
         "passed": true,
         "violations": []
@@ -50,7 +50,7 @@
       ],
       "status": "rejected under the tested conditions",
       "contributions": {
-        "D": 1.0309337535588265
+        "D": 1.0309076851552743
       },
       "inactive_parameters": [],
       "reduced_equation_if_inactive_terms_dropped": null,
@@ -65,7 +65,7 @@
         "complexity_score": 4.1,
         "rhs_expanded": "D*u_xx"
       },
-      "bic": -1172.5634932633895,
+      "bic": -1172.6403133697356,
       "n_train": 245,
       "k_params": 1,
       "decision_data": "held-out noisy observations only (no oracle)",
@@ -75,15 +75,15 @@
       "id": "H2",
       "equation": "u_t + c*u_x = 0",
       "params": {
-        "c": 0.3685310184955597
+        "c": 0.3862530291080475
       },
-      "train_rmse": 0.06697687545055235,
-      "val_rmse": 0.06353182958912637,
-      "ood_obs_rmse": 0.11201696644123686,
-      "physics_residual": 0.0012920380104333162,
-      "data_loss": 0.00448590237647295,
-      "bc_loss": 3.479225370028871e-06,
-      "ic_loss": 0.0025157732889056206,
+      "train_rmse": 0.06797487327906353,
+      "val_rmse": 0.06941184473061238,
+      "ood_obs_rmse": 0.11218256439816952,
+      "physics_residual": 0.0011774717131629586,
+      "data_loss": 0.004620583727955818,
+      "bc_loss": 5.344499186321627e-06,
+      "ic_loss": 0.0025236832443624735,
       "physical_bounds": {
         "passed": true,
         "violations": []
@@ -101,7 +101,7 @@
       ],
       "status": "rejected under the tested conditions",
       "contributions": {
-        "c": 0.9957797851683752
+        "c": 0.9958865737233908
       },
       "inactive_parameters": [],
       "reduced_equation_if_inactive_terms_dropped": null,
@@ -116,7 +116,7 @@
         "complexity_score": 3.2,
         "rhs_expanded": "-c*u_x"
       },
-      "bic": -1319.168594020315,
+      "bic": -1311.9211466094673,
       "n_train": 245,
       "k_params": 1,
       "decision_data": "held-out noisy observations only (no oracle)",
@@ -126,17 +126,17 @@
       "id": "H3",
       "equation": "u_t = D*u_xx + r*u*(1 - u/K)",
       "params": {
-        "D": 0.11713941395282745,
-        "r": 1.2169146537780762,
-        "K": 1.43923020362854
+        "D": 0.11740957945585251,
+        "r": 1.224410891532898,
+        "K": 1.4316887855529785
       },
-      "train_rmse": 0.0852103536414008,
-      "val_rmse": 0.08413572332664943,
-      "ood_obs_rmse": 0.10064957207564616,
-      "physics_residual": 0.004460480529814959,
-      "data_loss": 0.0072608040645718575,
-      "bc_loss": 0.0002763040829449892,
-      "ic_loss": 7.488543633371592e-05,
+      "train_rmse": 0.08524283935107332,
+      "val_rmse": 0.08411378764177109,
+      "ood_obs_rmse": 0.10070638031832821,
+      "physics_residual": 0.004571579396724701,
+      "data_loss": 0.007266341708600521,
+      "bc_loss": 0.0002671349502634257,
+      "ic_loss": 8.08507320471108e-05,
       "physical_bounds": {
         "passed": true,
         "violations": []
@@ -154,9 +154,9 @@
       ],
       "status": "rejected under the tested conditions",
       "contributions": {
-        "D": 1.1031394198958353,
-        "r": 0.2170218538454123,
-        "K": 0.07840650949964374
+        "D": 1.1041909181449574,
+        "r": 0.2181426820412722,
+        "K": 0.07927860652452856
       },
       "inactive_parameters": [],
       "reduced_equation_if_inactive_terms_dropped": null,
@@ -171,7 +171,7 @@
         "complexity_score": 10.7,
         "rhs_expanded": "D*u_xx + r*u - r*u**2/K"
       },
-      "bic": -1190.1860675178598,
+      "bic": -1189.9992948601841,
       "n_train": 245,
       "k_params": 3,
       "decision_data": "held-out noisy observations only (no oracle)",
@@ -181,16 +181,16 @@
       "id": "H4",
       "equation": "u_t + c*u_x = D*u_xx",
       "params": {
-        "c": 0.3989666998386383,
-        "D": 0.020080121234059334
+        "c": 0.3984125256538391,
+        "D": 0.01979236677289009
       },
-      "train_rmse": 0.008916385372066998,
-      "val_rmse": 0.00990743410283017,
-      "ood_obs_rmse": 0.00963462636007039,
-      "physics_residual": 8.909902135201264e-06,
-      "data_loss": 7.950192230055109e-05,
-      "bc_loss": 2.6606059577716223e-07,
-      "ic_loss": 8.990162427835457e-07,
+      "train_rmse": 0.008971274281066529,
+      "val_rmse": 0.010025429423245712,
+      "ood_obs_rmse": 0.009399664682312871,
+      "physics_residual": 2.883335400838405e-05,
+      "data_loss": 8.048376184888184e-05,
+      "bc_loss": 4.028040621051332e-07,
+      "ic_loss": 5.737812443840085e-06,
       "physical_bounds": {
         "passed": true,
         "violations": []
@@ -206,8 +206,8 @@
       "failed_checks": [],
       "status": "supported by the available observations and physics constraints",
       "contributions": {
-        "c": 0.869436050576171,
-        "D": 0.49428220744698687
+        "c": 0.8720360419137202,
+        "D": 0.4885194245862621
       },
       "inactive_parameters": [],
       "reduced_equation_if_inactive_terms_dropped": null,
@@ -222,7 +222,7 @@
         "complexity_score": 6.3,
         "rhs_expanded": "D*u_xx - c*u_x"
       },
-      "bic": -2301.731158092152,
+      "bic": -2298.7239843928337,
       "n_train": 245,
       "k_params": 2,
       "decision_data": "held-out noisy observations only (no oracle)",
@@ -231,18 +231,18 @@
   },
   "selected_family": "advection-diffusion",
   "ood_rmse_noisy_obs": {
-    "H1": 0.1152629418652047,
-    "H2": 0.11201696644123686,
-    "H3": 0.10064957207564616,
-    "H4": 0.00963462636007039,
-    "MLP_data_only": 0.011910364423449133
+    "H1": 0.11532250034977244,
+    "H2": 0.11218256439816952,
+    "H3": 0.10070638031832821,
+    "H4": 0.009399664682312871,
+    "MLP_data_only": 0.011942964841500777
   },
   "heldout_rmse_noisy_obs": {
-    "H1": 0.09575517316539446,
-    "H2": 0.06353182958912637,
-    "H3": 0.08413572332664943,
-    "H4": 0.00990743410283017,
-    "MLP_data_only": 0.012426429854421063
+    "H1": 0.09573468576441604,
+    "H2": 0.06941184473061238,
+    "H3": 0.08411378764177109,
+    "H4": 0.010025429423245712,
+    "MLP_data_only": 0.01245899760075669
   },
   "oracle_benchmark_evaluation": {
     "truth": {
@@ -250,16 +250,16 @@
       "D": 0.02
     },
     "ood_rmse_vs_clean_field": {
-      "H1": 0.11097047205873324,
-      "H2": 0.1127184163780683,
-      "H3": 0.0946344471920962,
-      "H4": 0.001036208285075776,
-      "MLP_data_only": 0.006822775288093064
+      "H1": 0.11103403253221698,
+      "H2": 0.11101139749403847,
+      "H3": 0.09465182345289568,
+      "H4": 0.0013263115076023687,
+      "MLP_data_only": 0.0066486223029261805
     },
     "selected_param_rel_error": {
-      "c": 0.0025832504034042914,
-      "D": 0.004006061702966669
+      "c": 0.003968685865402277,
+      "D": 0.010381661355495474
     },
-    "novel_prediction_rel_rmse_t_1_to_1.3": 0.005763493002937697
+    "novel_prediction_rel_rmse_t_1_to_1.3": 0.008939080217898238
   }
 }

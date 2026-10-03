@@ -155,7 +155,7 @@
     "expected": "diffusion selected; nesting candidates may be supported but not selected",
     "actual": {
       "selected": "diffusion",
-      "nesting_candidates_supported": 1
+      "nesting_candidates_supported": 2
     },
     "passed": true,
     "detail": {}

@@ -10,7 +10,7 @@ validation" in the Phase 4 constraints).
 
 `confidence` is the LLM's own self-reported plausibility estimate. It
 is explicitly NOT a scientific-validity score -- see the warning on
-the field itself and README's "LLM vs PINN" section. Only the PINN
+the field itself and docs/development_log.md, Phase 4 ("LLM vs PINN"). Only the PINN
 validation stage (Phase 3, via validation/scorer.py) produces an
 evidence-based accept/reject status.
 """

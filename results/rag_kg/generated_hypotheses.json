@@ -324,7 +324,7 @@
             "no diffusive spreading",
             "no reaction/source terms"
           ],
-          "confidence": 0.5330793765177753,
+          "confidence": 0.5330793765177754,
           "provenance_type": "documented"
         },
         {
@@ -351,7 +351,7 @@
             "no reaction/source terms",
             "constant diffusion coefficient"
           ],
-          "confidence": 0.5283236974273894,
+          "confidence": 0.5283236974273893,
           "provenance_type": "documented"
         },
         {
@@ -995,22 +995,22 @@
       "equation": "u_t = D*u_xx",
       "status": "supported by the available observations and physics constraints",
       "failed_checks": [],
-      "data_loss": 0.0001322756870649755,
-      "physics_residual": 3.3133415854536e-05,
-      "bc_loss": 2.8071319775335724e-06,
-      "ic_loss": 1.2144211041231756e-06,
-      "prediction_error": 0.0008795529781843732,
+      "data_loss": 0.00013212642807047814,
+      "physics_residual": 2.6208273993688636e-05,
+      "bc_loss": 2.767621253951802e-06,
+      "ic_loss": 7.925890486149001e-07,
+      "prediction_error": 0.0008489456974547785,
       "ood_error": null,
       "parameter_estimate": {
-        "D": 0.09988795220851898
+        "D": 0.09990929812192917
       },
       "parameter_true": {
         "D": 0.1
       },
       "parameter_error": {
         "D": {
-          "absolute_error": 0.00011204779148102362,
-          "relative_error": 0.0011204779148102362
+          "absolute_error": 9.070187807083685e-05,
+          "relative_error": 0.0009070187807083685
         }
       },
       "thresholds_used": {

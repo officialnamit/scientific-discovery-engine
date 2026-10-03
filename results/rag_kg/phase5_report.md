@@ -94,7 +94,7 @@ Relationships relevant to retrieved mechanisms (21 total):
 
 | ID | Status | Data loss | Physics residual | Prediction RMSE | Parameters |
 |---|---|---|---|---|---|
-| H1 | supported by the available observations and physics constraints | 0.000132 | 0.000033 | 0.000880 | {'D': 0.09988795220851898} |
+| H1 | supported by the available observations and physics constraints | 0.000132 | 0.000026 | 0.000849 | {'D': 0.09990929812192917} |
 
 ## 5. Final interpretation
 

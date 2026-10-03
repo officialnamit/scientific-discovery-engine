@@ -15,8 +15,8 @@ generic (not dataset-specific) parameter guesses. It exists to make
 the rest of the pipeline (schema validation, deduplication, ranking,
 the Phase 3 adapter) fully testable without external dependencies.
 The real demonstration of LLM-driven reasoning requires
-llm/gemini_provider.py with a real API key -- see README's Phase 4
-section for how to switch.
+llm/gemini_provider.py with a real API key -- see the README's
+"Choosing the LLM" section for how to switch.
 """
 
 import json
