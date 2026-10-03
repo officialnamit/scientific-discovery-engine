@@ -1,0 +1,747 @@
+[
+  {
+    "id": "Q01",
+    "category": "structure_identification",
+    "hops": 1,
+    "question": "Which governing equation structure explains dataset 'diffusion_D0.05'?",
+    "expected": "diffusion",
+    "answer": "diffusion",
+    "correct": true,
+    "detail": {
+      "selected_equation": "u_t = D*u_xx"
+    }
+  },
+  {
+    "id": "Q02",
+    "category": "structure_identification",
+    "hops": 1,
+    "question": "Which governing equation structure explains dataset 'diffusion_D0.1'?",
+    "expected": "diffusion",
+    "answer": "diffusion",
+    "correct": true,
+    "detail": {
+      "selected_equation": "u_t = D*u_xx"
+    }
+  },
+  {
+    "id": "Q03",
+    "category": "structure_identification",
+    "hops": 1,
+    "question": "Which governing equation structure explains dataset 'diffusion_D0.2'?",
+    "expected": "diffusion",
+    "answer": "diffusion",
+    "correct": true,
+    "detail": {
+      "selected_equation": "u_t = D*u_xx"
+    }
+  },
+  {
+    "id": "Q04",
+    "category": "structure_identification",
+    "hops": 1,
+    "question": "Which governing equation structure explains dataset 'advection_c0.3'?",
+    "expected": "advection",
+    "answer": "advection",
+    "correct": true,
+    "detail": {
+      "selected_equation": "u_t + c*u_x = 0"
+    }
+  },
+  {
+    "id": "Q05",
+    "category": "structure_identification",
+    "hops": 1,
+    "question": "Which governing equation structure explains dataset 'advection_c0.5'?",
+    "expected": "advection",
+    "answer": "advection",
+    "correct": true,
+    "detail": {
+      "selected_equation": "u_t + c*u_x = 0"
+    }
+  },
+  {
+    "id": "Q06",
+    "category": "structure_identification",
+    "hops": 1,
+    "question": "Which governing equation structure explains dataset 'advection_c-0.4'?",
+    "expected": "advection",
+    "answer": "advection",
+    "correct": true,
+    "detail": {
+      "selected_equation": "u_t + c*u_x = 0"
+    }
+  },
+  {
+    "id": "Q07",
+    "category": "structure_identification",
+    "hops": 1,
+    "question": "Which governing equation structure explains dataset 'reacdiff_D0.05_r1.0_K1.0'?",
+    "expected": "reaction-diffusion",
+    "answer": "reaction-diffusion",
+    "correct": true,
+    "detail": {
+      "selected_equation": "u_t = D*u_xx + r*u*(1 - u/K)"
+    }
+  },
+  {
+    "id": "Q08",
+    "category": "structure_identification",
+    "hops": 1,
+    "question": "Which governing equation structure explains dataset 'reacdiff_D0.02_r2.0_K1.0'?",
+    "expected": "reaction-diffusion",
+    "answer": "reaction-diffusion",
+    "correct": true,
+    "detail": {
+      "selected_equation": "u_t = D*u_xx + r*u*(1 - u/K)"
+    }
+  },
+  {
+    "id": "Q09",
+    "category": "structure_identification",
+    "hops": 1,
+    "question": "Which governing equation structure explains dataset 'reacdiff_D0.1_r1.5_K0.8'?",
+    "expected": "reaction-diffusion",
+    "answer": "reaction-diffusion",
+    "correct": true,
+    "detail": {
+      "selected_equation": "u_t = D*u_xx + r*u*(1 - u/K)"
+    }
+  },
+  {
+    "id": "Q10",
+    "category": "structure_identification",
+    "hops": 1,
+    "question": "Which governing equation structure explains dataset 'advdiff_c0.3_D0.01'?",
+    "expected": "advection-diffusion",
+    "answer": "advection-diffusion",
+    "correct": true,
+    "detail": {
+      "selected_equation": "u_t + c*u_x = D*u_xx"
+    }
+  },
+  {
+    "id": "Q11",
+    "category": "structure_identification",
+    "hops": 1,
+    "question": "Which governing equation structure explains dataset 'advdiff_c0.4_D0.02'?",
+    "expected": "advection-diffusion",
+    "answer": "advection-diffusion",
+    "correct": true,
+    "detail": {
+      "selected_equation": "u_t + c*u_x = D*u_xx"
+    }
+  },
+  {
+    "id": "Q12",
+    "category": "structure_identification",
+    "hops": 1,
+    "question": "Which governing equation structure explains dataset 'advdiff_c-0.3_D0.015'?",
+    "expected": "advection-diffusion",
+    "answer": "advection-diffusion",
+    "correct": true,
+    "detail": {
+      "selected_equation": "u_t + c*u_x = D*u_xx"
+    }
+  },
+  {
+    "id": "Q13",
+    "category": "parameter_estimation",
+    "hops": 1,
+    "question": "Estimate the physical parameters of dataset 'diffusion_D0.05'.",
+    "expected": {
+      "D": 0.05
+    },
+    "answer": {
+      "D": 0.0501281255063001
+    },
+    "correct": true,
+    "detail": {
+      "max_rel_error": 0.0025625101260019767
+    }
+  },
+  {
+    "id": "Q14",
+    "category": "parameter_estimation",
+    "hops": 1,
+    "question": "Estimate the physical parameters of dataset 'diffusion_D0.1'.",
+    "expected": {
+      "D": 0.1
+    },
+    "answer": {
+      "D": 0.100287376104378
+    },
+    "correct": true,
+    "detail": {
+      "max_rel_error": 0.002873761043779982
+    }
+  },
+  {
+    "id": "Q15",
+    "category": "parameter_estimation",
+    "hops": 1,
+    "question": "Estimate the physical parameters of dataset 'diffusion_D0.2'.",
+    "expected": {
+      "D": 0.2
+    },
+    "answer": {
+      "D": 0.200882489461257
+    },
+    "correct": true,
+    "detail": {
+      "max_rel_error": 0.004412447306284956
+    }
+  },
+  {
+    "id": "Q16",
+    "category": "parameter_estimation",
+    "hops": 1,
+    "question": "Estimate the physical parameters of dataset 'advection_c0.3'.",
+    "expected": {
+      "c": 0.3
+    },
+    "answer": {
+      "c": 0.301059709475043
+    },
+    "correct": true,
+    "detail": {
+      "max_rel_error": 0.0035323649168100824
+    }
+  },
+  {
+    "id": "Q17",
+    "category": "parameter_estimation",
+    "hops": 1,
+    "question": "Estimate the physical parameters of dataset 'advection_c0.5'.",
+    "expected": {
+      "c": 0.5
+    },
+    "answer": {
+      "c": 0.501456511462947
+    },
+    "correct": true,
+    "detail": {
+      "max_rel_error": 0.0029130229258940155
+    }
+  },
+  {
+    "id": "Q18",
+    "category": "parameter_estimation",
+    "hops": 1,
+    "question": "Estimate the physical parameters of dataset 'advection_c-0.4'.",
+    "expected": {
+      "c": -0.4
+    },
+    "answer": {
+      "c": -0.401310875452733
+    },
+    "correct": true,
+    "detail": {
+      "max_rel_error": 0.0032771886318323784
+    }
+  },
+  {
+    "id": "Q19",
+    "category": "parameter_estimation",
+    "hops": 1,
+    "question": "Estimate the physical parameters of dataset 'reacdiff_D0.05_r1.0_K1.0'.",
+    "expected": {
+      "D": 0.05,
+      "r": 1.0,
+      "K": 1.0
+    },
+    "answer": {
+      "D": 0.0500109549934305,
+      "K": 0.9999198941376982,
+      "r": 1.00017901294337
+    },
+    "correct": true,
+    "detail": {
+      "max_rel_error": 0.0002190998686099621
+    }
+  },
+  {
+    "id": "Q20",
+    "category": "parameter_estimation",
+    "hops": 1,
+    "question": "Estimate the physical parameters of dataset 'reacdiff_D0.02_r2.0_K1.0'.",
+    "expected": {
+      "D": 0.02,
+      "r": 2.0,
+      "K": 1.0
+    },
+    "answer": {
+      "D": 0.0199994157150686,
+      "K": 0.9999997352202367,
+      "r": 1.99995291559332
+    },
+    "correct": true,
+    "detail": {
+      "max_rel_error": 2.9214246569965463e-05
+    }
+  },
+  {
+    "id": "Q21",
+    "category": "parameter_estimation",
+    "hops": 1,
+    "question": "Estimate the physical parameters of dataset 'reacdiff_D0.1_r1.5_K0.8'.",
+    "expected": {
+      "D": 0.1,
+      "r": 1.5,
+      "K": 0.8
+    },
+    "answer": {
+      "D": 0.100112599100062,
+      "K": 0.7998650353756285,
+      "r": 1.50174249857775
+    },
+    "correct": true,
+    "detail": {
+      "max_rel_error": 0.0011616657185000712
+    }
+  },
+  {
+    "id": "Q22",
+    "category": "parameter_estimation",
+    "hops": 1,
+    "question": "Estimate the physical parameters of dataset 'advdiff_c0.3_D0.01'.",
+    "expected": {
+      "c": 0.3,
+      "D": 0.01
+    },
+    "answer": {
+      "D": 0.0100708289360225,
+      "c": 0.300639183948912
+    },
+    "correct": true,
+    "detail": {
+      "max_rel_error": 0.00708289360224993
+    }
+  },
+  {
+    "id": "Q23",
+    "category": "parameter_estimation",
+    "hops": 1,
+    "question": "Estimate the physical parameters of dataset 'advdiff_c0.4_D0.02'.",
+    "expected": {
+      "c": 0.4,
+      "D": 0.02
+    },
+    "answer": {
+      "D": 0.0201194685952767,
+      "c": 0.400782305614292
+    },
+    "correct": true,
+    "detail": {
+      "max_rel_error": 0.005973429763835025
+    }
+  },
+  {
+    "id": "Q24",
+    "category": "parameter_estimation",
+    "hops": 1,
+    "question": "Estimate the physical parameters of dataset 'advdiff_c-0.3_D0.015'.",
+    "expected": {
+      "c": -0.3,
+      "D": 0.015
+    },
+    "answer": {
+      "D": 0.0151024184003673,
+      "c": -0.300595708423344
+    },
+    "correct": true,
+    "detail": {
+      "max_rel_error": 0.006827893357820003
+    }
+  },
+  {
+    "id": "Q25",
+    "category": "kg_parameters",
+    "hops": 1,
+    "question": "Which parameters appear in the documented equation for diffusion?",
+    "expected": [
+      "D"
+    ],
+    "answer": [
+      "D"
+    ],
+    "correct": true,
+    "detail": {}
+  },
+  {
+    "id": "Q26",
+    "category": "kg_parameters",
+    "hops": 1,
+    "question": "Which parameters appear in the documented equation for advection?",
+    "expected": [
+      "c"
+    ],
+    "answer": [
+      "c"
+    ],
+    "correct": true,
+    "detail": {}
+  },
+  {
+    "id": "Q27",
+    "category": "kg_parameters",
+    "hops": 1,
+    "question": "Which parameters appear in the documented equation for reaction?",
+    "expected": [
+      "K",
+      "r"
+    ],
+    "answer": [
+      "K",
+      "r"
+    ],
+    "correct": true,
+    "detail": {}
+  },
+  {
+    "id": "Q28",
+    "category": "kg_parameters",
+    "hops": 1,
+    "question": "Which parameters appear in the documented equation for reaction-diffusion?",
+    "expected": [
+      "D",
+      "K",
+      "r"
+    ],
+    "answer": [
+      "D",
+      "K",
+      "r"
+    ],
+    "correct": true,
+    "detail": {}
+  },
+  {
+    "id": "Q29",
+    "category": "kg_parameters",
+    "hops": 1,
+    "question": "Which parameters appear in the documented equation for advection-diffusion?",
+    "expected": [
+      "D",
+      "c"
+    ],
+    "answer": [
+      "D",
+      "c"
+    ],
+    "correct": true,
+    "detail": {}
+  },
+  {
+    "id": "Q30",
+    "category": "equation_derivatives",
+    "hops": 1,
+    "question": "Which derivatives does 'u_t = D*u_xx' require?",
+    "expected": [
+      "u_t",
+      "u_xx"
+    ],
+    "answer": [
+      "u_t",
+      "u_xx"
+    ],
+    "correct": true,
+    "detail": {}
+  },
+  {
+    "id": "Q31",
+    "category": "equation_derivatives",
+    "hops": 1,
+    "question": "Which derivatives does 'u_t + c*u_x = 0' require?",
+    "expected": [
+      "u_t",
+      "u_x"
+    ],
+    "answer": [
+      "u_t",
+      "u_x"
+    ],
+    "correct": true,
+    "detail": {}
+  },
+  {
+    "id": "Q32",
+    "category": "equation_derivatives",
+    "hops": 1,
+    "question": "Which derivatives does 'u_t = r*u*(1-u/K)' require?",
+    "expected": [
+      "u_t"
+    ],
+    "answer": [
+      "u_t"
+    ],
+    "correct": true,
+    "detail": {}
+  },
+  {
+    "id": "Q33",
+    "category": "equation_derivatives",
+    "hops": 1,
+    "question": "Which derivatives does 'u_t = D*u_xx + r*u*(1-u/K)' require?",
+    "expected": [
+      "u_t",
+      "u_xx"
+    ],
+    "answer": [
+      "u_t",
+      "u_xx"
+    ],
+    "correct": true,
+    "detail": {}
+  },
+  {
+    "id": "Q34",
+    "category": "equation_derivatives",
+    "hops": 1,
+    "question": "Which derivatives does 'u_t + c*u_x = D*u_xx' require?",
+    "expected": [
+      "u_t",
+      "u_x",
+      "u_xx"
+    ],
+    "answer": [
+      "u_t",
+      "u_x",
+      "u_xx"
+    ],
+    "correct": true,
+    "detail": {}
+  },
+  {
+    "id": "Q35",
+    "category": "kg_provenance",
+    "hops": 1,
+    "question": "Which source document supports the mechanism 'diffusion'?",
+    "expected": "doc_diffusion",
+    "answer": [
+      "doc_diffusion"
+    ],
+    "correct": true,
+    "detail": {}
+  },
+  {
+    "id": "Q36",
+    "category": "kg_provenance",
+    "hops": 1,
+    "question": "Which source document supports the mechanism 'advection'?",
+    "expected": "doc_advection",
+    "answer": [
+      "doc_advection"
+    ],
+    "correct": true,
+    "detail": {}
+  },
+  {
+    "id": "Q37",
+    "category": "kg_provenance",
+    "hops": 1,
+    "question": "Which source document supports the mechanism 'reaction'?",
+    "expected": "doc_reaction",
+    "answer": [
+      "doc_reaction"
+    ],
+    "correct": true,
+    "detail": {}
+  },
+  {
+    "id": "Q38",
+    "category": "kg_provenance",
+    "hops": 1,
+    "question": "Which source document supports the mechanism 'reaction-diffusion'?",
+    "expected": "doc_reaction_diffusion",
+    "answer": [
+      "doc_reaction_diffusion"
+    ],
+    "correct": true,
+    "detail": {}
+  },
+  {
+    "id": "Q39",
+    "category": "kg_provenance",
+    "hops": 1,
+    "question": "Which source document supports the mechanism 'advection-diffusion'?",
+    "expected": "doc_advection_diffusion",
+    "answer": [
+      "doc_advection_diffusion"
+    ],
+    "correct": true,
+    "detail": {}
+  },
+  {
+    "id": "Q40",
+    "category": "complexity",
+    "hops": 1,
+    "question": "Which is simpler: (a) u_t = D*u_xx  or  (b) u_t = D*u_xx + r*u*(1-u/K)?",
+    "expected": "a",
+    "answer": "a",
+    "correct": true,
+    "detail": {
+      "complexity_a": 4.1,
+      "complexity_b": 10.7
+    }
+  },
+  {
+    "id": "Q41",
+    "category": "complexity",
+    "hops": 1,
+    "question": "Which is simpler: (a) u_t + c*u_x = D*u_xx  or  (b) u_t = D*u_xx?",
+    "expected": "b",
+    "answer": "b",
+    "correct": true,
+    "detail": {
+      "complexity_a": 6.3,
+      "complexity_b": 4.1
+    }
+  },
+  {
+    "id": "Q42",
+    "category": "complexity",
+    "hops": 1,
+    "question": "Which is simpler: (a) u_t = r*u*(1-u/K)  or  (b) u_t = D*u_xx + r*u*(1-u/K)?",
+    "expected": "a",
+    "answer": "a",
+    "correct": true,
+    "detail": {
+      "complexity_a": 6.5,
+      "complexity_b": 10.7
+    }
+  },
+  {
+    "id": "Q43",
+    "category": "complexity",
+    "hops": 1,
+    "question": "Which is simpler: (a) u_t + c*u_x = 0  or  (b) u_t + c*u_x = D*u_xx?",
+    "expected": "a",
+    "answer": "a",
+    "correct": true,
+    "detail": {
+      "complexity_a": 3.2,
+      "complexity_b": 6.3
+    }
+  },
+  {
+    "id": "Q44",
+    "category": "complexity",
+    "hops": 1,
+    "question": "Which is simpler: (a) u_t = D*u_xx + k*u  or  (b) u_t = D*u_xx?",
+    "expected": "b",
+    "answer": "b",
+    "correct": true,
+    "detail": {
+      "complexity_a": 6.3,
+      "complexity_b": 4.1
+    }
+  },
+  {
+    "id": "Q45",
+    "category": "retrieval",
+    "hops": 1,
+    "question": "Is the true mechanism of 'diffusion_D0.05' among the retrieved evidence (top-5 chunks)?",
+    "expected": "diffusion",
+    "answer": [
+      "advection",
+      "diffusion",
+      "reaction",
+      "reaction-diffusion",
+      "advection-diffusion"
+    ],
+    "correct": true,
+    "detail": {
+      "top1_mechanism": "advection",
+      "top1_correct": false
+    }
+  },
+  {
+    "id": "Q46",
+    "category": "retrieval",
+    "hops": 1,
+    "question": "Is the true mechanism of 'advection_c0.3' among the retrieved evidence (top-5 chunks)?",
+    "expected": "advection",
+    "answer": [
+      "advection",
+      "diffusion",
+      "advection-diffusion",
+      "reaction"
+    ],
+    "correct": true,
+    "detail": {
+      "top1_mechanism": "advection",
+      "top1_correct": true
+    }
+  },
+  {
+    "id": "Q47",
+    "category": "retrieval",
+    "hops": 1,
+    "question": "Is the true mechanism of 'reacdiff_D0.05_r1.0_K1.0' among the retrieved evidence (top-5 chunks)?",
+    "expected": "reaction-diffusion",
+    "answer": [
+      "advection",
+      "reaction-diffusion",
+      "diffusion",
+      "reaction"
+    ],
+    "correct": true,
+    "detail": {
+      "top1_mechanism": "advection",
+      "top1_correct": false
+    }
+  },
+  {
+    "id": "Q48",
+    "category": "retrieval",
+    "hops": 1,
+    "question": "Is the true mechanism of 'reacdiff_D0.02_r2.0_K1.0' among the retrieved evidence (top-5 chunks)?",
+    "expected": "reaction-diffusion",
+    "answer": [
+      "advection",
+      "reaction-diffusion",
+      "diffusion",
+      "reaction"
+    ],
+    "correct": true,
+    "detail": {
+      "top1_mechanism": "advection",
+      "top1_correct": false
+    }
+  },
+  {
+    "id": "Q49",
+    "category": "retrieval",
+    "hops": 1,
+    "question": "Is the true mechanism of 'advdiff_c0.3_D0.01' among the retrieved evidence (top-5 chunks)?",
+    "expected": "advection-diffusion",
+    "answer": [
+      "advection",
+      "diffusion",
+      "advection-diffusion",
+      "reaction-diffusion"
+    ],
+    "correct": true,
+    "detail": {
+      "top1_mechanism": "advection",
+      "top1_correct": false
+    }
+  },
+  {
+    "id": "Q50",
+    "category": "retrieval",
+    "hops": 1,
+    "question": "Is the true mechanism of 'advdiff_c-0.3_D0.015' among the retrieved evidence (top-5 chunks)?",
+    "expected": "advection-diffusion",
+    "answer": [
+      "advection",
+      "diffusion",
+      "advection-diffusion"
+    ],
+    "correct": true,
+    "detail": {
+      "top1_mechanism": "advection",
+      "top1_correct": false
+    }
+  }
+]

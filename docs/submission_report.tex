@@ -1,0 +1,345 @@
+% =====================================================================
+%  Generative Scientific Discovery Engine -- technical report (submission)
+%  Build:  tectonic submission_report.tex     (run from the docs/ folder)
+%  Flowcharts are shared with project_guide.tex via figures/*.tex.
+% =====================================================================
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage[margin=2cm]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+\usepackage{booktabs,array,tabularx}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,shapes.geometric,shapes.misc,fit,backgrounds,calc}
+\usepackage{float}
+\usepackage{caption}
+\usepackage{microtype}
+\usepackage[hidelinks]{hyperref}
+\usepackage[strings,nohyphen]{underscore}
+
+\graphicspath{{../}}
+\setlist{itemsep=1pt,topsep=3pt}
+\setlength{\parskip}{3pt}
+\setlength{\parindent}{0pt}
+\captionsetup{font=small}
+\input{common}
+
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
+\newcommand{\met}{\textbf{\color{green!50!black}Met}}
+\newcommand{\partl}{\textbf{\color{orange!85!black}Partial}}
+\newcommand{\notdone}{\textbf{\color{red!70!black}Not done}}
+
+\title{\textbf{Generative Scientific Discovery Engine}\\[3pt]\large Technical Report}
+\author{Namit Aggarwal}
+\date{October 2026}
+
+\begin{document}
+\maketitle
+\vspace{-6mm}
+
+\begin{abstract}
+\noindent Given 400 sparse, noisy observations of a field $u(x,t)$ and no governing equation, the system retrieves
+scientific evidence (RAG + knowledge graph), generates candidate equations (LLM + graph templates), tests each with an
+inverse physics-informed neural network (PINN), rejects invalid hypotheses on held-out data, selects the most
+parsimonious supported law, and predicts beyond the observed window. It recovers $u_t = D\,u_{xx}$ with
+$\hat D = 0.10002$ (truth 0.1), rejects advection and pure reaction, and predicts unseen times with RMSE
+$2.5\times10^{-4}$, 40$\times$ better than a physics-free network. On a second, unseen system it recovers
+$u_t + c\,u_x = D\,u_{xx}$ with both constants within 0.4\%. It passes 50/50 benchmark questions, 23/25 multi-hop
+problems and 20/20 adversarial cases, and the pipeline also runs end to end with a real LLM (Google Gemini).
+\end{abstract}
+
+% =====================================================================
+\section{System overview}
+% =====================================================================
+
+The pipeline follows the brief: \emph{Observed data $\to$ evidence $\to$ candidate physics $\to$ equation $\to$ PINN
+$\to$ validation $\to$ new prediction} (Figure~\ref{fig:pipeline}). Division of responsibility is enforced in code:
+RAG retrieves, the graph organises, the LLM only \emph{proposes}. Accept/reject and selection use only measured losses
+on held-out noisy observations; the hidden truth is read in one function, after all decisions, to report error.
+
+\begin{figure}[!tbp]
+\centering
+\scalebox{0.85}{\input{figures/pipeline}}
+\caption{End-to-end pipeline. Colours mark the code package that implements each stage.}
+\label{fig:pipeline}
+\end{figure}
+
+\textbf{Data.} Ground truth $u_t = 0.1\,u_{xx}$ on $x,t\in[0,1]$, zero boundary values,
+$u(x,0)=\sin\pi x + 0.5\sin 3\pi x$. The system sees only 400 random points with 5\% Gaussian noise. Splits: train on
+$t\le0.8$ (minus a random 20\% holdout used for the gate and selection); OOD $=$ all $t>0.8$, never used for any
+decision; novel prediction on $t\in(1,1.5]$, where no data exists. All thresholds were fixed in \fn{config.yaml}
+before each run.
+
+% =====================================================================
+\section{Requirement coverage}
+% =====================================================================
+
+\textbf{Minimum research challenge} (all met).
+\begin{center}
+\small
+\begin{tabular}{@{}L{4.6cm}L{10.6cm}@{}}
+\toprule
+\textbf{Required} & \textbf{Delivered} \\ \midrule
+$\ge$3 generated hypotheses & 5 candidates (mock run), 6 (Gemini run) \\
+1 discovered governing equation & $u_t = D\,u_{xx}$, $\hat D = 0.10002$; and $u_t + 0.399\,u_x = 0.0201\,u_{xx}$ on a second system \\
+1 inverse / 1 forward PINN & Phase 3 (both), every Phase 6 candidate is an inverse PINN \\
+1 sparse/noisy experiment & all main experiments use 400 points with 5\% noise \\
+1 OOD prediction & $t>0.8$: RMSE 0.0018 vs clean field; novel $t\in(1,1.5]$: $2.5\times10^{-4}$ \\
+1 correctly rejected hypothesis & advection (holdout RMSE 0.227 vs gate 0.03) and pure reaction (0.118) \\
+20 adversarial physics cases & 20/20 (3 by abstention) \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\begin{center}
+\small
+\begin{tabular}{@{}L{4.6cm}L{8.6cm}l@{}}
+\multicolumn{3}{@{}l}{\normalsize\textbf{Mandatory research components}}\\[3pt]
+\toprule
+\textbf{Mandatory component} & \textbf{Implementation and evidence} & \textbf{Status} \\ \midrule
+Scientific RAG + knowledge graph & \fn{rag/}, \fn{knowledge_graph/}; 22 entities, 40 relationships, all with provenance & \met \\
+Generative hypotheses from multi-source evidence & LLM proposals $\cup$ graph templates (\fn{hypotheses/search.py}); mock and real Gemini runs & \met \\
+PINN forward and inverse & \fn{pinn/}; forward RMSE $7.3\times10^{-4}$; inverse $\hat D$ error 0.11\% & \met \\
+PDE/ODE discovery from data & SINDy (\fn{equation_discovery/}) on clean/sparse data; PINN-based identification on noisy data & \partl \\
+Unknown parameter estimation (PINN) & $D$ within 0.02\%; $c, D$ within 0.4\% on a second system & \met \\
+Sparse/noisy-data learning & 400 points, 5\% noise, two systems & \met \\
+Boundary/initial-condition inference & BC/IC supplied as known physics; enforced and checked, not inferred & \notdone \\
+Physics-constrained generative search & bounds ($D,K>0$), well-posedness pre-checks, PINN gate (Figures~\ref{fig:p6}--\ref{fig:selection}) & \met \\
+Uncertainty estimation & bootstrap coefficient stability (20 subsets); not Bayesian & \partl \\
+Out-of-distribution validation & held-out $t>0.8$ and novel window $t\in(1,1.5]$ & \met \\
+Comparison with NN and numerical solver & same network without physics; RK4/Euler forward solver & \met \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+
+% =====================================================================
+\section{Method: physics-constrained generative search}
+% =====================================================================
+
+\begin{enumerate}
+  \item \textbf{Evidence.} The observations are summarised as text (statistics only, never naming a mechanism) and used
+        to query a 5-document corpus; the knowledge graph returns the documented equations and parameters. A check
+        confirms the corpus never states the dataset's parameter values (no answer leakage).
+  \item \textbf{Generation.} The LLM returns schema-validated JSON hypotheses; graph templates are added; structural
+        duplicates are removed (parameter- and sign-invariant signatures).
+  \item \textbf{Pre-checks.} Syntax, variables, parameters, declared vs.\ actual derivatives, unit metadata, evolution
+        form, physical bounds, boundary-condition well-posedness.
+  \item \textbf{Inverse PINN per candidate.} Each equation string is compiled by SymPy into the residual of one shared
+        PINN (4$\times$64 tanh, Adam 3000 + L-BFGS 300); unknown parameters train jointly with the network.
+  \item \textbf{Gate} (held-out noisy data): holdout RMSE $\le0.03$, physics residual $\le0.01$, BC loss $\le0.005$,
+        IC loss $\le0.01$, physical bounds.
+  \item \textbf{Selection} (Figure~\ref{fig:selection}): fit-equivalence (within 5\% of best) $\to$ drop inactive terms
+        ($<$5\% of $u_t$) $\to$ lowest complexity $\to$ BIC.
+  \item \textbf{Validation and prediction.} Bootstrap stability, conservation check, OOD prediction, and a forward solve
+        of the selected law beyond the data.
+\end{enumerate}
+
+\begin{figure}[p]
+\centering
+\input{figures/p6}
+\pkglegend
+\caption{Function-level flow of the search (\fn{experiments/08_physics_constrained_search.py}), stage by stage.
+Only \fn{oracle_evaluation} reads the ground truth, after all decisions.}
+\label{fig:p6}
+\end{figure}
+
+\begin{figure}[!htb]
+\centering
+\input{figures/selection}
+\caption{Model-selection rule (\fn{validation/model_selection.py}); thresholds fixed before any run.}
+\label{fig:selection}
+\end{figure}
+
+\textbf{Ranking criteria requested by the brief, and where each is used:}
+\begin{center}
+\small
+\begin{tabular}{@{}L{3.3cm}L{9.0cm}L{3.0cm}@{}}
+\toprule
+\textbf{Criterion} & \textbf{Measure} & \textbf{Used in} \\ \midrule
+Data fit & holdout RMSE on noisy observations & gate, equivalence \\
+PDE residual & mean squared residual on a fresh grid & gate \\
+Conservation laws & global balance violation $\mathrm{RMS}_t\!\int\!\mathcal R\,dx \,/\, \mathrm{RMS}_t\, dM/dt$ & reported \\
+Dimensional consistency & declared units per parameter (fraction complete) & pre-check (metadata) \\
+Boundary/initial conditions & BC and IC losses; well-posedness warnings & gate, pre-check \\
+Complexity & terms + parameters + derivative order + 2$\times$nonlinear + 0.1$\times$ops & selection \\
+Uncertainty & bootstrap coefficient mean, spread, sign stability & reported \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+% =====================================================================
+\section{Results}
+% =====================================================================
+
+\subsection{Hypothesis testing and the discovered law}
+
+\begin{center}
+\footnotesize
+\setlength{\tabcolsep}{3.5pt}
+\begin{tabular}{@{}llllllr@{}}
+\toprule
+\textbf{ID} & \textbf{Candidate} & \textbf{Estimates} & \textbf{Holdout} & \textbf{Status} & \textbf{Inactive} & \textbf{Cons.\ viol.} \\ \midrule
+H1 & $u_t = D\,u_{xx}$ & $D=0.10002$ & 0.01214 & \textbf{selected} & -- & 0.08\% \\
+H2 & $u_t + c\,u_x = 0$ & $c=0.0089$ & 0.2269 & rejected & -- & 100\% \\
+H3 & $u_t = D\,u_{xx} + r\,u(1-u/K)$ & $D{=}0.101, r{=}0.023, K{=}1.18$ & 0.01217 & supported & $r, K$ & 0.11\% \\
+H4 & $u_t + c\,u_x = D\,u_{xx}$ & $c{=}{-0.0002}, D{=}0.09995$ & 0.01214 & supported & $c$ & 0.13\% \\
+K3 & $u_t = r\,u(1-u/K)$ (graph) & $r{=}{-1.44}, K{=}6.67$ & 0.1176 & rejected & -- & 0.75\% \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+H1, H3 and H4 fit to the noise floor ($\approx0.012$); H3 and H4 carry inactive terms and reduce to H1, which has the
+lowest complexity, and BIC agrees. A pure best-fit rule would have chosen H4 (lower by 0.06\%). Advection breaks global
+conservation completely: with zero boundary values it conserves $\int u\,dx$, while the data loses it.
+
+\subsection{PINN research results}
+
+\begin{center}
+\footnotesize
+\begin{tabular}{@{}L{3.6cm}L{3.3cm}L{3.3cm}L{5.0cm}@{}}
+\toprule
+\textbf{Metric} & \textbf{Forward ($D$ fixed)} & \textbf{Inverse ($D$ from 0.2)} & \textbf{Phase 6 selected (H1)} \\ \midrule
+PDE residual (fresh grid) & $2.7\times10^{-5}$ & $3.3\times10^{-5}$ & $1.4\times10^{-5}$ \\
+Data loss & $1.32\times10^{-4}$ & $1.32\times10^{-4}$ & $1.29\times10^{-4}$ \\
+Boundary / initial loss & $2.4\times10^{-6}$ / $8\times10^{-7}$ & $2.8\times10^{-6}$ / $1.2\times10^{-6}$ & $1.0\times10^{-6}$ / $1.0\times10^{-6}$ \\
+Parameter error & -- & 0.11\% & 0.02\% \\
+Prediction error (vs clean) & RMSE $7.3\times10^{-4}$ & RMSE $8.8\times10^{-4}$ & OOD RMSE $1.8\times10^{-3}$ \\
+Conservation violation & -- & -- & 0.08\% (train), 1.7\% (OOD), 5.6\% ($t>1$) \\
+Uncertainty (bootstrap $u_{xx}$ coef.) & -- & -- & $0.110\pm0.003$, sign-stable 100\% \\
+OOD (noisy holdout, $t>0.8$) & -- & -- & RMSE 0.0114 (noise floor $\approx0.012$) \\
+\bottomrule
+\end{tabular}
+\end{center}
+The bootstrap uses finite-difference derivatives and is biased high (0.110 vs.\ the PINN's 0.100); it measures term
+stability, not a calibrated interval.
+
+\subsection{Comparison with a conventional network and a numerical solver}
+
+\begin{center}
+\small
+\begin{tabular}{@{}L{5.4cm}L{5.4cm}L{4.6cm}@{}}
+\toprule
+\textbf{Model} & \textbf{OOD RMSE, $t>0.8$ (vs clean)} & \textbf{Conservation viol.\ (train / OOD)} \\ \midrule
+PINN, selected law H1 & 0.0018 & 0.08\% / 1.7\% \\
+Same network, data only (no physics) & 0.0712 (40$\times$ worse) & 15\% / 5.3\% \\
+Forward solver (RK4) with $\hat D$, no data & 0.0003; novel $t\in(1,1.5]$: 0.00025 & -- \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection{Sparse/noisy data and generalisation}
+
+SINDy recovers $u_t = 0.1009\,u_{xx}$ (clean) and $0.1013\,u_{xx}$ (sparse) but fails on the 400 noisy points
+(five spurious terms); the PINN path succeeds on the same data. On a second hidden system
+($u_t + 0.4\,u_x = 0.02\,u_{xx}$, $x\in[0,1.5]$, Gaussian start, 400 points, 5\% noise) the identical pipeline rejects
+diffusion, advection and reaction--diffusion and selects advection--diffusion with $c=0.39897$, $D=0.02008$ (errors
+0.26\%, 0.40\%), OOD RMSE 0.0010 vs.\ 0.0068 for the physics-free network, and 0.58\% error beyond the data window.
+SINDy on that data returned a spurious equation.
+
+\subsection{Real LLM (Gemini)}
+
+With \fn{gemini-3.5-flash-lite} (larger models were overloaded), retrieved evidence changed the generated hypotheses on
+all three test datasets. In the full search Gemini proposed $D u_{xx}$, $D u_{xx} - r u$, advection--diffusion and
+reaction--diffusion; the graph added pure advection and pure reaction, which were rejected. The same law was selected
+($\hat D = 0.10001$, OOD RMSE 0.0020 vs.\ clean). This is a single sample of a stochastic generator.
+
+% =====================================================================
+\section{Benchmark and ablation}
+% =====================================================================
+
+Twelve benchmark datasets (diffusion, advection, reaction--diffusion, advection--diffusion; 3 settings each).
+\textbf{50 questions: 50/50}; \textbf{25 multi-hop problems: 23/25} (both failures from top-1 lexical retrieval);
+\textbf{20 adversarial cases: 20/20}, including invalid equations, negative diffusivity, time-reversed data, disguised
+duplicates, malicious LLM output, a non-identifiable dataset, Occam traps, answer leakage and prompt injection (three
+noise/sparsity cases pass by abstention).
+
+\begin{center}
+\small
+\begin{tabular}{@{}lcc@{}}
+\toprule
+\textbf{Ablation arm} (12 datasets) & \textbf{Correct law} & \textbf{OOD within 5\%} \\ \midrule
+LLM/RAG generation, no validation & 3/12 & 3/12 \\
+RAG + KG generation, no validation & 3/12 & 3/12 \\
+Equation discovery alone (SINDy) & 8/12 & 6/12 \\
+\textbf{Full system} (generation + physics validation + selection) & \textbf{12/12} & \textbf{12/12} \\
+Full system without the LLM & 12/12 & 12/12 \\
+\bottomrule
+\end{tabular}
+\end{center}
+Physics validation and selection drive accuracy; RAG supplies a candidate pool containing the truth (top-1 retrieval
+only 1/6); the graph and mock LLM add no measurable accuracy here. A leakage audit confirms no decision function
+reads ground truth and catches a planted cheating selector.
+
+% =====================================================================
+\section{Limitations}
+% =====================================================================
+\begin{itemize}
+  \item Synthetic 1-D PDEs only; known laws recovered, no new law claimed.
+  \item Boundary/initial conditions are given, not inferred.
+  \item Uncertainty is a bootstrap of term stability, not a Bayesian posterior.
+  \item Nested models fit equally well; selection relies on a stated parsimony rule, not uniqueness.
+  \item Lexical retrieval over a 5-document corpus; thresholds hand-set (fixed in advance, not calibrated).
+  \item Conservation is a consistency check, not a discriminator: a network fitted to a wrong law can still follow
+        that law (K3: 0.75\%), so it is reported alongside the data gate rather than replacing it.
+\end{itemize}
+
+% =====================================================================
+\section{Deliverables and reproducibility}
+% =====================================================================
+\begin{center}
+\small
+\begin{tabular}{@{}L{3.6cm}L{12.0cm}@{}}
+\toprule
+\textbf{Artifact} & \textbf{Location} \\ \midrule
+Code & \fn{data/}, \fn{equation_discovery/}, \fn{pinn/}, \fn{validation/}, \fn{llm/}, \fn{hypotheses/}, \fn{rag/},
+        \fn{knowledge_graph/}, \fn{evaluation/}; 95 tests in \fn{tests/} \\
+Datasets & \fn{data/generated/*.npz} (clean, sparse, noisy, benchmark, second system) \\
+Trained models & \fn{results/phase6/models/}, \fn{results/evaluation/generalization/models/} \\
+Discovered equations & \fn{results/phase6/model_selection.json}, \fn{.../generalization/generalization_results.json} \\
+Knowledge graph & \fn{results/rag_kg/knowledge_graph.json} \\
+Experiments & \fn{experiments/02}--\fn{12} (one script per phase) \\
+Benchmark & \fn{results/evaluation/} (questions, multi-hop, adversarial, ablation, leakage) \\
+Conservation; Gemini run & \fn{results/evaluation/conservation/}; \fn{results/evaluation/real_llm_gemini/} \\
+Reports & this report; \fn{results/final_report.md}; \fn{docs/project_guide.pdf} (detailed guide) \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\textbf{Reproduce:} install with \fn{pip install -r requirements.txt} and test with \fn{python -m pytest tests}.
+Then run \fn{data/generate_diffusion.py} and the experiment scripts 02--12 in order, each with
+\fn{-{}-config config.yaml} (each PINN takes about 4 minutes on CPU; stages are cached). The Gemini run needs \fn{GEMINI_API_KEY}; see \fn{README.md}.
+
+% =====================================================================
+\appendix
+\section{Additional flowcharts}
+% =====================================================================
+Function-level flows of the remaining components. Colours follow the package legend.
+
+\begin{figure}[!htb]\centering\input{figures/packages}
+\caption{Package dependency map (from the actual imports).}\end{figure}
+
+\begin{figure}[!htb]\centering\input{figures/p2}\pkglegend
+\caption{PDE discovery from data (SINDy/STLSQ).}\end{figure}
+
+\begin{figure}[!htb]\centering\input{figures/p3}\pkglegend
+\caption{PINN training (forward/inverse) and threshold scoring.}\end{figure}
+
+\begin{figure}[!htb]\centering\input{figures/p4}\pkglegend
+\caption{Hypothesis generation, deterministic validation and compilation into a PINN.}\end{figure}
+
+\begin{figure}[!htb]\centering\input{figures/p5}\pkglegend
+\caption{Scientific RAG and knowledge-graph construction into one scientific context.}\end{figure}
+
+\begin{figure}[!htb]\centering\input{figures/p7}\pkglegend
+\caption{Benchmark, adversarial, ablation and leakage evaluation.}\end{figure}
+
+\begin{figure}[!htb]\centering\input{figures/gemini}\pkglegend
+\caption{Real-LLM (Gemini) run and the provider's retry/JSON handling.}\end{figure}
+
+\end{document}

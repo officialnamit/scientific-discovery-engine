@@ -1,0 +1,31 @@
+% flowchart 'gemini' -- shared by project_guide.tex and submission_report.tex
+\begin{tikzpicture}[node distance=3.4mm and 7mm]
+  \node[fnw=cExp] (main) {11_real_llm_gemini.main};
+  \node[dec=cExp, below=of main] (key) {GEMINI_API_KEY\\set?};
+  \node[fn=cExp, right=of key, font=\scriptsize] (stop) {stop: refuse to\\use the mock};
+  \node[fnw=cLlm, below=of key] (gp) {get_provider $\to$ GeminiProvider\\{\normalfont\tiny model from the -{}-model flag or config}};
+  \node[fnw=cExp, below=of gp] (sg) {stage_generate};
+  \node[fnw=cExp, right=of sg] (rl) {09_evaluation.real_llm\\{\normalfont\tiny Mode A vs Mode B, 3 datasets}};
+  \node[fnw=cExp, below=of sg] (p6) {_phase6_module\\{\normalfont\tiny load 08 script, redirect OUT}};
+  \node[fnw=cExp, below=of p6] (st) {stage_prepare $\to$ stage_pinn\\$\to$ stage_select\\{\normalfont\tiny the unchanged Phase 6 stages}};
+  \node[fnw=cExp, below=of st] (ar) {annotate_report};
+  \node[fnw=cExp, below=of ar] (cm) {compare_with_mock};
+  \node[io, below=of cm] (out) {results/evaluation/real\_llm\_gemini/};
+  % provider internals
+  \node[fnw=cLlm, right=of p6, yshift=-2mm] (gen) {GeminiProvider.generate};
+  \node[fnw=cLlm, below=of gen] (cl) {_get_client\\{\normalfont\tiny lazy import of google.genai}};
+  \node[fnw=cLlm, below=of cl] (gc) {models.generate_content\\{\normalfont\tiny JSON output mode}};
+  \node[dec=cLlm, below=of gc] (err) {429/500/503?};
+  \node[fnw=cLlm, below=of err] (rep) {_repair_json_escapes\\{\normalfont\tiny only if the JSON is invalid}};
+  \begin{scope}[on background layer]
+    \node[pkgbox=cLlm, fit=(gen)(cl)(gc)(err)(rep), label={[pkglabel=cLlm]below:inside every LLM call}] (box) {};
+  \end{scope}
+  \draw[flow] (main) -- (key); \draw[flow] (key) -- node[note, above]{no} (stop);
+  \draw[flow] (key) -- node[note, right]{yes} (gp); \draw[flow] (gp) -- (sg); \draw[flow] (sg) -- (rl);
+  \draw[flow] (sg) -- (p6); \draw[flow] (p6) -- (st); \draw[flow] (st) -- (ar); \draw[flow] (ar) -- (cm);
+  \draw[flow] (cm) -- (out);
+  \draw[flow] (gen) -- (cl); \draw[flow] (cl) -- (gc); \draw[flow] (gc) -- (err);
+  \draw[flow] (err.east) -- node[note, above]{yes} ++(5mm,0) |- node[note, right, pos=0.25]{wait 5, 10, 20\ldots s} (gc.east);
+  \draw[flow] (err) -- node[note, right]{no} (rep);
+  \draw[dflow] (rl.south) -- (box.north -| rl.south);
+\end{tikzpicture}

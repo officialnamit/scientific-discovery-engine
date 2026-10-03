@@ -1,0 +1,32 @@
+{
+  "decision_functions_referencing_ground_truth": {},
+  "decision_functions_checked": [
+    "evaluation.engine.build_pool",
+    "evaluation.engine.validate_and_select",
+    "hypotheses.search.validate_candidate",
+    "hypotheses.search.make_splits",
+    "hypotheses.search.build_candidate_pool",
+    "validation.model_selection.select_model"
+  ],
+  "hidden_values_checked": [
+    -0.4,
+    -0.3,
+    0.01,
+    0.015,
+    0.02,
+    0.05,
+    0.1,
+    0.2,
+    0.3,
+    0.4,
+    0.5,
+    0.8,
+    1.0,
+    1.5,
+    2.0
+  ],
+  "corpus_documents_containing_hidden_values": {},
+  "phase6_and_generalization_selection_data": "held-out noisy observations only (see hypotheses/search.py)",
+  "passed": true,
+  "deterministic_rerun_identical": true
+}

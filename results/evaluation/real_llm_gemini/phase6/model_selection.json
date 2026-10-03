@@ -1,0 +1,152 @@
+{
+  "selected": "H1",
+  "best_val_rmse": 0.012176912355965725,
+  "equivalence_cutoff": 0.012785757973764012,
+  "equivalence_set": [
+    "H1",
+    "H2",
+    "H3",
+    "H4"
+  ],
+  "bic_minimizer": "H1",
+  "bic_agrees_with_selection": true,
+  "explanations": [
+    {
+      "id": "H1",
+      "inactive_parameters": [],
+      "role": "selected"
+    },
+    {
+      "id": "H2",
+      "inactive_parameters": [
+        "r"
+      ],
+      "role": "fits equivalently but is more complex",
+      "reduces_to_selected": true
+    },
+    {
+      "id": "H3",
+      "inactive_parameters": [
+        "c"
+      ],
+      "role": "fits equivalently but is more complex",
+      "reduces_to_selected": true
+    },
+    {
+      "id": "H4",
+      "inactive_parameters": [
+        "r",
+        "K"
+      ],
+      "role": "fits equivalently but is more complex",
+      "reduces_to_selected": true
+    }
+  ],
+  "rule": "gate -> val_rmse within 5% of best -> lowest complexity -> lowest BIC",
+  "reduction_applied": null,
+  "stability": {
+    "H1": {
+      "monomials": {
+        "u_xx": {
+          "mean": 0.11019305772330386,
+          "std": 0.002908258533303767,
+          "sign_consistency": 1.0
+        }
+      },
+      "n_boot": 20,
+      "subset_fraction": 0.8,
+      "all_terms_sign_stable": true,
+      "method": "bootstrap OLS on Phase-2 finite-difference derivatives (empirical stability, not Bayesian)"
+    },
+    "H2": {
+      "monomials": {
+        "u_xx": {
+          "mean": 0.11295318598315159,
+          "std": 0.0036951311358802527,
+          "sign_consistency": 1.0
+        },
+        "u": {
+          "mean": 0.03620681376425266,
+          "std": 0.049143961841849444,
+          "sign_consistency": 0.75
+        }
+      },
+      "n_boot": 20,
+      "subset_fraction": 0.8,
+      "all_terms_sign_stable": false,
+      "method": "bootstrap OLS on Phase-2 finite-difference derivatives (empirical stability, not Bayesian)"
+    },
+    "H3": {
+      "monomials": {
+        "u_xx": {
+          "mean": 0.11046638293105877,
+          "std": 0.0030720145824096132,
+          "sign_consistency": 1.0
+        },
+        "u_x": {
+          "mean": 0.008768405030751915,
+          "std": 0.02836110366386941,
+          "sign_consistency": 0.8
+        }
+      },
+      "n_boot": 20,
+      "subset_fraction": 0.8,
+      "all_terms_sign_stable": false,
+      "method": "bootstrap OLS on Phase-2 finite-difference derivatives (empirical stability, not Bayesian)"
+    },
+    "H4": {
+      "monomials": {
+        "u_xx": {
+          "mean": 0.11271432717857695,
+          "std": 0.0038143553181480927,
+          "sign_consistency": 1.0
+        },
+        "u": {
+          "mean": -0.6717608264499741,
+          "std": 0.14663028911399367,
+          "sign_consistency": 1.0
+        },
+        "u**2": {
+          "mean": 1.155218738820522,
+          "std": 0.2095342215447284,
+          "sign_consistency": 1.0
+        }
+      },
+      "n_boot": 20,
+      "subset_fraction": 0.8,
+      "all_terms_sign_stable": true,
+      "method": "bootstrap OLS on Phase-2 finite-difference derivatives (empirical stability, not Bayesian)"
+    },
+    "K1": {
+      "monomials": {
+        "u_x": {
+          "mean": -0.010315232953165068,
+          "std": 0.013442741556324737,
+          "sign_consistency": 0.85
+        }
+      },
+      "n_boot": 20,
+      "subset_fraction": 0.8,
+      "all_terms_sign_stable": false,
+      "method": "bootstrap OLS on Phase-2 finite-difference derivatives (empirical stability, not Bayesian)"
+    },
+    "K3": {
+      "monomials": {
+        "u": {
+          "mean": -1.7405161789100387,
+          "std": 0.14165365604879726,
+          "sign_consistency": 1.0
+        },
+        "u**2": {
+          "mean": 1.2028970994971906,
+          "std": 0.2775542777143861,
+          "sign_consistency": 1.0
+        }
+      },
+      "n_boot": 20,
+      "subset_fraction": 0.8,
+      "all_terms_sign_stable": true,
+      "method": "bootstrap OLS on Phase-2 finite-difference derivatives (empirical stability, not Bayesian)"
+    }
+  }
+}

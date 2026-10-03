@@ -1,0 +1,27 @@
+% flowchart 'p4' -- shared by project_guide.tex and submission_report.tex
+\begin{tikzpicture}[node distance=3.6mm and 7mm]
+  \node[fnw=cExp] (main) {06_hypothesis_generation.main};
+  \node[fnw=cData, below=of main] (desc) {build_problem_description\\{\normalfont\tiny data statistics $\to$ plain text}};
+  \node[fnw=cLlm, below=of desc] (gp) {get_provider\\{\normalfont\tiny config + env: gemini or mock}};
+  \node[fnw=cHyp, below=of gp] (gen) {generate_hypotheses};
+  \node[fnw=cLlm, right=of gen] (prompt) {build_hypothesis_prompt\\{\normalfont\tiny + SYSTEM\_PROMPT}};
+  \node[fnw=cLlm, below=of prompt] (call) {provider.generate\\{\normalfont\tiny MockLLMProvider or GeminiProvider}};
+  \node[fnw=cHyp, below=of gen, yshift=-12mm] (json) {_extract_json_array\\{\normalfont\tiny strip code fences, json.loads}};
+  \node[fnw=cLlm, below=of json] (schema) {Hypothesis (pydantic)\\{\normalfont\tiny ParameterSpec; schema errors kept}};
+  \node[fnw=cHyp, below=of schema] (val) {validate_hypothesis\\{\normalfont\tiny checks 1--5}};
+  \node[fnw=cHyp, right=of val] (parse) {parse_equation\\{\normalfont\tiny SymPy: string $\to$ residual}};
+  \node[fnw=cHyp, below=of val] (dedup) {deduplicate\\{\normalfont\tiny via canonical\_signature}};
+  \node[fnw=cHyp, below=of dedup] (rank) {rank_hypotheses\\{\normalfont\tiny investigation order only}};
+  \node[fnw=cHyp, right=of rank] (scores) {_completeness_score\\_simplicity_score};
+  \node[fnw=cHyp, below=of rank] (adapt) {hypothesis_to_pinn_config};
+  \node[fnw=cHyp, right=of adapt] (comp) {compile_residual\\{\normalfont\tiny SymPy lambdify $\to$ torch}};
+  \node[fnw=cPinn, below=of adapt] (train) {build_and_train\\{\normalfont\tiny the unchanged Phase 3 trainer}};
+  \node[fnw=cVal, below=of train] (score) {build_validation_result};
+  \draw[flow] (main) -- (desc); \draw[flow] (desc) -- (gp); \draw[flow] (gp) -- (gen);
+  \draw[flow] (gen) -- (prompt); \draw[flow] (prompt) -- (call);
+  \draw[flow] (call) |- node[note, above, pos=0.75]{raw text} (json);
+  \draw[flow] (json) -- (schema); \draw[flow] (schema) -- (val); \draw[flow] (val) -- (parse);
+  \draw[flow] (val) -- (dedup); \draw[flow] (dedup) -- (rank); \draw[flow] (rank) -- (scores);
+  \draw[dflow] (rank) -- node[note, right]{optional PINN run} (adapt);
+  \draw[flow] (adapt) -- (comp); \draw[flow] (adapt) -- (train); \draw[flow] (train) -- (score);
+\end{tikzpicture}

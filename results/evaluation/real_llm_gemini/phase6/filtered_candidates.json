@@ -1,0 +1,245 @@
+{
+  "filter_report": {
+    "H1": {
+      "equation": "u_t = D * u_xx",
+      "structural": {
+        "id": "H1",
+        "valid": true,
+        "errors": [],
+        "warnings": [],
+        "used_fields": [
+          "u_t",
+          "u_xx"
+        ],
+        "used_params": [
+          "D"
+        ],
+        "dimensional_completeness": 1.0
+      },
+      "physics_precheck": {
+        "id": "H1",
+        "passed": true,
+        "errors": [],
+        "warnings": [],
+        "bounds": {
+          "D": {
+            "lower": 0.0,
+            "upper": null,
+            "source": "config_fallback"
+          }
+        },
+        "max_spatial_derivative_order": 2
+      },
+      "survives": true
+    },
+    "H2": {
+      "equation": "u_t = D * u_xx - r * u",
+      "structural": {
+        "id": "H2",
+        "valid": true,
+        "errors": [],
+        "warnings": [],
+        "used_fields": [
+          "u",
+          "u_t",
+          "u_xx"
+        ],
+        "used_params": [
+          "D",
+          "r"
+        ],
+        "dimensional_completeness": 1.0
+      },
+      "physics_precheck": {
+        "id": "H2",
+        "passed": true,
+        "errors": [],
+        "warnings": [],
+        "bounds": {
+          "D": {
+            "lower": 0.0,
+            "upper": null,
+            "source": "config_fallback"
+          },
+          "r": {
+            "lower": null,
+            "upper": null,
+            "source": "unconstrained"
+          }
+        },
+        "max_spatial_derivative_order": 2
+      },
+      "survives": true
+    },
+    "H3": {
+      "equation": "u_t + c * u_x = D * u_xx",
+      "structural": {
+        "id": "H3",
+        "valid": true,
+        "errors": [],
+        "warnings": [],
+        "used_fields": [
+          "u_t",
+          "u_x",
+          "u_xx"
+        ],
+        "used_params": [
+          "c",
+          "D"
+        ],
+        "dimensional_completeness": 1.0
+      },
+      "physics_precheck": {
+        "id": "H3",
+        "passed": true,
+        "errors": [],
+        "warnings": [],
+        "bounds": {
+          "c": {
+            "lower": null,
+            "upper": null,
+            "source": "unconstrained"
+          },
+          "D": {
+            "lower": 0.0,
+            "upper": null,
+            "source": "config_fallback"
+          }
+        },
+        "max_spatial_derivative_order": 2
+      },
+      "survives": true
+    },
+    "H4": {
+      "equation": "u_t = D * u_xx + r * u * (1.0 - u / K)",
+      "structural": {
+        "id": "H4",
+        "valid": true,
+        "errors": [],
+        "warnings": [],
+        "used_fields": [
+          "u",
+          "u_t",
+          "u_xx"
+        ],
+        "used_params": [
+          "D",
+          "r",
+          "K"
+        ],
+        "dimensional_completeness": 1.0
+      },
+      "physics_precheck": {
+        "id": "H4",
+        "passed": true,
+        "errors": [],
+        "warnings": [],
+        "bounds": {
+          "D": {
+            "lower": 0.0,
+            "upper": null,
+            "source": "config_fallback"
+          },
+          "r": {
+            "lower": null,
+            "upper": null,
+            "source": "unconstrained"
+          },
+          "K": {
+            "lower": 0.0,
+            "upper": null,
+            "source": "config_fallback"
+          }
+        },
+        "max_spatial_derivative_order": 2
+      },
+      "survives": true
+    },
+    "K1": {
+      "equation": "u_t + c*u_x = 0",
+      "structural": {
+        "id": "K1",
+        "valid": true,
+        "errors": [],
+        "warnings": [
+          "Dimensional metadata incomplete: 0/1 parameters have units specified"
+        ],
+        "used_fields": [
+          "u_t",
+          "u_x"
+        ],
+        "used_params": [
+          "c"
+        ],
+        "dimensional_completeness": 0.0
+      },
+      "physics_precheck": {
+        "id": "K1",
+        "passed": true,
+        "errors": [],
+        "warnings": [
+          "First order in x with Dirichlet data at BOTH ends: over-determined for a hyperbolic equation (only the inflow boundary can be prescribed)."
+        ],
+        "bounds": {
+          "c": {
+            "lower": null,
+            "upper": null,
+            "source": "unconstrained"
+          }
+        },
+        "max_spatial_derivative_order": 1
+      },
+      "survives": true
+    },
+    "K3": {
+      "equation": "u_t = r*u*(1-u/K)",
+      "structural": {
+        "id": "K3",
+        "valid": true,
+        "errors": [],
+        "warnings": [
+          "Dimensional metadata incomplete: 0/2 parameters have units specified"
+        ],
+        "used_fields": [
+          "u",
+          "u_t"
+        ],
+        "used_params": [
+          "K",
+          "r"
+        ],
+        "dimensional_completeness": 0.0
+      },
+      "physics_precheck": {
+        "id": "K3",
+        "passed": true,
+        "errors": [],
+        "warnings": [
+          "No spatial derivative: boundary conditions are not coupled to the dynamics (each point evolves independently); BCs can hold only if the dynamics preserve them."
+        ],
+        "bounds": {
+          "K": {
+            "lower": 0.0,
+            "upper": null,
+            "source": "config_fallback"
+          },
+          "r": {
+            "lower": null,
+            "upper": null,
+            "source": "unconstrained"
+          }
+        },
+        "max_spatial_derivative_order": 0
+      },
+      "survives": true
+    }
+  },
+  "survivors": [
+    "H1",
+    "H2",
+    "H3",
+    "H4",
+    "K1",
+    "K3"
+  ]
+}

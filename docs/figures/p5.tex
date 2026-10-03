@@ -1,0 +1,32 @@
+% flowchart 'p5' -- shared by project_guide.tex and submission_report.tex
+\begin{tikzpicture}[node distance=3.6mm and 6mm]
+  \node[fnw=cExp] (main) {07_scientific_rag_kg.main};
+  \node[fnw=cRag, below=of main] (lc) {load_corpus\\{\normalfont\tiny read the 5 files + front matter}};
+  % RAG column (left)
+  \node[fnw=cRag, below left=6mm and -10mm of lc] (ing) {RAGPipeline.ingest};
+  \node[fnw=cRag, below=of ing] (chunk) {chunk_document\\{\normalfont\tiny split at section headers}};
+  \node[fnw=cRag, below=of chunk] (emb) {LocalEmbeddingProvider.embed\\{\normalfont\tiny word hashing $\to$ 256-dim unit vector}};
+  \node[fnw=cRag, below=of emb] (vs) {InMemoryVectorStore.add};
+  % KG column (right)
+  \node[fnw=cKg, below right=6mm and -10mm of lc] (bg) {build_graph_from_documents};
+  \node[fnw=cKg, below=of bg] (ent) {KnowledgeGraph.add_entity\\{\normalfont\tiny Document, Mechanism, Variable, \ldots}};
+  \node[fnw=cKg, below=of ent] (rel) {KnowledgeGraph.add_relationship\\{\normalfont\tiny governs, has-parameter, \ldots}};
+  \node[fnw=cKg, below=of rel] (src) {_find_chunk_id\\{\normalfont\tiny provenance: which chunk said it}};
+  % merge
+  \node[fnw=cData, below=12mm of vs] (pd) {build_problem_description\\{\normalfont\tiny the query text}};
+  \node[fnw=cRag, below=of pd, xshift=27mm] (ctx) {build_scientific_context};
+  \node[fnw=cRag, below left=5mm and -12mm of ctx] (ret) {Retriever.retrieve\\{\normalfont\tiny cosine top-k, metadata filters}};
+  \node[fnw=cRag, below=of ret] (ev) {evidence_from_retrieval};
+  \node[fnw=cKg, below right=5mm and -12mm of ctx] (q) {equations_for_mechanism\\parameters_for_mechanism\\variables_for_mechanism};
+  \node[fnw=cRag, below=31mm of ctx] (sc) {ScientificContext\\{\normalfont\tiny mechanisms, equations, parameters, sources}};
+  \node[fnw=cHyp, below=of sc] (gen) {generate_hypotheses(context)\\{\normalfont\tiny Mode B: evidence-grounded prompt}};
+  \node[fnw=cKg, right=of lc, xshift=4mm] (ser) {save_graph\\{\normalfont\tiny graph to JSON (results/rag\_kg)}};
+  \draw[flow] (main) -- (lc); \draw[flow] (lc) -- (ing); \draw[flow] (lc) -- (bg);
+  \draw[flow] (ing) -- (chunk); \draw[flow] (chunk) -- (emb); \draw[flow] (emb) -- (vs);
+  \draw[flow] (bg) -- (ent); \draw[flow] (ent) -- (rel); \draw[flow] (rel) -- (src);
+  \draw[dflow] (chunk.east) -- (bg.west |- chunk.east);
+  \draw[dflow] (bg.north) |- (ser.west);
+  \draw[flow] (vs) -- (pd); \draw[flow] (pd) -- (ctx); \draw[flow] (src) |- (ctx);
+  \draw[flow] (ctx) -- (ret); \draw[flow] (ret) -- (ev); \draw[flow] (ctx) -- (q);
+  \draw[flow] (ev) |- (sc); \draw[flow] (q) |- (sc); \draw[flow] (sc) -- (gen);
+\end{tikzpicture}

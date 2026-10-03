@@ -1,0 +1,30 @@
+% flowchart 'p3' -- shared by project_guide.tex and submission_report.tex
+\begin{tikzpicture}[node distance=3.6mm and 6mm]
+  % left column: experiment set-up
+  \node[fnw=cExp] (main) {04_inverse_pinn.main\\{\normalfont\tiny (03 forward, 05 hypothesis vs hypothesis)}};
+  \node[fnw=cPinn, below=of main] (load) {load_observational_data\\{\normalfont\tiny noisy.npz: x, t, u only}};
+  \node[fnw=cPinn, below=of load] (pts) {make_collocation_points\\make_bc_points, make_ic_points};
+  \node[fnw=cPinn, below=of pts] (tens) {data_dict_to_tensors\\filter_by_time};
+  \node[fnw=cPinn, below=of tens] (inv) {run_inverse_pinn\\{\normalfont\tiny (run\_forward\_pinn: D fixed)}};
+  \node[fnw=cPinn, below=of inv] (bt) {build_and_train};
+  \node[fnw=cPinn, below=of bt] (net) {PINN\\{\normalfont\tiny 2 $\to$ 64$\times$4 tanh $\to$ 1}};
+  \node[fnw=cPinn, below=of net] (mp) {make_params\\{\normalfont\tiny D as trainable tensor}};
+  \node[fnw=cPinn, below=of mp] (tr) {PINNTrainer.train\\{\normalfont\tiny Adam 3000 $\to$ L-BFGS 300}};
+  % right column: one loss evaluation
+  \node[fnw=cPinn, right=of tr, xshift=10mm, yshift=46mm] (cl) {PINNTrainer.compute_losses};
+  \node[fnw=cPinn, below=of cl] (cd) {compute_derivatives\\{\normalfont\tiny exact derivatives by autograd}};
+  \node[fnw=cPinn, below=of cd] (res) {residual_fn\\{\normalfont\tiny from the residual registry}};
+  \node[fnw=cPinn, below=of res] (loss) {data_loss, physics_loss\\bc_loss, ic_loss};
+  \node[fnw=cPinn, below=of loss] (tot) {total_loss\\{\normalfont\tiny weighted sum (all weights 1)}};
+  \begin{scope}[on background layer]
+    \node[pkgbox=cPinn, fit=(cl)(cd)(res)(loss)(tot), label={[pkglabel=cPinn]above:one optimisation step}] (box) {};
+  \end{scope}
+  % scoring
+  \node[fnw=cVal, below=of tr] (phys) {evaluate_physics_residual\\{\normalfont\tiny residual on a fresh grid}};
+  \node[fnw=cVal, below=of phys] (ood) {split_by_time + prediction_error\\{\normalfont\tiny in-distribution vs $t>0.7$}};
+  \node[fnw=cVal, below=of ood] (score) {build_validation_result\\{\normalfont\tiny thresholds $\to$ supported / rejected}};
+  \foreach \a/\b in {main/load,load/pts,pts/tens,tens/inv,inv/bt,bt/net,net/mp,mp/tr,tr/phys,phys/ood,ood/score}
+    \draw[flow] (\a) -- (\b);
+  \draw[flow] (tr.east) -- (box.west |- tr.east) node[note, above, pos=0.45]{each step};
+  \draw[flow] (cl) -- (cd); \draw[flow] (cd) -- (res); \draw[flow] (res) -- (loss); \draw[flow] (loss) -- (tot);
+\end{tikzpicture}

@@ -1,0 +1,23 @@
+% flowchart 'selection' -- shared by project_guide.tex and submission_report.tex
+\begin{tikzpicture}[node distance=5mm and 9mm]
+  \node[io] (in) {trained candidates (val RMSE, losses, bounds, contributions, complexity, BIC)};
+  \node[dec=cVal, below=of in] (g) {gate passed?\\{\tiny val RMSE $\le 0.03$, physics,}\\{\tiny BC, IC, bounds}};
+  \node[fn=cVal, font=\scriptsize, right=of g] (rej) {rejected under the\\tested conditions};
+  \node[fn=cVal, font=\scriptsize, below=of g, text width=74mm] (eq) {\textbf{equivalence set}: survivors with val RMSE within 5\% of the best
+        (differences this small are below what 5\% noise can resolve)};
+  \node[dec=cVal, below=of eq] (red) {extra terms\\inactive?\\{\tiny (Phase 7 rule)}};
+  \node[fn=cVal, font=\scriptsize, right=of red, text width=44mm] (rd) {replace by its reduced equation if that equation is
+        itself a supported candidate};
+  \node[fn=cVal, font=\scriptsize, below=of red, text width=74mm] (cx) {lowest \textbf{complexity score}
+        (terms + free parameters + derivative order + 2$\times$nonlinear + 0.1$\times$operations)};
+  \node[fn=cVal, font=\scriptsize, below=of cx, text width=74mm] (bic) {tie-break: lowest \textbf{BIC} $= n\ln(\mathrm{MSE}) + k\ln n$};
+  \node[fn=cHyp, below=of bic] (sel) {\textbf{selected law}};
+  \draw[flow] (in) -- (g);
+  \draw[flow] (g) -- node[note, above]{no} (rej);
+  \draw[flow] (g) -- node[note, right]{yes} (eq);
+  \draw[flow] (eq) -- (red);
+  \draw[flow] (red) -- node[note, above]{yes} (rd);
+  \draw[flow] (rd) |- (cx.east);
+  \draw[flow] (red) -- node[note, right]{no} (cx);
+  \draw[flow] (cx) -- (bic); \draw[flow] (bic) -- (sel);
+\end{tikzpicture}

@@ -1,0 +1,629 @@
+{
+  "problem_description": "We observe a scalar field u(x,t) on a 1D spatial domain x in [0,1] over a time window t in [0,1], measured via 400 sparse, noisy point samples (x_i, t_i, u_i) -- no dense grid or simulation is provided to you.\n\nObserved facts (computed directly from the data):\n- Near t=0.05, the field's peak absolute amplitude is approximately 0.983.\n- Near t=0.95, the field's peak absolute amplitude is approximately 0.395 (i.e. the amplitude has decreased substantially over the observation window).\n- Near the domain edges (x<0.03 or x>0.97), the field stays very close to zero at essentially all observed times (max |u| there is approximately 0.0711).\n- The amplitude-weighted spatial centroid of |u| is approximately x~0.53 near t=0.05 and x~0.41 near t=0.95 (i.e. little evidence of bulk translation of the field across the domain -- compare this to the amplitude decay above).\n- The spatial profile appears to smooth out over time: early-time samples show more fine-grained spatial structure (multiple local peaks) than late-time samples.\n\nPropose plausible governing mechanisms for this field's evolution.",
+  "provider": "MockLLMProvider",
+  "all_hypotheses": [
+    {
+      "id": "H1",
+      "name": "Diffusion",
+      "domain": "transport",
+      "equation": "u_t = D*u_xx",
+      "latex": "u_t = D u_{xx}",
+      "dependent_variables": [
+        "u"
+      ],
+      "independent_variables": [
+        "x",
+        "t"
+      ],
+      "parameters": [
+        {
+          "name": "D",
+          "description": "diffusion coefficient",
+          "trainable": true,
+          "initial_value": 0.2,
+          "units": "length^2/time",
+          "lower_bound": 0.0,
+          "upper_bound": null
+        }
+      ],
+      "required_derivatives": [
+        "u_t",
+        "u_xx"
+      ],
+      "required_initial_conditions": true,
+      "required_boundary_conditions": true,
+      "assumptions": [
+        "isotropic medium",
+        "no advective transport",
+        "no source/sink terms"
+      ],
+      "mechanism": "diffusive transport",
+      "rationale": "A field that spreads out and decays smoothly over time, with no net directional drift, is consistent with a purely diffusive (random-walk) transport mechanism.",
+      "testable_predictions": [
+        "spatial variance grows linearly in time",
+        "field amplitude decays monotonically with no translation"
+      ],
+      "confidence": 0.55
+    },
+    {
+      "id": "H2",
+      "name": "Advection",
+      "domain": "transport",
+      "equation": "u_t + c*u_x = 0",
+      "latex": "u_t + c\\,u_x = 0",
+      "dependent_variables": [
+        "u"
+      ],
+      "independent_variables": [
+        "x",
+        "t"
+      ],
+      "parameters": [
+        {
+          "name": "c",
+          "description": "advection (transport) velocity",
+          "trainable": true,
+          "initial_value": 0.2,
+          "units": "length/time",
+          "lower_bound": null,
+          "upper_bound": null
+        }
+      ],
+      "required_derivatives": [
+        "u_t",
+        "u_x"
+      ],
+      "required_initial_conditions": true,
+      "required_boundary_conditions": true,
+      "assumptions": [
+        "no diffusive spreading",
+        "no source/sink terms",
+        "constant transport velocity"
+      ],
+      "mechanism": "advective (directional) transport",
+      "rationale": "If the observed field is primarily being carried/translated through space rather than spreading out, a pure advection mechanism is a plausible structurally simple alternative to diffusion.",
+      "testable_predictions": [
+        "the field's spatial profile translates rigidly with time",
+        "peak shape is preserved rather than flattening"
+      ],
+      "confidence": 0.3
+    },
+    {
+      "id": "H3",
+      "name": "Reaction-diffusion (logistic growth/decay)",
+      "domain": "transport",
+      "equation": "u_t = D*u_xx + r*u*(1 - u/K)",
+      "latex": "u_t = D u_{xx} + r u (1 - u/K)",
+      "dependent_variables": [
+        "u"
+      ],
+      "independent_variables": [
+        "x",
+        "t"
+      ],
+      "parameters": [
+        {
+          "name": "D",
+          "description": "diffusion coefficient",
+          "trainable": true,
+          "initial_value": 0.2,
+          "units": "length^2/time",
+          "lower_bound": 0.0,
+          "upper_bound": null
+        },
+        {
+          "name": "r",
+          "description": "local growth/decay rate",
+          "trainable": true,
+          "initial_value": 0.1,
+          "units": "1/time",
+          "lower_bound": null,
+          "upper_bound": null
+        },
+        {
+          "name": "K",
+          "description": "carrying capacity / saturation level",
+          "trainable": true,
+          "initial_value": 1.0,
+          "units": "same as u",
+          "lower_bound": 0.0,
+          "upper_bound": null
+        }
+      ],
+      "required_derivatives": [
+        "u_t",
+        "u_xx"
+      ],
+      "required_initial_conditions": true,
+      "required_boundary_conditions": true,
+      "assumptions": [
+        "diffusive transport plus a local nonlinear source/sink term",
+        "logistic-form self-limiting reaction kinetics"
+      ],
+      "mechanism": "diffusion combined with local nonlinear reaction kinetics",
+      "rationale": "If the decay rate itself appears to depend on the local field value (not just a constant-rate exponential decay), a reaction term alongside diffusion is a plausible richer alternative worth testing.",
+      "testable_predictions": [
+        "decay rate varies with local amplitude, not just position",
+        "field approaches a nonzero steady state if r>0"
+      ],
+      "confidence": 0.35
+    },
+    {
+      "id": "H4",
+      "name": "Advection-diffusion",
+      "domain": "transport",
+      "equation": "u_t + c*u_x = D*u_xx",
+      "latex": "u_t + c\\,u_x = D u_{xx}",
+      "dependent_variables": [
+        "u"
+      ],
+      "independent_variables": [
+        "x",
+        "t"
+      ],
+      "parameters": [
+        {
+          "name": "c",
+          "description": "advection velocity",
+          "trainable": true,
+          "initial_value": 0.1,
+          "units": "length/time",
+          "lower_bound": null,
+          "upper_bound": null
+        },
+        {
+          "name": "D",
+          "description": "diffusion coefficient",
+          "trainable": true,
+          "initial_value": 0.2,
+          "units": "length^2/time",
+          "lower_bound": 0.0,
+          "upper_bound": null
+        }
+      ],
+      "required_derivatives": [
+        "u_t",
+        "u_x",
+        "u_xx"
+      ],
+      "required_initial_conditions": true,
+      "required_boundary_conditions": true,
+      "assumptions": [
+        "both directional transport and diffusive spreading are present"
+      ],
+      "mechanism": "combined advective and diffusive transport",
+      "rationale": "A general combination of the two simplest linear transport mechanisms; worth testing in case the field both drifts and spreads.",
+      "testable_predictions": [
+        "field both translates and spreads over time"
+      ],
+      "confidence": 0.25
+    }
+  ],
+  "schema_errors": [],
+  "validations": {
+    "H1": {
+      "id": "H1",
+      "valid": true,
+      "errors": [],
+      "warnings": [],
+      "used_fields": [
+        "u_t",
+        "u_xx"
+      ],
+      "used_params": [
+        "D"
+      ],
+      "dimensional_completeness": 1.0
+    },
+    "H2": {
+      "id": "H2",
+      "valid": true,
+      "errors": [],
+      "warnings": [],
+      "used_fields": [
+        "u_t",
+        "u_x"
+      ],
+      "used_params": [
+        "c"
+      ],
+      "dimensional_completeness": 1.0
+    },
+    "H3": {
+      "id": "H3",
+      "valid": true,
+      "errors": [],
+      "warnings": [],
+      "used_fields": [
+        "u",
+        "u_t",
+        "u_xx"
+      ],
+      "used_params": [
+        "D",
+        "r",
+        "K"
+      ],
+      "dimensional_completeness": 1.0
+    },
+    "H4": {
+      "id": "H4",
+      "valid": true,
+      "errors": [],
+      "warnings": [],
+      "used_fields": [
+        "u_t",
+        "u_x",
+        "u_xx"
+      ],
+      "used_params": [
+        "c",
+        "D"
+      ],
+      "dimensional_completeness": 1.0
+    }
+  },
+  "removed_duplicates": [],
+  "valid_hypotheses": [
+    {
+      "id": "H1",
+      "name": "Diffusion",
+      "domain": "transport",
+      "equation": "u_t = D*u_xx",
+      "latex": "u_t = D u_{xx}",
+      "dependent_variables": [
+        "u"
+      ],
+      "independent_variables": [
+        "x",
+        "t"
+      ],
+      "parameters": [
+        {
+          "name": "D",
+          "description": "diffusion coefficient",
+          "trainable": true,
+          "initial_value": 0.2,
+          "units": "length^2/time",
+          "lower_bound": 0.0,
+          "upper_bound": null
+        }
+      ],
+      "required_derivatives": [
+        "u_t",
+        "u_xx"
+      ],
+      "required_initial_conditions": true,
+      "required_boundary_conditions": true,
+      "assumptions": [
+        "isotropic medium",
+        "no advective transport",
+        "no source/sink terms"
+      ],
+      "mechanism": "diffusive transport",
+      "rationale": "A field that spreads out and decays smoothly over time, with no net directional drift, is consistent with a purely diffusive (random-walk) transport mechanism.",
+      "testable_predictions": [
+        "spatial variance grows linearly in time",
+        "field amplitude decays monotonically with no translation"
+      ],
+      "confidence": 0.55
+    },
+    {
+      "id": "H2",
+      "name": "Advection",
+      "domain": "transport",
+      "equation": "u_t + c*u_x = 0",
+      "latex": "u_t + c\\,u_x = 0",
+      "dependent_variables": [
+        "u"
+      ],
+      "independent_variables": [
+        "x",
+        "t"
+      ],
+      "parameters": [
+        {
+          "name": "c",
+          "description": "advection (transport) velocity",
+          "trainable": true,
+          "initial_value": 0.2,
+          "units": "length/time",
+          "lower_bound": null,
+          "upper_bound": null
+        }
+      ],
+      "required_derivatives": [
+        "u_t",
+        "u_x"
+      ],
+      "required_initial_conditions": true,
+      "required_boundary_conditions": true,
+      "assumptions": [
+        "no diffusive spreading",
+        "no source/sink terms",
+        "constant transport velocity"
+      ],
+      "mechanism": "advective (directional) transport",
+      "rationale": "If the observed field is primarily being carried/translated through space rather than spreading out, a pure advection mechanism is a plausible structurally simple alternative to diffusion.",
+      "testable_predictions": [
+        "the field's spatial profile translates rigidly with time",
+        "peak shape is preserved rather than flattening"
+      ],
+      "confidence": 0.3
+    },
+    {
+      "id": "H3",
+      "name": "Reaction-diffusion (logistic growth/decay)",
+      "domain": "transport",
+      "equation": "u_t = D*u_xx + r*u*(1 - u/K)",
+      "latex": "u_t = D u_{xx} + r u (1 - u/K)",
+      "dependent_variables": [
+        "u"
+      ],
+      "independent_variables": [
+        "x",
+        "t"
+      ],
+      "parameters": [
+        {
+          "name": "D",
+          "description": "diffusion coefficient",
+          "trainable": true,
+          "initial_value": 0.2,
+          "units": "length^2/time",
+          "lower_bound": 0.0,
+          "upper_bound": null
+        },
+        {
+          "name": "r",
+          "description": "local growth/decay rate",
+          "trainable": true,
+          "initial_value": 0.1,
+          "units": "1/time",
+          "lower_bound": null,
+          "upper_bound": null
+        },
+        {
+          "name": "K",
+          "description": "carrying capacity / saturation level",
+          "trainable": true,
+          "initial_value": 1.0,
+          "units": "same as u",
+          "lower_bound": 0.0,
+          "upper_bound": null
+        }
+      ],
+      "required_derivatives": [
+        "u_t",
+        "u_xx"
+      ],
+      "required_initial_conditions": true,
+      "required_boundary_conditions": true,
+      "assumptions": [
+        "diffusive transport plus a local nonlinear source/sink term",
+        "logistic-form self-limiting reaction kinetics"
+      ],
+      "mechanism": "diffusion combined with local nonlinear reaction kinetics",
+      "rationale": "If the decay rate itself appears to depend on the local field value (not just a constant-rate exponential decay), a reaction term alongside diffusion is a plausible richer alternative worth testing.",
+      "testable_predictions": [
+        "decay rate varies with local amplitude, not just position",
+        "field approaches a nonzero steady state if r>0"
+      ],
+      "confidence": 0.35
+    },
+    {
+      "id": "H4",
+      "name": "Advection-diffusion",
+      "domain": "transport",
+      "equation": "u_t + c*u_x = D*u_xx",
+      "latex": "u_t + c\\,u_x = D u_{xx}",
+      "dependent_variables": [
+        "u"
+      ],
+      "independent_variables": [
+        "x",
+        "t"
+      ],
+      "parameters": [
+        {
+          "name": "c",
+          "description": "advection velocity",
+          "trainable": true,
+          "initial_value": 0.1,
+          "units": "length/time",
+          "lower_bound": null,
+          "upper_bound": null
+        },
+        {
+          "name": "D",
+          "description": "diffusion coefficient",
+          "trainable": true,
+          "initial_value": 0.2,
+          "units": "length^2/time",
+          "lower_bound": 0.0,
+          "upper_bound": null
+        }
+      ],
+      "required_derivatives": [
+        "u_t",
+        "u_x",
+        "u_xx"
+      ],
+      "required_initial_conditions": true,
+      "required_boundary_conditions": true,
+      "assumptions": [
+        "both directional transport and diffusive spreading are present"
+      ],
+      "mechanism": "combined advective and diffusive transport",
+      "rationale": "A general combination of the two simplest linear transport mechanisms; worth testing in case the field both drifts and spreads.",
+      "testable_predictions": [
+        "field both translates and spreads over time"
+      ],
+      "confidence": 0.25
+    }
+  ],
+  "ranking": [
+    {
+      "id": "H1",
+      "name": "Diffusion",
+      "equation": "u_t = D*u_xx",
+      "composite_score": 0.835,
+      "validity_score": 1.0,
+      "completeness_score": 1.0,
+      "dimensional_score": 1.0,
+      "simplicity_score": 0.5,
+      "llm_confidence": 0.55,
+      "note": "investigation-order triage only -- NOT a scientific validity judgment"
+    },
+    {
+      "id": "H2",
+      "name": "Advection",
+      "equation": "u_t + c*u_x = 0",
+      "composite_score": 0.7849999999999999,
+      "validity_score": 1.0,
+      "completeness_score": 1.0,
+      "dimensional_score": 1.0,
+      "simplicity_score": 0.5,
+      "llm_confidence": 0.3,
+      "note": "investigation-order triage only -- NOT a scientific validity judgment"
+    },
+    {
+      "id": "H3",
+      "name": "Reaction-diffusion (logistic growth/decay)",
+      "equation": "u_t = D*u_xx + r*u*(1 - u/K)",
+      "composite_score": 0.7575,
+      "validity_score": 1.0,
+      "completeness_score": 1.0,
+      "dimensional_score": 1.0,
+      "simplicity_score": 0.25,
+      "llm_confidence": 0.35,
+      "note": "investigation-order triage only -- NOT a scientific validity judgment"
+    },
+    {
+      "id": "H4",
+      "name": "Advection-diffusion",
+      "equation": "u_t + c*u_x = D*u_xx",
+      "composite_score": 0.7500000000000001,
+      "validity_score": 1.0,
+      "completeness_score": 1.0,
+      "dimensional_score": 1.0,
+      "simplicity_score": 0.3333333333333333,
+      "llm_confidence": 0.25,
+      "note": "investigation-order triage only -- NOT a scientific validity judgment"
+    }
+  ],
+  "structural_match_to_true_diffusion": "H1",
+  "pinn_validation_results": {
+    "H1": {
+      "hypothesis": "H1",
+      "equation": "u_t = D*u_xx",
+      "status": "supported by the available observations and physics constraints",
+      "failed_checks": [],
+      "data_loss": 0.0001322756870649755,
+      "physics_residual": 3.3133415854536e-05,
+      "bc_loss": 2.8071319775335724e-06,
+      "ic_loss": 1.2144211041231756e-06,
+      "prediction_error": 0.0008795529781843732,
+      "ood_error": null,
+      "parameter_estimate": {
+        "D": 0.09988795220851898
+      },
+      "parameter_true": {
+        "D": 0.1
+      },
+      "parameter_error": {
+        "D": {
+          "absolute_error": 0.00011204779148102362,
+          "relative_error": 0.0011204779148102362
+        }
+      },
+      "thresholds_used": {
+        "data_loss_max": 0.01,
+        "physics_residual_max": 0.01,
+        "bc_loss_max": 0.005,
+        "ic_loss_max": 0.01,
+        "prediction_error_max": 0.1
+      }
+    },
+    "H2": {
+      "hypothesis": "H2",
+      "equation": "u_t + c*u_x = 0",
+      "status": "rejected under the tested conditions",
+      "failed_checks": [
+        "data_loss",
+        "physics_residual",
+        "ic_loss",
+        "prediction_error"
+      ],
+      "data_loss": 0.039758313447237015,
+      "physics_residual": 0.014475044794380665,
+      "bc_loss": 3.992196070612408e-05,
+      "ic_loss": 0.026302559301257133,
+      "prediction_error": 0.21009280369078362,
+      "ood_error": null,
+      "parameter_estimate": {
+        "c": 0.01640637032687664
+      },
+      "parameter_true": null,
+      "parameter_error": null,
+      "thresholds_used": {
+        "data_loss_max": 0.01,
+        "physics_residual_max": 0.01,
+        "bc_loss_max": 0.005,
+        "ic_loss_max": 0.01,
+        "prediction_error_max": 0.1
+      }
+    },
+    "H3": {
+      "hypothesis": "H3",
+      "equation": "u_t = D*u_xx + r*u*(1 - u/K)",
+      "status": "supported by the available observations and physics constraints",
+      "failed_checks": [],
+      "data_loss": 0.00013212513295002282,
+      "physics_residual": 2.9136976081645116e-05,
+      "bc_loss": 2.812706043187063e-06,
+      "ic_loss": 6.811489470237575e-07,
+      "prediction_error": 0.0008717748171991533,
+      "ood_error": null,
+      "parameter_estimate": {
+        "D": 0.10062636435031891,
+        "r": 0.014775658957660198,
+        "K": 1.2154279947280884
+      },
+      "parameter_true": null,
+      "parameter_error": null,
+      "thresholds_used": {
+        "data_loss_max": 0.01,
+        "physics_residual_max": 0.01,
+        "bc_loss_max": 0.005,
+        "ic_loss_max": 0.01,
+        "prediction_error_max": 0.1
+      }
+    },
+    "H4": {
+      "hypothesis": "H4",
+      "equation": "u_t + c*u_x = D*u_xx",
+      "status": "supported by the available observations and physics constraints",
+      "failed_checks": [],
+      "data_loss": 0.0001328568469034508,
+      "physics_residual": 8.067548333201557e-05,
+      "bc_loss": 3.328856564621674e-06,
+      "ic_loss": 5.819819648422708e-07,
+      "prediction_error": 0.0008433975111498198,
+      "ood_error": null,
+      "parameter_estimate": {
+        "c": -0.00035868637496605515,
+        "D": 0.0999932736158371
+      },
+      "parameter_true": null,
+      "parameter_error": null,
+      "thresholds_used": {
+        "data_loss_max": 0.01,
+        "physics_residual_max": 0.01,
+        "bc_loss_max": 0.005,
+        "ic_loss_max": 0.01,
+        "prediction_error_max": 0.1
+      }
+    }
+  }
+}

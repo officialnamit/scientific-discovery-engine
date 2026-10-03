@@ -1,0 +1,163 @@
+# Phase 1 configuration: 1D diffusion (heat) equation
+# u_t = D * u_xx
+#
+# This file is the single source of truth for experiment parameters.
+# Nothing in data/generate_diffusion.py should be hard-coded outside of here.
+
+seed: 42
+
+diffusion:
+  # NOTE: the explicit FD solver requires r = D_true*dt/dx^2 <= 0.5 to be stable,
+  # where dt = t_max/(n_t-1) and dx = (x_max-x_min)/(n_x-1). If you change
+  # D_true, x range, t range, or n_x, raise n_t until this holds (the
+  # generator will raise a clear error if it doesn't).
+  D_true: 0.1          # hidden ground-truth diffusion coefficient (NOT given to discovery system)
+  x_min: 0.0
+  x_max: 1.0
+  n_x: 61               # spatial grid points (clean/full-field simulation grid)
+  t_min: 0.0
+  t_max: 1.0
+  n_t: 800                # time steps (clean/full-field simulation grid; chosen for FD stability, see below)
+  initial_condition: "two_mode_sin"   # options: "sin" (degenerate, see generate_diffusion.py), "two_mode_sin", "gaussian_bump"
+  boundary_condition: "dirichlet_zero"  # u(0,t) = u(1,t) = 0
+
+sampling:
+  # sparse/noisy observation set handed to the discovery system
+  n_samples: 400          # number of (x,t,u) points sampled from the full field
+  noise_std_fraction: 0.05   # noise std as a fraction of the clean data's std
+  sparse_fraction_of_grid: 0.10  # fraction of full grid used to build the "sparse" (noise-free) set
+
+paths:
+  output_dir: "data/generated"
+
+# ---------------------------------------------------------------------------
+# Phase 2: equation discovery
+# ---------------------------------------------------------------------------
+discovery:
+  # Reconstruction grids used ONLY for the scattered (sparse/noisy) datasets.
+  # Grid resolution is matched to how many samples are actually available
+  # (interpolating a handful of points onto a very fine grid mostly just
+  # fits interpolation artifacts, not physics) -- this was tuned empirically
+  # against the sparse/noisy sample counts, NOT against the ground-truth D.
+  reconstruction:
+    interp_method: "linear"
+    sparse:   # 4880 noise-free points -> can support a fairly fine grid
+      n_x_recon: 41
+      n_t_recon: 150
+      smoothing_sigma: 0.0   # noise-free, no smoothing needed
+      crop: 3
+    noisy:    # only 400 noisy points -> needs a much coarser grid
+      n_x_recon: 13
+      n_t_recon: 25
+      smoothing_sigma: 0.6   # set to 0.0 for the "no smoothing" comparison run
+      crop: 2
+  finite_difference:
+    crop_clean: 3   # crop used for the clean full-grid case (no reconstruction)
+  sindy:
+    threshold: 0.05     # STLSQ sparsification threshold (applied to normalized columns)
+    alpha: 0.0           # optional ridge regularization
+    max_iterations: 20
+  # Candidate library: modular term specs, see equation_discovery/library.py.
+  # Each entry is a list of field names to multiply together; [] = constant 1.
+  candidate_terms:
+    - []
+    - ["u"]
+    - ["u_x"]
+    - ["u_xx"]
+    - ["u_xxx"]
+    - ["u", "u"]
+    - ["u", "u_x"]
+    - ["u", "u_xx"]
+  # Step 9: competing hypotheses scored via unrestricted least squares.
+  hypotheses:
+    H1_diffusion: ["u_xx"]
+    H2_advection: ["u_x"]
+
+# ---------------------------------------------------------------------------
+# Phase 3: PINN validation
+# ---------------------------------------------------------------------------
+# ---------------------------------------------------------------------------
+# Phase 4: generative hypothesis engine
+# ---------------------------------------------------------------------------
+llm:
+  provider: "gemini"      # "gemini" (real LLM) or "mock" (offline, deterministic)
+  model: "gemini-3.8-flash"  # set to null to use the GEMINI_MODEL env var instead
+  temperature: 0.7
+  n_hypotheses: 4
+  # GEMINI_API_KEY must be set in the environment to actually use provider="gemini";
+  # if it's missing, llm.get_provider() falls back to the mock provider with a warning.
+
+pinn:
+  architecture:
+    hidden_dims: [64, 64, 64, 64]
+    activation: "tanh"
+  training:
+    n_collocation: 2000
+    n_bc: 200
+    n_ic: 200
+    adam_epochs: 3000
+    adam_lr: 0.001
+    lbfgs_epochs: 300
+    seed: 0
+  weights:
+    lambda_data: 1.0
+    lambda_physics: 1.0
+    lambda_bc: 1.0
+    lambda_ic: 1.0
+  forward:
+    D_fixed: 0.1
+  inverse:
+    D_init: 0.2   # deliberately different from D_true=0.1
+  hypotheses:
+    H1_diffusion:
+      residual: "diffusion"
+      param_init: {D: 0.2}   # trainable, initialized away from D_true
+    H2_advection:
+      residual: "advection"
+      param_init: {c: 0.2}   # trainable, no true value -- advection is the wrong hypothesis
+  ood:
+    t_cutoff: 0.7   # train on t<=0.7, evaluate held-out error on t>0.7
+  validation:
+    thresholds:
+      data_loss_max: 0.01
+      physics_residual_max: 0.01
+      bc_loss_max: 0.005
+      ic_loss_max: 0.01
+      prediction_error_max: 0.1   # RMSE against the clean reference field
+
+
+
+# ---------------------------------------------------------------------------
+# Phase 6: physics-constrained generative search
+# All thresholds below were fixed BEFORE running the Phase 6 experiment.
+# ---------------------------------------------------------------------------
+phase6:
+  t_cutoff: 0.8           # train/select on t<=0.8; t>0.8 observations are OOD (never trained on, never used to select)
+  val_fraction: 0.2        # random in-distribution holdout used for the gate and for model selection
+  split_seed: 0
+  gate:                     # decisions use HELD-OUT NOISY OBSERVATIONS only (no clean oracle field)
+    val_rmse_max: 0.03       # ~2.5x nominal sensor noise level (real use: from instrument spec)
+    physics_residual_max: 0.01
+    bc_loss_max: 0.005
+    ic_loss_max: 0.01
+  equivalence_tol: 0.05     # val RMSE within 5% of best = indistinguishable fit at this noise level
+  inactive_threshold: 0.05  # parameter's terms contribute <5% of RMS(u_t) -> "data does not require this term"
+  parameter_defaults: {D: 0.2, c: 0.2, r: 0.1, K: 1.0, _default: 0.5}  # init values for KG templates (NOT truth)
+  parameter_constraints:    # name-keyed fallback when a hypothesis declares no bounds (exclusive bounds)
+    D: {lower: 0.0}          # diffusivity: D<=0 is the ill-posed backward heat equation
+    K: {lower: 0.0}          # carrying capacity must be positive
+    # c (velocity) and r (growth/decay rate) are deliberately unconstrained: either sign is physical
+  stability:
+    n_boot: 20
+    subset_fraction: 0.8
+  forward_prediction_t_end: 1.5   # "novel prediction": solve the selected law beyond the observed window
+
+# ---------------------------------------------------------------------------
+# Phase 7: evaluation. Fixed BEFORE running the benchmark/ablation/adversarial suites.
+# ---------------------------------------------------------------------------
+phase7:
+  gate_rel_val_error: 0.05   # regression engine: held-out u_t error <= 5% of RMS(u_t) to pass the gate
+  ood_t_end: 1.3              # forward-predict the selected law on (1.0, 1.3], beyond every dataset's window
+  param_tol: 0.05             # parameter estimate counted correct within 5% relative error
+  ood_tol: 0.05               # OOD prediction counted correct within 5% relative RMSE
+  seed: 0

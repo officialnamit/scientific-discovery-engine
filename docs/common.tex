@@ -1,0 +1,46 @@
+% Shared by project_guide.tex and submission_report.tex: macros, colours, flowchart styles, legend.
+% Needs: xcolor, tikz (+ arrows.meta, positioning, shapes.geometric, shapes.misc, fit, backgrounds, calc),
+% and the underscore package.
+
+% ---------- code identifiers (underscores safe) ----------
+\newcommand{\fn}[1]{\texttt{#1}}  % underscore pkg: _ prints literally and may break lines
+
+% ---------- package colour palette (used in every flowchart) ----------
+\definecolor{cData}{HTML}{6B7280}   % data/
+\definecolor{cEqd}{HTML}{2563EB}    % equation_discovery/
+\definecolor{cPinn}{HTML}{EA580C}   % pinn/
+\definecolor{cVal}{HTML}{DC2626}    % validation/
+\definecolor{cLlm}{HTML}{7C3AED}    % llm/
+\definecolor{cHyp}{HTML}{15803D}    % hypotheses/
+\definecolor{cRag}{HTML}{0D9488}    % rag/
+\definecolor{cKg}{HTML}{92400E}     % knowledge_graph/
+\definecolor{cEval}{HTML}{A16207}   % evaluation/
+\definecolor{cExp}{HTML}{111827}    % experiments/
+
+% ---------- flowchart styles ----------
+\tikzset{
+  >={Stealth[length=2.2mm]},
+  fn/.style={draw=#1!75!black, fill=#1!10, rounded corners=2pt, line width=0.6pt,
+             font=\ttfamily\scriptsize, align=center, inner sep=3pt, minimum height=6mm},
+  fnw/.style={fn=#1, text width=47mm},
+  stage/.style={draw=#1!75!black, fill=#1!8, rounded corners=3pt, line width=0.8pt,
+                font=\small, align=left, inner sep=5pt, text width=0.80\textwidth},
+  io/.style={draw=black!60, fill=black!4, font=\scriptsize\itshape, align=center,
+             trapezium, trapezium left angle=75, trapezium right angle=105,
+             inner sep=3pt, minimum height=6mm},
+  dec/.style={draw=#1!75!black, fill=#1!10, diamond, aspect=2.4, font=\scriptsize,
+              align=center, inner sep=1pt},
+  note/.style={font=\scriptsize\itshape, text=black!65, align=left},
+  flow/.style={->, line width=0.7pt, black!65},
+  dflow/.style={->, line width=0.7pt, black!45, dashed},
+  pkgbox/.style={draw=#1!60, fill=#1!4, rounded corners=4pt, line width=0.5pt, inner sep=6pt},
+  pkglabel/.style={font=\ttfamily\scriptsize\bfseries, text=#1!80!black},
+}
+
+% legend used under every flowchart
+\newcommand{\pkglegend}{%
+  \par\smallskip\centering\scriptsize
+  \tikz\node[fn=cData]{data};~\tikz\node[fn=cEqd]{equation\_discovery};~\tikz\node[fn=cPinn]{pinn};~%
+  \tikz\node[fn=cVal]{validation};~\tikz\node[fn=cLlm]{llm};~\tikz\node[fn=cHyp]{hypotheses};\\[2pt]
+  \tikz\node[fn=cRag]{rag};~\tikz\node[fn=cKg]{knowledge\_graph};~\tikz\node[fn=cEval]{evaluation};~%
+  \tikz\node[fn=cExp]{experiments};\par}

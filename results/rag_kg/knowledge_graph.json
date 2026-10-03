@@ -1,0 +1,769 @@
+{
+  "entities": [
+    {
+      "entity_id": "document_doc_advection",
+      "type": "Document",
+      "name": "Advective (Directional) Transport -- Benchmark Fixture",
+      "metadata": {
+        "source": "benchmark fixture",
+        "domain": "advection",
+        "is_benchmark_fixture": true
+      }
+    },
+    {
+      "entity_id": "mechanism_advection",
+      "type": "Mechanism",
+      "name": "advection",
+      "metadata": {}
+    },
+    {
+      "entity_id": "variable_u",
+      "type": "Variable",
+      "name": "u",
+      "metadata": {}
+    },
+    {
+      "entity_id": "variable_x",
+      "type": "Variable",
+      "name": "x",
+      "metadata": {}
+    },
+    {
+      "entity_id": "variable_t",
+      "type": "Variable",
+      "name": "t",
+      "metadata": {}
+    },
+    {
+      "entity_id": "parameter_c",
+      "type": "Parameter",
+      "name": "c",
+      "metadata": {}
+    },
+    {
+      "entity_id": "equation_4d6a6a15f4",
+      "type": "Equation",
+      "name": "u_t + c*u_x = 0",
+      "metadata": {
+        "equation": "u_t + c*u_x = 0"
+      }
+    },
+    {
+      "entity_id": "document_doc_advection_diffusion",
+      "type": "Document",
+      "name": "Advection-Diffusion Systems -- Benchmark Fixture",
+      "metadata": {
+        "source": "benchmark fixture",
+        "domain": "advection-diffusion",
+        "is_benchmark_fixture": true
+      }
+    },
+    {
+      "entity_id": "mechanism_advection_diffusion",
+      "type": "Mechanism",
+      "name": "advection-diffusion",
+      "metadata": {}
+    },
+    {
+      "entity_id": "parameter_D",
+      "type": "Parameter",
+      "name": "D",
+      "metadata": {}
+    },
+    {
+      "entity_id": "equation_0610d5bf87",
+      "type": "Equation",
+      "name": "u_t + c*u_x = D*u_xx",
+      "metadata": {
+        "equation": "u_t + c*u_x = D*u_xx"
+      }
+    },
+    {
+      "entity_id": "document_doc_diffusion",
+      "type": "Document",
+      "name": "Diffusive Transport (Fick's Second Law) -- Benchmark Fixture",
+      "metadata": {
+        "source": "benchmark fixture",
+        "domain": "diffusion",
+        "is_benchmark_fixture": true
+      }
+    },
+    {
+      "entity_id": "mechanism_diffusion",
+      "type": "Mechanism",
+      "name": "diffusion",
+      "metadata": {}
+    },
+    {
+      "entity_id": "equation_ae6ecf8e2e",
+      "type": "Equation",
+      "name": "u_t = D*u_xx",
+      "metadata": {
+        "equation": "u_t = D*u_xx"
+      }
+    },
+    {
+      "entity_id": "document_doc_reaction",
+      "type": "Document",
+      "name": "Local Reaction Kinetics (Logistic Growth/Decay) -- Benchmark Fixture",
+      "metadata": {
+        "source": "benchmark fixture",
+        "domain": "reaction",
+        "is_benchmark_fixture": true
+      }
+    },
+    {
+      "entity_id": "mechanism_reaction",
+      "type": "Mechanism",
+      "name": "reaction",
+      "metadata": {}
+    },
+    {
+      "entity_id": "parameter_r",
+      "type": "Parameter",
+      "name": "r",
+      "metadata": {}
+    },
+    {
+      "entity_id": "parameter_K",
+      "type": "Parameter",
+      "name": "K",
+      "metadata": {}
+    },
+    {
+      "entity_id": "equation_85a4878e87",
+      "type": "Equation",
+      "name": "u_t = r*u*(1-u/K)",
+      "metadata": {
+        "equation": "u_t = r*u*(1-u/K)"
+      }
+    },
+    {
+      "entity_id": "document_doc_reaction_diffusion",
+      "type": "Document",
+      "name": "Reaction-Diffusion Systems -- Benchmark Fixture",
+      "metadata": {
+        "source": "benchmark fixture",
+        "domain": "reaction-diffusion",
+        "is_benchmark_fixture": true
+      }
+    },
+    {
+      "entity_id": "mechanism_reaction_diffusion",
+      "type": "Mechanism",
+      "name": "reaction-diffusion",
+      "metadata": {}
+    },
+    {
+      "entity_id": "equation_2f4d4190d1",
+      "type": "Equation",
+      "name": "u_t = D*u_xx + r*u*(1-u/K)",
+      "metadata": {
+        "equation": "u_t = D*u_xx + r*u*(1-u/K)"
+      }
+    }
+  ],
+  "relationships": [
+    {
+      "relationship_id": "rel_c69c197c3360",
+      "subject": "mechanism_advection",
+      "predicate": "SUPPORTED_BY",
+      "object": "document_doc_advection",
+      "sources": [
+        {
+          "document_id": "doc_advection",
+          "chunk_id": "doc_advection_chunk_002"
+        }
+      ],
+      "provenance_type": "documented",
+      "confidence": null
+    },
+    {
+      "relationship_id": "rel_9d744a7c45f5",
+      "subject": "variable_u",
+      "predicate": "DEPENDS_ON",
+      "object": "variable_x",
+      "sources": [
+        {
+          "document_id": "doc_advection",
+          "chunk_id": null
+        },
+        {
+          "document_id": "doc_advection_diffusion",
+          "chunk_id": null
+        },
+        {
+          "document_id": "doc_diffusion",
+          "chunk_id": null
+        },
+        {
+          "document_id": "doc_reaction_diffusion",
+          "chunk_id": null
+        }
+      ],
+      "provenance_type": "documented",
+      "confidence": null
+    },
+    {
+      "relationship_id": "rel_e0f735830216",
+      "subject": "variable_u",
+      "predicate": "DEPENDS_ON",
+      "object": "variable_t",
+      "sources": [
+        {
+          "document_id": "doc_advection",
+          "chunk_id": null
+        },
+        {
+          "document_id": "doc_advection_diffusion",
+          "chunk_id": null
+        },
+        {
+          "document_id": "doc_diffusion",
+          "chunk_id": null
+        },
+        {
+          "document_id": "doc_reaction",
+          "chunk_id": null
+        },
+        {
+          "document_id": "doc_reaction_diffusion",
+          "chunk_id": null
+        }
+      ],
+      "provenance_type": "documented",
+      "confidence": null
+    },
+    {
+      "relationship_id": "rel_ae36d563d41d",
+      "subject": "mechanism_advection",
+      "predicate": "GOVERNS",
+      "object": "equation_4d6a6a15f4",
+      "sources": [
+        {
+          "document_id": "doc_advection",
+          "chunk_id": "doc_advection_chunk_003"
+        }
+      ],
+      "provenance_type": "documented",
+      "confidence": null
+    },
+    {
+      "relationship_id": "rel_d6ff9af61476",
+      "subject": "equation_4d6a6a15f4",
+      "predicate": "SUPPORTED_BY",
+      "object": "document_doc_advection",
+      "sources": [
+        {
+          "document_id": "doc_advection",
+          "chunk_id": "doc_advection_chunk_003"
+        }
+      ],
+      "provenance_type": "documented",
+      "confidence": null
+    },
+    {
+      "relationship_id": "rel_db709e790252",
+      "subject": "equation_4d6a6a15f4",
+      "predicate": "HAS_VARIABLE",
+      "object": "variable_u",
+      "sources": [
+        {
+          "document_id": "doc_advection",
+          "chunk_id": "doc_advection_chunk_003"
+        }
+      ],
+      "provenance_type": "documented",
+      "confidence": null
+    },
+    {
+      "relationship_id": "rel_550b8020450b",
+      "subject": "equation_4d6a6a15f4",
+      "predicate": "HAS_VARIABLE",
+      "object": "variable_x",
+      "sources": [
+        {
+          "document_id": "doc_advection",
+          "chunk_id": "doc_advection_chunk_003"
+        }
+      ],
+      "provenance_type": "documented",
+      "confidence": null
+    },
+    {
+      "relationship_id": "rel_114237aceb79",
+      "subject": "equation_4d6a6a15f4",
+      "predicate": "HAS_VARIABLE",
+      "object": "variable_t",
+      "sources": [
+        {
+          "document_id": "doc_advection",
+          "chunk_id": "doc_advection_chunk_003"
+        }
+      ],
+      "provenance_type": "documented",
+      "confidence": null
+    },
+    {
+      "relationship_id": "rel_a05ca221d08d",
+      "subject": "equation_4d6a6a15f4",
+      "predicate": "HAS_PARAMETER",
+      "object": "parameter_c",
+      "sources": [
+        {
+          "document_id": "doc_advection",
+          "chunk_id": "doc_advection_chunk_003"
+        }
+      ],
+      "provenance_type": "documented",
+      "confidence": null
+    },
+    {
+      "relationship_id": "rel_02015fea66fe",
+      "subject": "mechanism_advection_diffusion",
+      "predicate": "SUPPORTED_BY",
+      "object": "document_doc_advection_diffusion",
+      "sources": [
+        {
+          "document_id": "doc_advection_diffusion",
+          "chunk_id": "doc_advection_diffusion_chunk_002"
+        }
+      ],
+      "provenance_type": "documented",
+      "confidence": null
+    },
+    {
+      "relationship_id": "rel_54280f3fe4d1",
+      "subject": "mechanism_advection_diffusion",
+      "predicate": "GOVERNS",
+      "object": "equation_0610d5bf87",
+      "sources": [
+        {
+          "document_id": "doc_advection_diffusion",
+          "chunk_id": "doc_advection_diffusion_chunk_003"
+        }
+      ],
+      "provenance_type": "documented",
+      "confidence": null
+    },
+    {
+      "relationship_id": "rel_5f4632e36d11",
+      "subject": "equation_0610d5bf87",
+      "predicate": "SUPPORTED_BY",
+      "object": "document_doc_advection_diffusion",
+      "sources": [
+        {
+          "document_id": "doc_advection_diffusion",
+          "chunk_id": "doc_advection_diffusion_chunk_003"
+        }
+      ],
+      "provenance_type": "documented",
+      "confidence": null
+    },
+    {
+      "relationship_id": "rel_242462306328",
+      "subject": "equation_0610d5bf87",
+      "predicate": "HAS_VARIABLE",
+      "object": "variable_u",
+      "sources": [
+        {
+          "document_id": "doc_advection_diffusion",
+          "chunk_id": "doc_advection_diffusion_chunk_003"
+        }
+      ],
+      "provenance_type": "documented",
+      "confidence": null
+    },
+    {
+      "relationship_id": "rel_521338bef59a",
+      "subject": "equation_0610d5bf87",
+      "predicate": "HAS_VARIABLE",
+      "object": "variable_x",
+      "sources": [
+        {
+          "document_id": "doc_advection_diffusion",
+          "chunk_id": "doc_advection_diffusion_chunk_003"
+        }
+      ],
+      "provenance_type": "documented",
+      "confidence": null
+    },
+    {
+      "relationship_id": "rel_1f5cae35e6fa",
+      "subject": "equation_0610d5bf87",
+      "predicate": "HAS_VARIABLE",
+      "object": "variable_t",
+      "sources": [
+        {
+          "document_id": "doc_advection_diffusion",
+          "chunk_id": "doc_advection_diffusion_chunk_003"
+        }
+      ],
+      "provenance_type": "documented",
+      "confidence": null
+    },
+    {
+      "relationship_id": "rel_786d3a74a5c3",
+      "subject": "equation_0610d5bf87",
+      "predicate": "HAS_PARAMETER",
+      "object": "parameter_c",
+      "sources": [
+        {
+          "document_id": "doc_advection_diffusion",
+          "chunk_id": "doc_advection_diffusion_chunk_003"
+        }
+      ],
+      "provenance_type": "documented",
+      "confidence": null
+    },
+    {
+      "relationship_id": "rel_898cd84ef0d9",
+      "subject": "equation_0610d5bf87",
+      "predicate": "HAS_PARAMETER",
+      "object": "parameter_D",
+      "sources": [
+        {
+          "document_id": "doc_advection_diffusion",
+          "chunk_id": "doc_advection_diffusion_chunk_003"
+        }
+      ],
+      "provenance_type": "documented",
+      "confidence": null
+    },
+    {
+      "relationship_id": "rel_8342f9960a94",
+      "subject": "mechanism_diffusion",
+      "predicate": "SUPPORTED_BY",
+      "object": "document_doc_diffusion",
+      "sources": [
+        {
+          "document_id": "doc_diffusion",
+          "chunk_id": "doc_diffusion_chunk_002"
+        }
+      ],
+      "provenance_type": "documented",
+      "confidence": null
+    },
+    {
+      "relationship_id": "rel_6ecc50496993",
+      "subject": "mechanism_diffusion",
+      "predicate": "GOVERNS",
+      "object": "equation_ae6ecf8e2e",
+      "sources": [
+        {
+          "document_id": "doc_diffusion",
+          "chunk_id": "doc_diffusion_chunk_003"
+        }
+      ],
+      "provenance_type": "documented",
+      "confidence": null
+    },
+    {
+      "relationship_id": "rel_db41250ff41e",
+      "subject": "equation_ae6ecf8e2e",
+      "predicate": "SUPPORTED_BY",
+      "object": "document_doc_diffusion",
+      "sources": [
+        {
+          "document_id": "doc_diffusion",
+          "chunk_id": "doc_diffusion_chunk_003"
+        }
+      ],
+      "provenance_type": "documented",
+      "confidence": null
+    },
+    {
+      "relationship_id": "rel_42ac4c3f7cc1",
+      "subject": "equation_ae6ecf8e2e",
+      "predicate": "HAS_VARIABLE",
+      "object": "variable_u",
+      "sources": [
+        {
+          "document_id": "doc_diffusion",
+          "chunk_id": "doc_diffusion_chunk_003"
+        }
+      ],
+      "provenance_type": "documented",
+      "confidence": null
+    },
+    {
+      "relationship_id": "rel_5465410deea9",
+      "subject": "equation_ae6ecf8e2e",
+      "predicate": "HAS_VARIABLE",
+      "object": "variable_x",
+      "sources": [
+        {
+          "document_id": "doc_diffusion",
+          "chunk_id": "doc_diffusion_chunk_003"
+        }
+      ],
+      "provenance_type": "documented",
+      "confidence": null
+    },
+    {
+      "relationship_id": "rel_1e77145aecc3",
+      "subject": "equation_ae6ecf8e2e",
+      "predicate": "HAS_VARIABLE",
+      "object": "variable_t",
+      "sources": [
+        {
+          "document_id": "doc_diffusion",
+          "chunk_id": "doc_diffusion_chunk_003"
+        }
+      ],
+      "provenance_type": "documented",
+      "confidence": null
+    },
+    {
+      "relationship_id": "rel_064376dc7b09",
+      "subject": "equation_ae6ecf8e2e",
+      "predicate": "HAS_PARAMETER",
+      "object": "parameter_D",
+      "sources": [
+        {
+          "document_id": "doc_diffusion",
+          "chunk_id": "doc_diffusion_chunk_003"
+        }
+      ],
+      "provenance_type": "documented",
+      "confidence": null
+    },
+    {
+      "relationship_id": "rel_8d17c8e82136",
+      "subject": "mechanism_reaction",
+      "predicate": "SUPPORTED_BY",
+      "object": "document_doc_reaction",
+      "sources": [
+        {
+          "document_id": "doc_reaction",
+          "chunk_id": "doc_reaction_chunk_002"
+        }
+      ],
+      "provenance_type": "documented",
+      "confidence": null
+    },
+    {
+      "relationship_id": "rel_52c44764db25",
+      "subject": "mechanism_reaction",
+      "predicate": "GOVERNS",
+      "object": "equation_85a4878e87",
+      "sources": [
+        {
+          "document_id": "doc_reaction",
+          "chunk_id": "doc_reaction_chunk_003"
+        }
+      ],
+      "provenance_type": "documented",
+      "confidence": null
+    },
+    {
+      "relationship_id": "rel_4996a5810a4c",
+      "subject": "equation_85a4878e87",
+      "predicate": "SUPPORTED_BY",
+      "object": "document_doc_reaction",
+      "sources": [
+        {
+          "document_id": "doc_reaction",
+          "chunk_id": "doc_reaction_chunk_003"
+        }
+      ],
+      "provenance_type": "documented",
+      "confidence": null
+    },
+    {
+      "relationship_id": "rel_76267e38cc4d",
+      "subject": "equation_85a4878e87",
+      "predicate": "HAS_VARIABLE",
+      "object": "variable_u",
+      "sources": [
+        {
+          "document_id": "doc_reaction",
+          "chunk_id": "doc_reaction_chunk_003"
+        }
+      ],
+      "provenance_type": "documented",
+      "confidence": null
+    },
+    {
+      "relationship_id": "rel_4b8b44d5014c",
+      "subject": "equation_85a4878e87",
+      "predicate": "HAS_VARIABLE",
+      "object": "variable_t",
+      "sources": [
+        {
+          "document_id": "doc_reaction",
+          "chunk_id": "doc_reaction_chunk_003"
+        }
+      ],
+      "provenance_type": "documented",
+      "confidence": null
+    },
+    {
+      "relationship_id": "rel_e674ae62c16f",
+      "subject": "equation_85a4878e87",
+      "predicate": "HAS_PARAMETER",
+      "object": "parameter_r",
+      "sources": [
+        {
+          "document_id": "doc_reaction",
+          "chunk_id": "doc_reaction_chunk_003"
+        }
+      ],
+      "provenance_type": "documented",
+      "confidence": null
+    },
+    {
+      "relationship_id": "rel_bded1344a4d5",
+      "subject": "equation_85a4878e87",
+      "predicate": "HAS_PARAMETER",
+      "object": "parameter_K",
+      "sources": [
+        {
+          "document_id": "doc_reaction",
+          "chunk_id": "doc_reaction_chunk_003"
+        }
+      ],
+      "provenance_type": "documented",
+      "confidence": null
+    },
+    {
+      "relationship_id": "rel_80397b62b849",
+      "subject": "mechanism_reaction_diffusion",
+      "predicate": "SUPPORTED_BY",
+      "object": "document_doc_reaction_diffusion",
+      "sources": [
+        {
+          "document_id": "doc_reaction_diffusion",
+          "chunk_id": "doc_reaction_diffusion_chunk_002"
+        }
+      ],
+      "provenance_type": "documented",
+      "confidence": null
+    },
+    {
+      "relationship_id": "rel_505587042f02",
+      "subject": "mechanism_reaction_diffusion",
+      "predicate": "GOVERNS",
+      "object": "equation_2f4d4190d1",
+      "sources": [
+        {
+          "document_id": "doc_reaction_diffusion",
+          "chunk_id": "doc_reaction_diffusion_chunk_003"
+        }
+      ],
+      "provenance_type": "documented",
+      "confidence": null
+    },
+    {
+      "relationship_id": "rel_9732e7ac6cc8",
+      "subject": "equation_2f4d4190d1",
+      "predicate": "SUPPORTED_BY",
+      "object": "document_doc_reaction_diffusion",
+      "sources": [
+        {
+          "document_id": "doc_reaction_diffusion",
+          "chunk_id": "doc_reaction_diffusion_chunk_003"
+        }
+      ],
+      "provenance_type": "documented",
+      "confidence": null
+    },
+    {
+      "relationship_id": "rel_9cf961ce0097",
+      "subject": "equation_2f4d4190d1",
+      "predicate": "HAS_VARIABLE",
+      "object": "variable_u",
+      "sources": [
+        {
+          "document_id": "doc_reaction_diffusion",
+          "chunk_id": "doc_reaction_diffusion_chunk_003"
+        }
+      ],
+      "provenance_type": "documented",
+      "confidence": null
+    },
+    {
+      "relationship_id": "rel_70f8dac9f299",
+      "subject": "equation_2f4d4190d1",
+      "predicate": "HAS_VARIABLE",
+      "object": "variable_x",
+      "sources": [
+        {
+          "document_id": "doc_reaction_diffusion",
+          "chunk_id": "doc_reaction_diffusion_chunk_003"
+        }
+      ],
+      "provenance_type": "documented",
+      "confidence": null
+    },
+    {
+      "relationship_id": "rel_82f3ec44c096",
+      "subject": "equation_2f4d4190d1",
+      "predicate": "HAS_VARIABLE",
+      "object": "variable_t",
+      "sources": [
+        {
+          "document_id": "doc_reaction_diffusion",
+          "chunk_id": "doc_reaction_diffusion_chunk_003"
+        }
+      ],
+      "provenance_type": "documented",
+      "confidence": null
+    },
+    {
+      "relationship_id": "rel_bbc81f2f48e7",
+      "subject": "equation_2f4d4190d1",
+      "predicate": "HAS_PARAMETER",
+      "object": "parameter_D",
+      "sources": [
+        {
+          "document_id": "doc_reaction_diffusion",
+          "chunk_id": "doc_reaction_diffusion_chunk_003"
+        }
+      ],
+      "provenance_type": "documented",
+      "confidence": null
+    },
+    {
+      "relationship_id": "rel_97979caf836f",
+      "subject": "equation_2f4d4190d1",
+      "predicate": "HAS_PARAMETER",
+      "object": "parameter_r",
+      "sources": [
+        {
+          "document_id": "doc_reaction_diffusion",
+          "chunk_id": "doc_reaction_diffusion_chunk_003"
+        }
+      ],
+      "provenance_type": "documented",
+      "confidence": null
+    },
+    {
+      "relationship_id": "rel_510182d7b39a",
+      "subject": "equation_2f4d4190d1",
+      "predicate": "HAS_PARAMETER",
+      "object": "parameter_K",
+      "sources": [
+        {
+          "document_id": "doc_reaction_diffusion",
+          "chunk_id": "doc_reaction_diffusion_chunk_003"
+        }
+      ],
+      "provenance_type": "documented",
+      "confidence": null
+    }
+  ],
+  "summary": {
+    "n_entities": 22,
+    "n_relationships": 40,
+    "entities_by_type": {
+      "Document": 5,
+      "Mechanism": 5,
+      "Variable": 3,
+      "Parameter": 4,
+      "Equation": 5
+    },
+    "n_sourced_relationships": 40,
+    "n_unsourced_relationships": 0
+  }
+}

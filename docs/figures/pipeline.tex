@@ -1,0 +1,37 @@
+% flowchart 'pipeline' -- shared by project_guide.tex and submission_report.tex
+\begin{tikzpicture}[node distance=3.2mm]
+  \tikzset{st/.style={draw=#1!75!black, fill=#1!9, rounded corners=3pt, line width=0.7pt,
+                      font=\small, align=left, inner sep=4pt, text width=7.6cm},
+           side/.style={font=\scriptsize, align=left, text width=5.6cm, text=black!75}}
+  \node[st=cData] (s1) {\textbf{1. Observations}\quad 400 noisy points $(x,t,u)$; no equation given};
+  \node[st=cRag, below=of s1] (s2) {\textbf{2. Describe + retrieve (RAG)}\quad turn data statistics into
+        text; fetch relevant textbook chunks};
+  \node[st=cKg, below=of s2] (s3) {\textbf{3. Knowledge graph}\quad documented mechanisms $\to$ equations,
+        parameters, sources};
+  \node[st=cLlm, below=of s3] (s4) {\textbf{4. Generate hypotheses (LLM)}\quad schema-validated JSON
+        equations, grounded in the evidence};
+  \node[st=cHyp, below=of s4] (s5) {\textbf{5. Candidate pool + filters}\quad LLM ideas $\cup$ KG templates;
+        deduplicate; syntax, variables, physics pre-checks};
+  \node[st=cPinn, below=of s5] (s6) {\textbf{6. Inverse PINN per candidate}\quad compile the equation, train
+        on the train split, estimate parameters};
+  \node[st=cVal, below=of s6] (s7) {\textbf{7. Gate on held-out data}\quad reject unless held-out error,
+        physics, BC, IC and bounds all pass};
+  \node[st=cVal, below=of s7] (s8) {\textbf{8. Model selection}\quad term necessity $\to$ fit-equivalence
+        $\to$ lowest complexity $\to$ BIC};
+  \node[st=cVal, below=of s8] (s9) {\textbf{9. OOD validation}\quad predict $t>0.8$ observations never used
+        for any decision};
+  \node[st=cVal, below=of s9] (s10) {\textbf{10. Novel prediction}\quad solve the selected law forward beyond
+        the data ($t$ up to 1.5)};
+  \foreach \a/\b in {s1/s2,s2/s3,s3/s4,s4/s5,s5/s6,s6/s7,s7/s8,s8/s9,s9/s10}
+     \draw[flow] (\a) -- (\b);
+  \node[side, right=4mm of s1]  {\fn{data/}\\ ``What did we measure?''};
+  \node[side, right=4mm of s2]  {\fn{evaluation/describe.py}, \fn{rag/}\\ ``What is documented about such behaviour?''};
+  \node[side, right=4mm of s3]  {\fn{knowledge_graph/}\\ ``How do documented concepts relate?''};
+  \node[side, right=4mm of s4]  {\fn{llm/}, \fn{hypotheses/pipeline.py}\\ ``Which equations are worth testing?''};
+  \node[side, right=4mm of s5]  {\fn{hypotheses/search.py}, \fn{validation.py}, \fn{constraints.py}\\ ``Is each one well-formed and physical?''};
+  \node[side, right=4mm of s6]  {\fn{hypotheses/adapter.py}, \fn{pinn/}\\ ``Can data + this physics be fitted together?''};
+  \node[side, right=4mm of s7]  {\fn{hypotheses/search.py}\\ ``Does it explain unseen observations?''};
+  \node[side, right=4mm of s8]  {\fn{validation/model_selection.py}\\ ``Which is the simplest sufficient law?''};
+  \node[side, right=4mm of s9]  {\fn{hypotheses/search.py}\\ ``Does it extrapolate in time?''};
+  \node[side, right=4mm of s10] {\fn{validation/forward_solver.py}\\ ``What happens where no data exists?''};
+\end{tikzpicture}

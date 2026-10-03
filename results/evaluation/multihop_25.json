@@ -1,0 +1,477 @@
+[
+  {
+    "id": "M01",
+    "category": "data_to_prediction",
+    "hops": 6,
+    "question": "From observations of 'diffusion_D0.05': retrieve evidence, build candidates from the KG, validate, select, and predict u on t in (1.0, 1.3] (beyond the data).",
+    "expected": {
+      "family": "diffusion",
+      "ood_rel_rmse_max": 0.05
+    },
+    "answer": {
+      "family": "diffusion",
+      "ood_rel_rmse": 0.001265091097439911
+    },
+    "correct": true,
+    "detail": {}
+  },
+  {
+    "id": "M02",
+    "category": "data_to_prediction",
+    "hops": 6,
+    "question": "From observations of 'diffusion_D0.1': retrieve evidence, build candidates from the KG, validate, select, and predict u on t in (1.0, 1.3] (beyond the data).",
+    "expected": {
+      "family": "diffusion",
+      "ood_rel_rmse_max": 0.05
+    },
+    "answer": {
+      "family": "diffusion",
+      "ood_rel_rmse": 0.0028684474238845634
+    },
+    "correct": true,
+    "detail": {}
+  },
+  {
+    "id": "M03",
+    "category": "data_to_prediction",
+    "hops": 6,
+    "question": "From observations of 'diffusion_D0.2': retrieve evidence, build candidates from the KG, validate, select, and predict u on t in (1.0, 1.3] (beyond the data).",
+    "expected": {
+      "family": "diffusion",
+      "ood_rel_rmse_max": 0.05
+    },
+    "answer": {
+      "family": "diffusion",
+      "ood_rel_rmse": 0.009043801910902038
+    },
+    "correct": true,
+    "detail": {}
+  },
+  {
+    "id": "M04",
+    "category": "data_to_prediction",
+    "hops": 6,
+    "question": "From observations of 'advection_c0.3': retrieve evidence, build candidates from the KG, validate, select, and predict u on t in (1.0, 1.3] (beyond the data).",
+    "expected": {
+      "family": "advection",
+      "ood_rel_rmse_max": 0.05
+    },
+    "answer": {
+      "family": "advection",
+      "ood_rel_rmse": 0.009872004589361848
+    },
+    "correct": true,
+    "detail": {}
+  },
+  {
+    "id": "M05",
+    "category": "data_to_prediction",
+    "hops": 6,
+    "question": "From observations of 'advection_c0.5': retrieve evidence, build candidates from the KG, validate, select, and predict u on t in (1.0, 1.3] (beyond the data).",
+    "expected": {
+      "family": "advection",
+      "ood_rel_rmse_max": 0.05
+    },
+    "answer": {
+      "family": "advection",
+      "ood_rel_rmse": 0.0170935174894425
+    },
+    "correct": true,
+    "detail": {}
+  },
+  {
+    "id": "M06",
+    "category": "data_to_prediction",
+    "hops": 6,
+    "question": "From observations of 'advection_c-0.4': retrieve evidence, build candidates from the KG, validate, select, and predict u on t in (1.0, 1.3] (beyond the data).",
+    "expected": {
+      "family": "advection",
+      "ood_rel_rmse_max": 0.05
+    },
+    "answer": {
+      "family": "advection",
+      "ood_rel_rmse": 0.013318172540018717
+    },
+    "correct": true,
+    "detail": {}
+  },
+  {
+    "id": "M07",
+    "category": "data_to_prediction",
+    "hops": 6,
+    "question": "From observations of 'reacdiff_D0.05_r1.0_K1.0': retrieve evidence, build candidates from the KG, validate, select, and predict u on t in (1.0, 1.3] (beyond the data).",
+    "expected": {
+      "family": "reaction-diffusion",
+      "ood_rel_rmse_max": 0.05
+    },
+    "answer": {
+      "family": "reaction-diffusion",
+      "ood_rel_rmse": 0.002120707266013365
+    },
+    "correct": true,
+    "detail": {}
+  },
+  {
+    "id": "M08",
+    "category": "data_to_prediction",
+    "hops": 6,
+    "question": "From observations of 'reacdiff_D0.02_r2.0_K1.0': retrieve evidence, build candidates from the KG, validate, select, and predict u on t in (1.0, 1.3] (beyond the data).",
+    "expected": {
+      "family": "reaction-diffusion",
+      "ood_rel_rmse_max": 0.05
+    },
+    "answer": {
+      "family": "reaction-diffusion",
+      "ood_rel_rmse": 0.005282480022296033
+    },
+    "correct": true,
+    "detail": {}
+  },
+  {
+    "id": "M09",
+    "category": "data_to_prediction",
+    "hops": 6,
+    "question": "From observations of 'reacdiff_D0.1_r1.5_K0.8': retrieve evidence, build candidates from the KG, validate, select, and predict u on t in (1.0, 1.3] (beyond the data).",
+    "expected": {
+      "family": "reaction-diffusion",
+      "ood_rel_rmse_max": 0.05
+    },
+    "answer": {
+      "family": "reaction-diffusion",
+      "ood_rel_rmse": 0.0002504832786490661
+    },
+    "correct": true,
+    "detail": {}
+  },
+  {
+    "id": "M10",
+    "category": "data_to_prediction",
+    "hops": 6,
+    "question": "From observations of 'advdiff_c0.3_D0.01': retrieve evidence, build candidates from the KG, validate, select, and predict u on t in (1.0, 1.3] (beyond the data).",
+    "expected": {
+      "family": "advection-diffusion",
+      "ood_rel_rmse_max": 0.05
+    },
+    "answer": {
+      "family": "advection-diffusion",
+      "ood_rel_rmse": 0.0026069212316112366
+    },
+    "correct": true,
+    "detail": {}
+  },
+  {
+    "id": "M11",
+    "category": "data_to_prediction",
+    "hops": 6,
+    "question": "From observations of 'advdiff_c0.4_D0.02': retrieve evidence, build candidates from the KG, validate, select, and predict u on t in (1.0, 1.3] (beyond the data).",
+    "expected": {
+      "family": "advection-diffusion",
+      "ood_rel_rmse_max": 0.05
+    },
+    "answer": {
+      "family": "advection-diffusion",
+      "ood_rel_rmse": 0.005864317185956168
+    },
+    "correct": true,
+    "detail": {}
+  },
+  {
+    "id": "M12",
+    "category": "data_to_prediction",
+    "hops": 6,
+    "question": "From observations of 'advdiff_c-0.3_D0.015': retrieve evidence, build candidates from the KG, validate, select, and predict u on t in (1.0, 1.3] (beyond the data).",
+    "expected": {
+      "family": "advection-diffusion",
+      "ood_rel_rmse_max": 0.05
+    },
+    "answer": {
+      "family": "advection-diffusion",
+      "ood_rel_rmse": 0.002787355099932439
+    },
+    "correct": true,
+    "detail": {}
+  },
+  {
+    "id": "M13",
+    "category": "text_to_derivatives",
+    "hops": 4,
+    "question": "Observation: 'the profile spreads out and flattens in place over time and its amplitude decays, without moving'. Which mechanism does retrieval point to, which parameters does its documented equation use, and which derivatives must a PINN compute?",
+    "expected": {
+      "mechanism": "diffusion",
+      "derivatives": [
+        "u_t",
+        "u_xx"
+      ]
+    },
+    "answer": {
+      "mechanism": "diffusion",
+      "parameters": [
+        "D"
+      ],
+      "derivatives": [
+        "u_t",
+        "u_xx"
+      ]
+    },
+    "correct": true,
+    "detail": {}
+  },
+  {
+    "id": "M14",
+    "category": "text_to_derivatives",
+    "hops": 4,
+    "question": "Observation: 'the whole profile is carried across the domain at constant speed and keeps its shape'. Which mechanism does retrieval point to, which parameters does its documented equation use, and which derivatives must a PINN compute?",
+    "expected": {
+      "mechanism": "advection",
+      "derivatives": [
+        "u_t",
+        "u_x"
+      ]
+    },
+    "answer": {
+      "mechanism": "advection",
+      "parameters": [
+        "c"
+      ],
+      "derivatives": [
+        "u_t",
+        "u_x"
+      ]
+    },
+    "correct": true,
+    "detail": {}
+  },
+  {
+    "id": "M15",
+    "category": "text_to_derivatives",
+    "hops": 4,
+    "question": "Observation: 'each point grows or decays on its own toward a saturation level with no spatial coupling'. Which mechanism does retrieval point to, which parameters does its documented equation use, and which derivatives must a PINN compute?",
+    "expected": {
+      "mechanism": "reaction",
+      "derivatives": [
+        "u_t"
+      ]
+    },
+    "answer": {
+      "mechanism": "reaction",
+      "parameters": [
+        "K",
+        "r"
+      ],
+      "derivatives": [
+        "u_t"
+      ]
+    },
+    "correct": true,
+    "detail": {}
+  },
+  {
+    "id": "M16",
+    "category": "text_to_derivatives",
+    "hops": 4,
+    "question": "Observation: 'the profile spreads out while also growing locally toward a carrying capacity'. Which mechanism does retrieval point to, which parameters does its documented equation use, and which derivatives must a PINN compute?",
+    "expected": {
+      "mechanism": "reaction-diffusion",
+      "derivatives": [
+        "u_t",
+        "u_xx"
+      ]
+    },
+    "answer": {
+      "mechanism": "advection",
+      "parameters": [
+        "c"
+      ],
+      "derivatives": [
+        "u_t",
+        "u_x"
+      ]
+    },
+    "correct": false,
+    "detail": {}
+  },
+  {
+    "id": "M17",
+    "category": "text_to_derivatives",
+    "hops": 4,
+    "question": "Observation: 'the profile drifts across the domain while also spreading out and flattening'. Which mechanism does retrieval point to, which parameters does its documented equation use, and which derivatives must a PINN compute?",
+    "expected": {
+      "mechanism": "advection-diffusion",
+      "derivatives": [
+        "u_t",
+        "u_x",
+        "u_xx"
+      ]
+    },
+    "answer": {
+      "mechanism": "advection",
+      "parameters": [
+        "c"
+      ],
+      "derivatives": [
+        "u_t",
+        "u_x"
+      ]
+    },
+    "correct": false,
+    "detail": {}
+  },
+  {
+    "id": "M18",
+    "category": "parameter_to_derivatives",
+    "hops": 3,
+    "question": "Which documented mechanisms involve parameter 'D', and which derivatives do their equations need in total?",
+    "expected": {
+      "mechanisms": [
+        "advection-diffusion",
+        "diffusion",
+        "reaction-diffusion"
+      ],
+      "derivatives": [
+        "u_t",
+        "u_x",
+        "u_xx"
+      ]
+    },
+    "answer": {
+      "mechanisms": [
+        "advection-diffusion",
+        "diffusion",
+        "reaction-diffusion"
+      ],
+      "derivatives": [
+        "u_t",
+        "u_x",
+        "u_xx"
+      ]
+    },
+    "correct": true,
+    "detail": {}
+  },
+  {
+    "id": "M19",
+    "category": "parameter_to_derivatives",
+    "hops": 3,
+    "question": "Which documented mechanisms involve parameter 'c', and which derivatives do their equations need in total?",
+    "expected": {
+      "mechanisms": [
+        "advection",
+        "advection-diffusion"
+      ],
+      "derivatives": [
+        "u_t",
+        "u_x",
+        "u_xx"
+      ]
+    },
+    "answer": {
+      "mechanisms": [
+        "advection",
+        "advection-diffusion"
+      ],
+      "derivatives": [
+        "u_t",
+        "u_x",
+        "u_xx"
+      ]
+    },
+    "correct": true,
+    "detail": {}
+  },
+  {
+    "id": "M20",
+    "category": "parameter_to_derivatives",
+    "hops": 3,
+    "question": "Which documented mechanisms involve parameter 'r', and which derivatives do their equations need in total?",
+    "expected": {
+      "mechanisms": [
+        "reaction",
+        "reaction-diffusion"
+      ],
+      "derivatives": [
+        "u_t",
+        "u_xx"
+      ]
+    },
+    "answer": {
+      "mechanisms": [
+        "reaction",
+        "reaction-diffusion"
+      ],
+      "derivatives": [
+        "u_t",
+        "u_xx"
+      ]
+    },
+    "correct": true,
+    "detail": {}
+  },
+  {
+    "id": "M21",
+    "category": "parameter_to_derivatives",
+    "hops": 3,
+    "question": "Which documented mechanisms involve parameter 'K', and which derivatives do their equations need in total?",
+    "expected": {
+      "mechanisms": [
+        "reaction",
+        "reaction-diffusion"
+      ],
+      "derivatives": [
+        "u_t",
+        "u_xx"
+      ]
+    },
+    "answer": {
+      "mechanisms": [
+        "reaction",
+        "reaction-diffusion"
+      ],
+      "derivatives": [
+        "u_t",
+        "u_xx"
+      ]
+    },
+    "correct": true,
+    "detail": {}
+  },
+  {
+    "id": "M22",
+    "category": "nesting",
+    "hops": 3,
+    "question": "Does the documented advection equation reduce to pure diffusion when one of its parameters is set to zero?",
+    "expected": false,
+    "answer": false,
+    "correct": true,
+    "detail": {}
+  },
+  {
+    "id": "M23",
+    "category": "nesting",
+    "hops": 3,
+    "question": "Does the documented reaction equation reduce to pure diffusion when one of its parameters is set to zero?",
+    "expected": false,
+    "answer": false,
+    "correct": true,
+    "detail": {}
+  },
+  {
+    "id": "M24",
+    "category": "nesting",
+    "hops": 3,
+    "question": "Does the documented reaction-diffusion equation reduce to pure diffusion when one of its parameters is set to zero?",
+    "expected": true,
+    "answer": true,
+    "correct": true,
+    "detail": {}
+  },
+  {
+    "id": "M25",
+    "category": "nesting",
+    "hops": 3,
+    "question": "Does the documented advection-diffusion equation reduce to pure diffusion when one of its parameters is set to zero?",
+    "expected": true,
+    "answer": true,
+    "correct": true,
+    "detail": {}
+  }
+]

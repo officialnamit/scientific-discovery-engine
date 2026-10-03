@@ -1,0 +1,389 @@
+{
+  "dataset": "advdiff_c0.4_D0.02",
+  "n_obs": 400,
+  "noise_frac": 0.05,
+  "description_given_to_system": "We observe a scalar field u(x,t) on x in [0.0,1.5] over t in [0.0,1.0].\n- Peak amplitude went from 0.838 to 0.356: it decreased substantially.\n- The amplitude-weighted spatial centroid went from x~0.42 to x~0.74: it moved by +21% of the domain length (the profile translates across the domain).\n- The spatial spread broadened (the profile spreads out).\n- Over time the number of local peaks stayed at 1.\n- At the domain edges the field stays near zero (max |u| there ~0.016).\nPropose plausible governing mechanisms for this field's evolution.",
+  "sindy_on_reconstructed_noisy_grid": "u_t = 1.821*u - 0.365*u_x - 5.796*u^2",
+  "retrieved_mechanisms": [
+    "advection",
+    "advection-diffusion",
+    "diffusion",
+    "reaction-diffusion"
+  ],
+  "pool": [
+    {
+      "id": "H1",
+      "origin": "llm",
+      "equation": "u_t = D*u_xx",
+      "hypothesis": {
+        "id": "H1",
+        "name": "Diffusion",
+        "domain": "transport",
+        "equation": "u_t = D*u_xx",
+        "latex": "u_t = D u_{xx}",
+        "dependent_variables": [
+          "u"
+        ],
+        "independent_variables": [
+          "x",
+          "t"
+        ],
+        "parameters": [
+          {
+            "name": "D",
+            "description": "diffusion coefficient",
+            "trainable": true,
+            "initial_value": 0.2,
+            "units": "length^2/time",
+            "lower_bound": 0.0,
+            "upper_bound": null
+          }
+        ],
+        "required_derivatives": [
+          "u_t",
+          "u_xx"
+        ],
+        "required_initial_conditions": true,
+        "required_boundary_conditions": true,
+        "assumptions": [
+          "isotropic medium",
+          "no advective transport",
+          "no source/sink terms"
+        ],
+        "mechanism": "diffusive transport",
+        "rationale": "A field that spreads out and decays smoothly over time, with no net directional drift, is consistent with a purely diffusive (random-walk) transport mechanism.",
+        "testable_predictions": [
+          "spatial variance grows linearly in time",
+          "field amplitude decays monotonically with no translation"
+        ],
+        "confidence": 0.55
+      }
+    },
+    {
+      "id": "H2",
+      "origin": "llm",
+      "equation": "u_t + c*u_x = 0",
+      "hypothesis": {
+        "id": "H2",
+        "name": "Advection",
+        "domain": "transport",
+        "equation": "u_t + c*u_x = 0",
+        "latex": "u_t + c\\,u_x = 0",
+        "dependent_variables": [
+          "u"
+        ],
+        "independent_variables": [
+          "x",
+          "t"
+        ],
+        "parameters": [
+          {
+            "name": "c",
+            "description": "advection (transport) velocity",
+            "trainable": true,
+            "initial_value": 0.2,
+            "units": "length/time",
+            "lower_bound": null,
+            "upper_bound": null
+          }
+        ],
+        "required_derivatives": [
+          "u_t",
+          "u_x"
+        ],
+        "required_initial_conditions": true,
+        "required_boundary_conditions": true,
+        "assumptions": [
+          "no diffusive spreading",
+          "no source/sink terms",
+          "constant transport velocity"
+        ],
+        "mechanism": "advective (directional) transport",
+        "rationale": "If the observed field is primarily being carried/translated through space rather than spreading out, a pure advection mechanism is a plausible structurally simple alternative to diffusion.",
+        "testable_predictions": [
+          "the field's spatial profile translates rigidly with time",
+          "peak shape is preserved rather than flattening"
+        ],
+        "confidence": 0.3
+      }
+    },
+    {
+      "id": "H3",
+      "origin": "llm",
+      "equation": "u_t = D*u_xx + r*u*(1 - u/K)",
+      "hypothesis": {
+        "id": "H3",
+        "name": "Reaction-diffusion (logistic growth/decay)",
+        "domain": "transport",
+        "equation": "u_t = D*u_xx + r*u*(1 - u/K)",
+        "latex": "u_t = D u_{xx} + r u (1 - u/K)",
+        "dependent_variables": [
+          "u"
+        ],
+        "independent_variables": [
+          "x",
+          "t"
+        ],
+        "parameters": [
+          {
+            "name": "D",
+            "description": "diffusion coefficient",
+            "trainable": true,
+            "initial_value": 0.2,
+            "units": "length^2/time",
+            "lower_bound": 0.0,
+            "upper_bound": null
+          },
+          {
+            "name": "r",
+            "description": "local growth/decay rate",
+            "trainable": true,
+            "initial_value": 0.1,
+            "units": "1/time",
+            "lower_bound": null,
+            "upper_bound": null
+          },
+          {
+            "name": "K",
+            "description": "carrying capacity / saturation level",
+            "trainable": true,
+            "initial_value": 1.0,
+            "units": "same as u",
+            "lower_bound": 0.0,
+            "upper_bound": null
+          }
+        ],
+        "required_derivatives": [
+          "u_t",
+          "u_xx"
+        ],
+        "required_initial_conditions": true,
+        "required_boundary_conditions": true,
+        "assumptions": [
+          "diffusive transport plus a local nonlinear source/sink term",
+          "logistic-form self-limiting reaction kinetics"
+        ],
+        "mechanism": "diffusion combined with local nonlinear reaction kinetics",
+        "rationale": "If the decay rate itself appears to depend on the local field value (not just a constant-rate exponential decay), a reaction term alongside diffusion is a plausible richer alternative worth testing.",
+        "testable_predictions": [
+          "decay rate varies with local amplitude, not just position",
+          "field approaches a nonzero steady state if r>0"
+        ],
+        "confidence": 0.35
+      }
+    },
+    {
+      "id": "H4",
+      "origin": "llm",
+      "equation": "u_t + c*u_x = D*u_xx",
+      "hypothesis": {
+        "id": "H4",
+        "name": "Advection-diffusion",
+        "domain": "transport",
+        "equation": "u_t + c*u_x = D*u_xx",
+        "latex": "u_t + c\\,u_x = D u_{xx}",
+        "dependent_variables": [
+          "u"
+        ],
+        "independent_variables": [
+          "x",
+          "t"
+        ],
+        "parameters": [
+          {
+            "name": "c",
+            "description": "advection velocity",
+            "trainable": true,
+            "initial_value": 0.1,
+            "units": "length/time",
+            "lower_bound": null,
+            "upper_bound": null
+          },
+          {
+            "name": "D",
+            "description": "diffusion coefficient",
+            "trainable": true,
+            "initial_value": 0.2,
+            "units": "length^2/time",
+            "lower_bound": 0.0,
+            "upper_bound": null
+          }
+        ],
+        "required_derivatives": [
+          "u_t",
+          "u_x",
+          "u_xx"
+        ],
+        "required_initial_conditions": true,
+        "required_boundary_conditions": true,
+        "assumptions": [
+          "both directional transport and diffusive spreading are present"
+        ],
+        "mechanism": "combined advective and diffusive transport",
+        "rationale": "A general combination of the two simplest linear transport mechanisms; worth testing in case the field both drifts and spreads.",
+        "testable_predictions": [
+          "field both translates and spreads over time"
+        ],
+        "confidence": 0.25
+      }
+    }
+  ],
+  "filter_report": {
+    "H1": {
+      "equation": "u_t = D*u_xx",
+      "structural": {
+        "id": "H1",
+        "valid": true,
+        "errors": [],
+        "warnings": [],
+        "used_fields": [
+          "u_t",
+          "u_xx"
+        ],
+        "used_params": [
+          "D"
+        ],
+        "dimensional_completeness": 1.0
+      },
+      "physics_precheck": {
+        "id": "H1",
+        "passed": true,
+        "errors": [],
+        "warnings": [],
+        "bounds": {
+          "D": {
+            "lower": 0.0,
+            "upper": null,
+            "source": "hypothesis"
+          }
+        },
+        "max_spatial_derivative_order": 2
+      },
+      "survives": true
+    },
+    "H2": {
+      "equation": "u_t + c*u_x = 0",
+      "structural": {
+        "id": "H2",
+        "valid": true,
+        "errors": [],
+        "warnings": [],
+        "used_fields": [
+          "u_t",
+          "u_x"
+        ],
+        "used_params": [
+          "c"
+        ],
+        "dimensional_completeness": 1.0
+      },
+      "physics_precheck": {
+        "id": "H2",
+        "passed": true,
+        "errors": [],
+        "warnings": [
+          "First order in x with Dirichlet data at BOTH ends: over-determined for a hyperbolic equation (only the inflow boundary can be prescribed)."
+        ],
+        "bounds": {
+          "c": {
+            "lower": null,
+            "upper": null,
+            "source": "unconstrained"
+          }
+        },
+        "max_spatial_derivative_order": 1
+      },
+      "survives": true
+    },
+    "H3": {
+      "equation": "u_t = D*u_xx + r*u*(1 - u/K)",
+      "structural": {
+        "id": "H3",
+        "valid": true,
+        "errors": [],
+        "warnings": [],
+        "used_fields": [
+          "u",
+          "u_t",
+          "u_xx"
+        ],
+        "used_params": [
+          "D",
+          "r",
+          "K"
+        ],
+        "dimensional_completeness": 1.0
+      },
+      "physics_precheck": {
+        "id": "H3",
+        "passed": true,
+        "errors": [],
+        "warnings": [],
+        "bounds": {
+          "D": {
+            "lower": 0.0,
+            "upper": null,
+            "source": "hypothesis"
+          },
+          "r": {
+            "lower": null,
+            "upper": null,
+            "source": "unconstrained"
+          },
+          "K": {
+            "lower": 0.0,
+            "upper": null,
+            "source": "hypothesis"
+          }
+        },
+        "max_spatial_derivative_order": 2
+      },
+      "survives": true
+    },
+    "H4": {
+      "equation": "u_t + c*u_x = D*u_xx",
+      "structural": {
+        "id": "H4",
+        "valid": true,
+        "errors": [],
+        "warnings": [],
+        "used_fields": [
+          "u_t",
+          "u_x",
+          "u_xx"
+        ],
+        "used_params": [
+          "c",
+          "D"
+        ],
+        "dimensional_completeness": 1.0
+      },
+      "physics_precheck": {
+        "id": "H4",
+        "passed": true,
+        "errors": [],
+        "warnings": [],
+        "bounds": {
+          "c": {
+            "lower": null,
+            "upper": null,
+            "source": "unconstrained"
+          },
+          "D": {
+            "lower": 0.0,
+            "upper": null,
+            "source": "hypothesis"
+          }
+        },
+        "max_spatial_derivative_order": 2
+      },
+      "survives": true
+    }
+  },
+  "survivors": [
+    "H1",
+    "H2",
+    "H3",
+    "H4"
+  ]
+}

@@ -1,0 +1,53 @@
+% flowchart 'p6' -- shared by project_guide.tex and submission_report.tex
+\begin{tikzpicture}[node distance=2.6mm and 6mm]
+  \tikzset{sp/.style={fnw=#1}, hp/.style={fnw=#1, text width=52mm}}
+  % ---------------- stage 1 ----------------
+  \node[sp=cExp] (p0) {stage_prepare};
+  \node[sp=cRag, below=of p0] (p1) {load_corpus, RAGPipeline.ingest};
+  \node[hp=cKg, right=of p1] (h1) {build_graph_from_documents};
+  \node[sp=cRag, below=of p1] (p2) {build_scientific_context};
+  \node[hp=cData, right=of p2] (h2) {build_problem_description};
+  \node[sp=cHyp, below=of p2] (p3) {generate_hypotheses};
+  \node[hp=cLlm, right=of p3] (h3) {get_provider $\to$ provider.generate};
+  \node[sp=cHyp, below=of p3] (p4) {build_candidate_pool\\{\normalfont\tiny LLM $\cup$ KG, deduplicate}};
+  \node[hp=cHyp, right=of p4] (h4) {kg_template_candidates\\{\normalfont\tiny equations documented in the graph}};
+  \node[sp=cHyp, below=of p4] (p5) {structural_and_physics_filter};
+  \node[hp=cHyp, right=of p5] (h5) {validate_hypothesis, precheck_physics};
+  \node[io, below=of p5] (o1) {generated / filtered\_candidates.json};
+  % ---------------- stage 2 ----------------
+  \node[sp=cExp, below=7mm of o1] (q0) {stage_pinn};
+  \node[sp=cHyp, below=of q0] (q1) {make_splits\\{\normalfont\tiny train / holdout / OOD}};
+  \node[hp=cPinn, right=of q1] (g1) {load_observational_data};
+  \node[sp=cHyp, below=of q1] (q2) {validate_candidate\\{\normalfont\tiny once per survivor}};
+  \node[hp=cPinn, right=of q2] (g2) {hypothesis_to_pinn_config\\$\to$ build_and_train};
+  \node[sp=cVal, below=of q2] (q3) {evaluate_physics_residual\\_rmse};
+  \node[hp=cHyp, right=of q3] (g3) {resolve_bounds, check_fitted_bounds};
+  \node[sp=cVal, below=of q3] (q4) {parameter_contributions\\{\normalfont\tiny term necessity (5\% rule)}};
+  \node[hp=cVal, right=of q4] (g4) {reduced_signature, bic\\equation_complexity};
+  \node[io, below=of q4] (o2) {candidates/*.json, models/*.pt};
+  % ---------------- stage 3 ----------------
+  \node[sp=cExp, below=7mm of o2] (r0) {stage_select};
+  \node[sp=cVal, below=of r0] (r1) {bootstrap_stability};
+  \node[hp=cVal, right=of r1] (k1) {candidate_monomials\\{\normalfont\tiny refit on 20 random 80\% subsets}};
+  \node[sp=cVal, below=of r1] (r2) {select_model\\{\normalfont\tiny see Figure \ref{fig:selection}}};
+  \node[sp=cHyp, below=of r2] (r3) {train_data_only_mlp\\{\normalfont\tiny same network, no physics}};
+  \node[hp=cHyp, right=of r3] (k3) {load_candidate_model};
+  \node[sp=cVal, below=of r3] (r4) {solve_forward\\{\normalfont\tiny selected law to $t=1.5$}};
+  \node[hp=cVal, right=of r4] (k4) {rhs_function\\_effective_coefficients};
+  \node[sp=cExp, below=of r4] (r5) {oracle_evaluation\\{\normalfont\tiny truth used ONLY to report error}};
+  \node[hp=cData, right=of r5] (k5) {solve_diffusion_fd\\{\normalfont\tiny ground truth beyond $t=1$}};
+  \node[sp=cExp, below=of r5] (r6) {_plots, _report};
+  \node[io, below=of r6] (o3) {model\_selection, ood\_predictions, phase6\_report.md};
+  % groups
+  \begin{scope}[on background layer]
+    \node[pkgbox=cExp, fit=(p0)(h1)(h5)(o1), label={[pkglabel=cExp]left:\rotatebox{90}{1 prepare}}] {};
+    \node[pkgbox=cExp, fit=(q0)(g1)(g4)(o2), label={[pkglabel=cExp]left:\rotatebox{90}{2 pinn}}] {};
+    \node[pkgbox=cExp, fit=(r0)(k1)(k5)(o3), label={[pkglabel=cExp]left:\rotatebox{90}{3 select}}] {};
+  \end{scope}
+  % arrows
+  \foreach \a/\b in {p0/p1,p1/p2,p2/p3,p3/p4,p4/p5,p5/o1,o1/q0,q0/q1,q1/q2,q2/q3,q3/q4,q4/o2,o2/r0,r0/r1,r1/r2,r2/r3,r3/r4,r4/r5,r5/r6,r6/o3}
+    \draw[flow] (\a) -- (\b);
+  \foreach \a/\b in {p1/h1,h2/p2,p3/h3,h4/p4,p5/h5,g1/q1,q2/g2,q3/g3,q4/g4,r1/k1,k3/r3,r4/k4,r5/k5}
+    \draw[flow] (\a) -- (\b);
+  \draw[flow] (h1) -- (p2.north east);
+\end{tikzpicture}

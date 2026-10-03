@@ -1,0 +1,47 @@
+% =====================================================================
+\section{The whole machine on one page}\label{sec:architecture}
+% =====================================================================
+
+Figure~\ref{fig:pipeline} is the complete discovery pipeline as finally assembled in Phase~6. Read it top to
+bottom: each stage hands its output to the next. The right-hand column says which package does the work and
+which question the stage answers.
+
+\begin{figure}[!htb]
+\centering
+\input{figures/pipeline}
+\caption{The end-to-end discovery pipeline (Phase~6 form). Colours follow the package legend used in every
+flowchart.}
+\label{fig:pipeline}
+\end{figure}
+
+\begin{lesson}[: who is allowed to decide]
+\begin{itemize}
+  \item RAG \emph{retrieves}, the graph \emph{organises}, the LLM \emph{proposes}. None of them can mark an
+        equation as correct; there is literally no field for that in the schema.
+  \item Ranking (\fn{hypotheses/ranking.py}) only sets the \emph{order} in which candidates are examined.
+  \item Only measured numbers decide: the gate (\fn{validate_candidate}) and \fn{select_model}, both using
+        held-out \emph{noisy} observations, never the hidden truth.
+  \item Status strings are deliberately modest: ``supported by the available observations and physics
+        constraints'' or ``rejected under the tested conditions''. Never ``proven''.
+\end{itemize}
+\end{lesson}
+
+\subsection{How the code packages depend on each other}
+
+Figure~\ref{fig:packages} was computed from the actual \fn{import} statements in the code. An arrow
+$A\to B$ means ``package $A$ imports from package $B$''. Double-headed arrows are mutual imports.
+
+\begin{figure}[!htb]
+\centering
+\input{figures/packages}
+\caption{Package dependency map, derived from the real imports. The phase that introduced each package is shown
+under its name.}
+\label{fig:packages}
+\end{figure}
+
+\begin{intuition}[: reading the map]
+\fn{hypotheses} sits in the middle because it glues the brainstormer (\fn{llm}) to the lab (\fn{pinn}) and the
+judge (\fn{validation}). \fn{evaluation} (Phase~7) reaches into almost everything because it re-runs the whole
+pipeline on benchmark datasets. \fn{data} and \fn{pinn} import each other only because the problem description
+and the PINN share the same data-loading helper (\fn{load_observational_data}).
+\end{intuition}

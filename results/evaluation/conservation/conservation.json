@@ -1,0 +1,437 @@
+{
+  "definition": "relative_violation = RMS_t(integral residual dx) / RMS_t(dM/dt); 0 means the model's total amount changes exactly as its law says",
+  "windows": {
+    "train": [
+      0.0,
+      0.8
+    ],
+    "ood": [
+      0.8,
+      1.0
+    ],
+    "beyond": [
+      1.0,
+      1.5
+    ]
+  },
+  "mock": {
+    "selected": "H1",
+    "candidates": {
+      "H1": {
+        "equation": "u_t = D*u_xx",
+        "gate_passed": true,
+        "train": {
+          "rms_balance_violation": 0.0005016575265686347,
+          "rms_dM_dt": 0.6576384562026121,
+          "relative_violation": 0.0007628165929732048,
+          "max_abs_violation": 0.0013116778060793875,
+          "t_window": [
+            0.0,
+            0.8
+          ]
+        },
+        "ood": {
+          "rms_balance_violation": 0.004541963980088456,
+          "rms_dM_dt": 0.26687935615579206,
+          "relative_violation": 0.017018790982982826,
+          "max_abs_violation": 0.00728875370696187,
+          "t_window": [
+            0.8,
+            1.0
+          ]
+        },
+        "beyond": {
+          "rms_balance_violation": 0.011344339686901161,
+          "rms_dM_dt": 0.20247812299195447,
+          "relative_violation": 0.05602748345979053,
+          "max_abs_violation": 0.012555032316595313,
+          "t_window": [
+            1.0,
+            1.5
+          ]
+        }
+      },
+      "H2": {
+        "equation": "u_t + c*u_x = 0",
+        "gate_passed": false,
+        "train": {
+          "rms_balance_violation": 0.07436356707664758,
+          "rms_dM_dt": 0.07435146795954832,
+          "relative_violation": 1.0001627286915955,
+          "max_abs_violation": 0.1052300478774123,
+          "t_window": [
+            0.0,
+            0.8
+          ]
+        },
+        "ood": {
+          "rms_balance_violation": 0.014820700544139564,
+          "rms_dM_dt": 0.014792555618554463,
+          "relative_violation": 1.0019026411872873,
+          "max_abs_violation": 0.027382860237266864,
+          "t_window": [
+            0.8,
+            1.0
+          ]
+        },
+        "beyond": {
+          "rms_balance_violation": 0.06327559881850275,
+          "rms_dM_dt": 0.06326554247079656,
+          "relative_violation": 1.0001589545795935,
+          "max_abs_violation": 0.08804464254528285,
+          "t_window": [
+            1.0,
+            1.5
+          ]
+        }
+      },
+      "H3": {
+        "equation": "u_t = D*u_xx + r*u*(1 - u/K)",
+        "gate_passed": true,
+        "train": {
+          "rms_balance_violation": 0.000734603563208903,
+          "rms_dM_dt": 0.6584418169003486,
+          "relative_violation": 0.0011156696679246315,
+          "max_abs_violation": 0.0036292470688931676,
+          "t_window": [
+            0.0,
+            0.8
+          ]
+        },
+        "ood": {
+          "rms_balance_violation": 0.0014105928046150354,
+          "rms_dM_dt": 0.2743317217523601,
+          "relative_violation": 0.005141923783383611,
+          "max_abs_violation": 0.002669113999872934,
+          "t_window": [
+            0.8,
+            1.0
+          ]
+        },
+        "beyond": {
+          "rms_balance_violation": 0.009811250097632142,
+          "rms_dM_dt": 0.21187753632299355,
+          "relative_violation": 0.04630623079681052,
+          "max_abs_violation": 0.015370342615933624,
+          "t_window": [
+            1.0,
+            1.5
+          ]
+        }
+      },
+      "H4": {
+        "equation": "u_t + c*u_x = D*u_xx",
+        "gate_passed": true,
+        "train": {
+          "rms_balance_violation": 0.0008602585076243818,
+          "rms_dM_dt": 0.657162913938367,
+          "relative_violation": 0.0013090490795788614,
+          "max_abs_violation": 0.0028534262627363206,
+          "t_window": [
+            0.0,
+            0.8
+          ]
+        },
+        "ood": {
+          "rms_balance_violation": 0.010130904250230492,
+          "rms_dM_dt": 0.2811156197961137,
+          "relative_violation": 0.03603821181326811,
+          "max_abs_violation": 0.017030017226934435,
+          "t_window": [
+            0.8,
+            1.0
+          ]
+        },
+        "beyond": {
+          "rms_balance_violation": 0.04237284329652917,
+          "rms_dM_dt": 0.2542187796613516,
+          "relative_violation": 0.166678651171934,
+          "max_abs_violation": 0.06055543869733811,
+          "t_window": [
+            1.0,
+            1.5
+          ]
+        }
+      },
+      "K3": {
+        "equation": "u_t = r*u*(1-u/K)",
+        "gate_passed": false,
+        "train": {
+          "rms_balance_violation": 0.004660310925652761,
+          "rms_dM_dt": 0.6255718776406384,
+          "relative_violation": 0.007449680991462168,
+          "max_abs_violation": 0.015483876522630452,
+          "t_window": [
+            0.0,
+            0.8
+          ]
+        },
+        "ood": {
+          "rms_balance_violation": 0.002876401791526929,
+          "rms_dM_dt": 0.30730608874123655,
+          "relative_violation": 0.009360054671578502,
+          "max_abs_violation": 0.003119214057223871,
+          "t_window": [
+            0.8,
+            1.0
+          ]
+        },
+        "beyond": {
+          "rms_balance_violation": 0.0021694236775196577,
+          "rms_dM_dt": 0.19909494098380687,
+          "relative_violation": 0.010896427939352337,
+          "max_abs_violation": 0.0031266089575365187,
+          "t_window": [
+            1.0,
+            1.5
+          ]
+        }
+      }
+    }
+  },
+  "gemini": {
+    "selected": "H1",
+    "candidates": {
+      "H1": {
+        "equation": "u_t = D * u_xx",
+        "gate_passed": true,
+        "train": {
+          "rms_balance_violation": 0.0013883144623490539,
+          "rms_dM_dt": 0.6576588147423453,
+          "relative_violation": 0.0021109949889335272,
+          "max_abs_violation": 0.00775511551648378,
+          "t_window": [
+            0.0,
+            0.8
+          ]
+        },
+        "ood": {
+          "rms_balance_violation": 0.0054033953703010295,
+          "rms_dM_dt": 0.2663970457105552,
+          "relative_violation": 0.020283240588831106,
+          "max_abs_violation": 0.008834947161376477,
+          "t_window": [
+            0.8,
+            1.0
+          ]
+        },
+        "beyond": {
+          "rms_balance_violation": 0.01720691451429902,
+          "rms_dM_dt": 0.19610133088095524,
+          "relative_violation": 0.0877450165024357,
+          "max_abs_violation": 0.02154151953756809,
+          "t_window": [
+            1.0,
+            1.5
+          ]
+        }
+      },
+      "H2": {
+        "equation": "u_t = D * u_xx - r * u",
+        "gate_passed": true,
+        "train": {
+          "rms_balance_violation": 0.002774764693575255,
+          "rms_dM_dt": 0.6585583500572536,
+          "relative_violation": 0.004213392318742937,
+          "max_abs_violation": 0.01636142253875732,
+          "t_window": [
+            0.0,
+            0.8
+          ]
+        },
+        "ood": {
+          "rms_balance_violation": 0.0009886127322123082,
+          "rms_dM_dt": 0.27168230064126775,
+          "relative_violation": 0.0036388558617135797,
+          "max_abs_violation": 0.0025168513506650925,
+          "t_window": [
+            0.8,
+            1.0
+          ]
+        },
+        "beyond": {
+          "rms_balance_violation": 0.01812464692793718,
+          "rms_dM_dt": 0.20044576438273262,
+          "relative_violation": 0.0904217007715356,
+          "max_abs_violation": 0.030977079160511498,
+          "t_window": [
+            1.0,
+            1.5
+          ]
+        }
+      },
+      "H3": {
+        "equation": "u_t + c * u_x = D * u_xx",
+        "gate_passed": true,
+        "train": {
+          "rms_balance_violation": 0.0014582387629544797,
+          "rms_dM_dt": 0.6571394474527287,
+          "relative_violation": 0.0022190705011045286,
+          "max_abs_violation": 0.005372229292988774,
+          "t_window": [
+            0.0,
+            0.8
+          ]
+        },
+        "ood": {
+          "rms_balance_violation": 0.00420515166704487,
+          "rms_dM_dt": 0.26430430428653806,
+          "relative_violation": 0.015910265549387244,
+          "max_abs_violation": 0.00711109722033143,
+          "t_window": [
+            0.8,
+            1.0
+          ]
+        },
+        "beyond": {
+          "rms_balance_violation": 0.02625230979598456,
+          "rms_dM_dt": 0.19019830095824516,
+          "relative_violation": 0.13802599530974682,
+          "max_abs_violation": 0.043850173465907576,
+          "t_window": [
+            1.0,
+            1.5
+          ]
+        }
+      },
+      "H4": {
+        "equation": "u_t = D * u_xx + r * u * (1.0 - u / K)",
+        "gate_passed": true,
+        "train": {
+          "rms_balance_violation": 0.001078739988183004,
+          "rms_dM_dt": 0.6575726041274351,
+          "relative_violation": 0.0016404880334308274,
+          "max_abs_violation": 0.0040722290705889515,
+          "t_window": [
+            0.0,
+            0.8
+          ]
+        },
+        "ood": {
+          "rms_balance_violation": 0.00792192917527282,
+          "rms_dM_dt": 0.26522415708849156,
+          "relative_violation": 0.029868807058286484,
+          "max_abs_violation": 0.013453393545933069,
+          "t_window": [
+            0.8,
+            1.0
+          ]
+        },
+        "beyond": {
+          "rms_balance_violation": 0.030853639320717764,
+          "rms_dM_dt": 0.187796129746196,
+          "relative_violation": 0.16429326505512148,
+          "max_abs_violation": 0.042380793560296295,
+          "t_window": [
+            1.0,
+            1.5
+          ]
+        }
+      },
+      "K1": {
+        "equation": "u_t + c*u_x = 0",
+        "gate_passed": false,
+        "train": {
+          "rms_balance_violation": 0.07387666216970204,
+          "rms_dM_dt": 0.07385470582734378,
+          "relative_violation": 1.0002972910407304,
+          "max_abs_violation": 0.10906722436193375,
+          "t_window": [
+            0.0,
+            0.8
+          ]
+        },
+        "ood": {
+          "rms_balance_violation": 0.013855515500382635,
+          "rms_dM_dt": 0.013695269719925162,
+          "relative_violation": 1.0117008123048743,
+          "max_abs_violation": 0.02609356408007443,
+          "t_window": [
+            0.8,
+            1.0
+          ]
+        },
+        "beyond": {
+          "rms_balance_violation": 0.06247042967550637,
+          "rms_dM_dt": 0.06214126504055933,
+          "relative_violation": 1.005297037881868,
+          "max_abs_violation": 0.08728402705863117,
+          "t_window": [
+            1.0,
+            1.5
+          ]
+        }
+      },
+      "K3": {
+        "equation": "u_t = r*u*(1-u/K)",
+        "gate_passed": false,
+        "train": {
+          "rms_balance_violation": 0.003929566330110949,
+          "rms_dM_dt": 0.6264951587355791,
+          "relative_violation": 0.006272301190709561,
+          "max_abs_violation": 0.009953320578206332,
+          "t_window": [
+            0.0,
+            0.8
+          ]
+        },
+        "ood": {
+          "rms_balance_violation": 0.0025038229862978634,
+          "rms_dM_dt": 0.31128683468095025,
+          "relative_violation": 0.008043459302942018,
+          "max_abs_violation": 0.005096017918549477,
+          "t_window": [
+            0.8,
+            1.0
+          ]
+        },
+        "beyond": {
+          "rms_balance_violation": 0.01898919366548025,
+          "rms_dM_dt": 0.21170653801337258,
+          "relative_violation": 0.08969583010365406,
+          "max_abs_violation": 0.030875973536167292,
+          "t_window": [
+            1.0,
+            1.5
+          ]
+        }
+      }
+    }
+  },
+  "mlp_baseline_vs_selected_law": {
+    "law": "u_t = D*u_xx",
+    "params": {
+      "D": 0.10002120584249496
+    },
+    "train": {
+      "rms_balance_violation": 0.08239053800588872,
+      "rms_dM_dt": 0.550235989232789,
+      "relative_violation": 0.14973673045408822,
+      "max_abs_violation": 0.20875513000413776,
+      "t_window": [
+        0.0,
+        0.8
+      ]
+    },
+    "ood": {
+      "rms_balance_violation": 0.013901856519707014,
+      "rms_dM_dt": 0.26022424308667125,
+      "relative_violation": 0.053422603347055606,
+      "max_abs_violation": 0.028599409740418198,
+      "t_window": [
+        0.8,
+        1.0
+      ]
+    },
+    "beyond": {
+      "rms_balance_violation": 0.05455715790144631,
+      "rms_dM_dt": 0.17260462804743593,
+      "relative_violation": 0.3160816631547833,
+      "max_abs_violation": 0.0606809402257204,
+      "t_window": [
+        1.0,
+        1.5
+      ]
+    }
+  }
+}

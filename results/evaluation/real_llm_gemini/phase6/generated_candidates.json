@@ -1,0 +1,732 @@
+{
+  "problem_description": "We observe a scalar field u(x,t) on a 1D spatial domain x in [0,1] over a time window t in [0,1], measured via 400 sparse, noisy point samples (x_i, t_i, u_i) -- no dense grid or simulation is provided to you.\n\nObserved facts (computed directly from the data):\n- Near t=0.05, the field's peak absolute amplitude is approximately 0.983.\n- Near t=0.95, the field's peak absolute amplitude is approximately 0.395 (i.e. the amplitude has decreased substantially over the observation window).\n- Near the domain edges (x<0.03 or x>0.97), the field stays very close to zero at essentially all observed times (max |u| there is approximately 0.0711).\n- The amplitude-weighted spatial centroid of |u| is approximately x~0.53 near t=0.05 and x~0.41 near t=0.95 (i.e. little evidence of bulk translation of the field across the domain -- compare this to the amplitude decay above).\n- The spatial profile appears to smooth out over time: early-time samples show more fine-grained spatial structure (multiple local peaks) than late-time samples.\n\nPropose plausible governing mechanisms for this field's evolution.",
+  "provider": "GeminiProvider",
+  "generation_mode": "evidence-grounded",
+  "answer_leakage_check": {
+    "D_true_string_found_in_corpus_docs": []
+  },
+  "scientific_evidence": {
+    "retrieved": [
+      {
+        "evidence_id": "evidence_doc_advection_chunk_003",
+        "document_id": "doc_advection",
+        "section": "Governing equation",
+        "retrieval_score": 0.5467168497692326
+      },
+      {
+        "evidence_id": "evidence_doc_advection_chunk_004",
+        "document_id": "doc_advection",
+        "section": "Typical observational signatures",
+        "retrieval_score": 0.5330793765177754
+      },
+      {
+        "evidence_id": "evidence_doc_diffusion_chunk_003",
+        "document_id": "doc_diffusion",
+        "section": "Governing equation",
+        "retrieval_score": 0.5283236974273893
+      },
+      {
+        "evidence_id": "evidence_doc_diffusion_chunk_004",
+        "document_id": "doc_diffusion",
+        "section": "Typical observational signatures",
+        "retrieval_score": 0.5202213479576518
+      },
+      {
+        "evidence_id": "evidence_doc_reaction_chunk_003",
+        "document_id": "doc_reaction",
+        "section": "Governing equation",
+        "retrieval_score": 0.47399750318085077
+      }
+    ],
+    "mechanisms": [
+      "advection",
+      "diffusion",
+      "reaction"
+    ],
+    "documented_equation_forms": [
+      "u_t + c*u_x = 0",
+      "u_t = D*u_xx",
+      "u_t = r*u*(1-u/K)"
+    ],
+    "parameters": [
+      "D",
+      "K",
+      "c",
+      "r"
+    ],
+    "n_graph_relationships": 21,
+    "graph_summary": {
+      "n_entities": 22,
+      "n_relationships": 40,
+      "entities_by_type": {
+        "Document": 5,
+        "Mechanism": 5,
+        "Variable": 3,
+        "Parameter": 4,
+        "Equation": 5
+      },
+      "n_sourced_relationships": 40,
+      "n_unsourced_relationships": 0
+    }
+  },
+  "llm_candidates": [
+    {
+      "id": "H1",
+      "name": "Pure Diffusion Model",
+      "domain": "1D scalar-field transport/reaction",
+      "equation": "u_t = D * u_xx",
+      "latex": "\\frac{\\partial u}{\\partial t} = D \\frac{\\partial^2 u}{\\partial x^2}",
+      "dependent_variables": [
+        "u"
+      ],
+      "independent_variables": [
+        "x",
+        "t"
+      ],
+      "parameters": [
+        {
+          "name": "D",
+          "description": "Diffusion coefficient governing spatial spreading and amplitude decay",
+          "trainable": true,
+          "initial_value": 0.05,
+          "units": "m^2/s",
+          "lower_bound": null,
+          "upper_bound": null
+        }
+      ],
+      "required_derivatives": [
+        "u_t",
+        "u_xx"
+      ],
+      "required_initial_conditions": true,
+      "required_boundary_conditions": true,
+      "assumptions": [
+        "The medium is isotropic and homogeneous",
+        "No advection or bulk translation is present",
+        "No active local reaction or source/sink terms are present",
+        "Boundary values remain near zero"
+      ],
+      "mechanism": "Diffusion, which smooths fine spatial structures, causes amplitude decay over time, and preserves spatial center of mass without strong bulk translation.",
+      "rationale": "Observations show significant amplitude decay from 0.983 to 0.395, smoothing of fine spatial structure into a simpler profile, and minimal bulk translation of the spatial centroid (shifting only from ~0.53 to ~0.41), while boundaries remain near zero. This aligns qualitatively with a diffusive decay process.",
+      "testable_predictions": [
+        "The peak amplitude will decay monotonically over time following a power law or exponential decay characteristic of 1D heat equations.",
+        "Higher-order spatial frequency components will dissipate faster than lower-order components."
+      ],
+      "confidence": 0.85
+    },
+    {
+      "id": "H2",
+      "name": "Reaction-Diffusion Model with Decay",
+      "domain": "1D scalar-field transport/reaction",
+      "equation": "u_t = D * u_xx - r * u",
+      "latex": "\\frac{\\partial u}{\\partial t} = D \\frac{\\partial^2 u}{\\partial x^2} - r u",
+      "dependent_variables": [
+        "u"
+      ],
+      "independent_variables": [
+        "x",
+        "t"
+      ],
+      "parameters": [
+        {
+          "name": "D",
+          "description": "Diffusion coefficient",
+          "trainable": true,
+          "initial_value": 0.02,
+          "units": "m^2/s",
+          "lower_bound": null,
+          "upper_bound": null
+        },
+        {
+          "name": "r",
+          "description": "Linear decay or absorption rate",
+          "trainable": true,
+          "initial_value": 0.5,
+          "units": "1/s",
+          "lower_bound": null,
+          "upper_bound": null
+        }
+      ],
+      "required_derivatives": [
+        "u_t",
+        "u_xx"
+      ],
+      "required_initial_conditions": true,
+      "required_boundary_conditions": true,
+      "assumptions": [
+        "Diffusion acts concurrently with a first-order decay reaction",
+        "No significant advective transport",
+        "Boundary values remain near zero"
+      ],
+      "mechanism": "Combined diffusion and linear exponential decay, accounting for both spatial smoothing and accelerated overall amplitude reduction beyond what diffusion alone might cause.",
+      "rationale": "While pure diffusion smooths and lowers amplitude, a combined reaction term allows independent control over the rate of total mass/amplitude loss versus spatial spreading.",
+      "testable_predictions": [
+        "The total integral of u across the domain will decay exponentially faster than under pure diffusion.",
+        "Spatial variance expansion will be constrained by the decay term."
+      ],
+      "confidence": 0.75
+    },
+    {
+      "id": "H3",
+      "name": "Advection-Diffusion Model",
+      "domain": "1D scalar-field transport/reaction",
+      "equation": "u_t + c * u_x = D * u_xx",
+      "latex": "\\frac{\\partial u}{\\partial t} + c \\frac{\\partial u}{\\partial x} = D \\frac{\\partial^2 u}{\\partial x^2}",
+      "dependent_variables": [
+        "u"
+      ],
+      "independent_variables": [
+        "x",
+        "t"
+      ],
+      "parameters": [
+        {
+          "name": "c",
+          "description": "Constant advective transport velocity",
+          "trainable": true,
+          "initial_value": -0.1,
+          "units": "m/s",
+          "lower_bound": null,
+          "upper_bound": null
+        },
+        {
+          "name": "D",
+          "description": "Diffusion coefficient",
+          "trainable": true,
+          "initial_value": 0.03,
+          "units": "m^2/s",
+          "lower_bound": null,
+          "upper_bound": null
+        }
+      ],
+      "required_derivatives": [
+        "u_t",
+        "u_x",
+        "u_xx"
+      ],
+      "required_initial_conditions": true,
+      "required_boundary_conditions": true,
+      "assumptions": [
+        "Medium exhibits uniform directional flow at velocity c",
+        "Diffusion is isotropic",
+        "No internal source or sink terms"
+      ],
+      "mechanism": "Simultaneous transport of the scalar field by a constant velocity field and spreading via diffusion.",
+      "rationale": "Although the centroid only shifts slightly from 0.53 to 0.41 over a long time window, a small advection velocity coupled with diffusion could explain both the minor drift and the amplitude reduction due to boundary leakage or spreading.",
+      "testable_predictions": [
+        "Asymmetric spreading of the wavepacket over time.",
+        "Centroid drift rate will remain strictly constant proportional to c."
+      ],
+      "confidence": 0.5
+    },
+    {
+      "id": "H4",
+      "name": "Damped Fisher-KPP Type Reaction-Diffusion Model",
+      "domain": "1D scalar-field transport/reaction",
+      "equation": "u_t = D * u_xx + r * u * (1.0 - u / K)",
+      "latex": "\\frac{\\partial u}{\\partial t} = D \\frac{\\partial^2 u}{\\partial x^2} + r u \\left(1 - \\frac{u}{K}\\right)",
+      "dependent_variables": [
+        "u"
+      ],
+      "independent_variables": [
+        "x",
+        "t"
+      ],
+      "parameters": [
+        {
+          "name": "D",
+          "description": "Diffusion coefficient",
+          "trainable": true,
+          "initial_value": 0.02,
+          "units": "m^2/s",
+          "lower_bound": null,
+          "upper_bound": null
+        },
+        {
+          "name": "r",
+          "description": "Reaction rate parameter",
+          "trainable": true,
+          "initial_value": 0.1,
+          "units": "1/s",
+          "lower_bound": null,
+          "upper_bound": null
+        },
+        {
+          "name": "K",
+          "description": "Carrying capacity or saturation parameter",
+          "trainable": true,
+          "initial_value": 1.0,
+          "units": "1",
+          "lower_bound": null,
+          "upper_bound": null
+        }
+      ],
+      "required_derivatives": [
+        "u_t",
+        "u_xx"
+      ],
+      "required_initial_conditions": true,
+      "required_boundary_conditions": true,
+      "assumptions": [
+        "Nonlinear local growth or decay kinetics governed by logistic-type feedback",
+        "Isotropic spatial diffusion",
+        "Zero-flux or absorbing boundaries near domain edges"
+      ],
+      "mechanism": "Nonlinear reaction-diffusion where local amplitude dynamics interact with spatial diffusion, capable of stabilizing or reshaping localized structures.",
+      "rationale": "Given that the amplitude drops from near 1.0 to ~0.4, a nonlinear reaction term that drives the field toward an equilibrium (or decays when above/below certain thresholds) combined with diffusion provides a structurally rich alternative to linear models.",
+      "testable_predictions": [
+        "Non-exponential decay rates where the rate of amplitude decrease changes non-linearly as u approaches specific intermediate values.",
+        "Self-regularization of steep gradients."
+      ],
+      "confidence": 0.4
+    }
+  ],
+  "kg_template_candidates": [
+    {
+      "id": "K1",
+      "name": "KG template: advection",
+      "domain": "from knowledge graph",
+      "equation": "u_t + c*u_x = 0",
+      "latex": null,
+      "dependent_variables": [
+        "u"
+      ],
+      "independent_variables": [
+        "x",
+        "t"
+      ],
+      "parameters": [
+        {
+          "name": "c",
+          "description": "",
+          "trainable": true,
+          "initial_value": 0.2,
+          "units": null,
+          "lower_bound": null,
+          "upper_bound": null
+        }
+      ],
+      "required_derivatives": [
+        "u_t",
+        "u_x"
+      ],
+      "required_initial_conditions": true,
+      "required_boundary_conditions": true,
+      "assumptions": [],
+      "mechanism": "advection",
+      "rationale": "Equation form documented for 'advection' in the knowledge graph (evidence-derived template, not an LLM proposal).",
+      "testable_predictions": [],
+      "confidence": null
+    },
+    {
+      "id": "K2",
+      "name": "KG template: diffusion",
+      "domain": "from knowledge graph",
+      "equation": "u_t = D*u_xx",
+      "latex": null,
+      "dependent_variables": [
+        "u"
+      ],
+      "independent_variables": [
+        "x",
+        "t"
+      ],
+      "parameters": [
+        {
+          "name": "D",
+          "description": "",
+          "trainable": true,
+          "initial_value": 0.2,
+          "units": null,
+          "lower_bound": null,
+          "upper_bound": null
+        }
+      ],
+      "required_derivatives": [
+        "u_t",
+        "u_xx"
+      ],
+      "required_initial_conditions": true,
+      "required_boundary_conditions": true,
+      "assumptions": [],
+      "mechanism": "diffusion",
+      "rationale": "Equation form documented for 'diffusion' in the knowledge graph (evidence-derived template, not an LLM proposal).",
+      "testable_predictions": [],
+      "confidence": null
+    },
+    {
+      "id": "K3",
+      "name": "KG template: reaction",
+      "domain": "from knowledge graph",
+      "equation": "u_t = r*u*(1-u/K)",
+      "latex": null,
+      "dependent_variables": [
+        "u"
+      ],
+      "independent_variables": [
+        "x",
+        "t"
+      ],
+      "parameters": [
+        {
+          "name": "K",
+          "description": "",
+          "trainable": true,
+          "initial_value": 1.0,
+          "units": null,
+          "lower_bound": null,
+          "upper_bound": null
+        },
+        {
+          "name": "r",
+          "description": "",
+          "trainable": true,
+          "initial_value": 0.1,
+          "units": null,
+          "lower_bound": null,
+          "upper_bound": null
+        }
+      ],
+      "required_derivatives": [
+        "u_t"
+      ],
+      "required_initial_conditions": true,
+      "required_boundary_conditions": true,
+      "assumptions": [],
+      "mechanism": "reaction",
+      "rationale": "Equation form documented for 'reaction' in the knowledge graph (evidence-derived template, not an LLM proposal).",
+      "testable_predictions": [],
+      "confidence": null
+    }
+  ],
+  "duplicates_removed": [
+    {
+      "id": "K2",
+      "name": "KG template: diffusion",
+      "duplicate_of": "H1",
+      "signature": "-_p0*u_xx + u_t"
+    }
+  ],
+  "pool": [
+    {
+      "id": "H1",
+      "origin": "llm",
+      "equation": "u_t = D * u_xx",
+      "hypothesis": {
+        "id": "H1",
+        "name": "Pure Diffusion Model",
+        "domain": "1D scalar-field transport/reaction",
+        "equation": "u_t = D * u_xx",
+        "latex": "\\frac{\\partial u}{\\partial t} = D \\frac{\\partial^2 u}{\\partial x^2}",
+        "dependent_variables": [
+          "u"
+        ],
+        "independent_variables": [
+          "x",
+          "t"
+        ],
+        "parameters": [
+          {
+            "name": "D",
+            "description": "Diffusion coefficient governing spatial spreading and amplitude decay",
+            "trainable": true,
+            "initial_value": 0.05,
+            "units": "m^2/s",
+            "lower_bound": null,
+            "upper_bound": null
+          }
+        ],
+        "required_derivatives": [
+          "u_t",
+          "u_xx"
+        ],
+        "required_initial_conditions": true,
+        "required_boundary_conditions": true,
+        "assumptions": [
+          "The medium is isotropic and homogeneous",
+          "No advection or bulk translation is present",
+          "No active local reaction or source/sink terms are present",
+          "Boundary values remain near zero"
+        ],
+        "mechanism": "Diffusion, which smooths fine spatial structures, causes amplitude decay over time, and preserves spatial center of mass without strong bulk translation.",
+        "rationale": "Observations show significant amplitude decay from 0.983 to 0.395, smoothing of fine spatial structure into a simpler profile, and minimal bulk translation of the spatial centroid (shifting only from ~0.53 to ~0.41), while boundaries remain near zero. This aligns qualitatively with a diffusive decay process.",
+        "testable_predictions": [
+          "The peak amplitude will decay monotonically over time following a power law or exponential decay characteristic of 1D heat equations.",
+          "Higher-order spatial frequency components will dissipate faster than lower-order components."
+        ],
+        "confidence": 0.85
+      }
+    },
+    {
+      "id": "H2",
+      "origin": "llm",
+      "equation": "u_t = D * u_xx - r * u",
+      "hypothesis": {
+        "id": "H2",
+        "name": "Reaction-Diffusion Model with Decay",
+        "domain": "1D scalar-field transport/reaction",
+        "equation": "u_t = D * u_xx - r * u",
+        "latex": "\\frac{\\partial u}{\\partial t} = D \\frac{\\partial^2 u}{\\partial x^2} - r u",
+        "dependent_variables": [
+          "u"
+        ],
+        "independent_variables": [
+          "x",
+          "t"
+        ],
+        "parameters": [
+          {
+            "name": "D",
+            "description": "Diffusion coefficient",
+            "trainable": true,
+            "initial_value": 0.02,
+            "units": "m^2/s",
+            "lower_bound": null,
+            "upper_bound": null
+          },
+          {
+            "name": "r",
+            "description": "Linear decay or absorption rate",
+            "trainable": true,
+            "initial_value": 0.5,
+            "units": "1/s",
+            "lower_bound": null,
+            "upper_bound": null
+          }
+        ],
+        "required_derivatives": [
+          "u_t",
+          "u_xx"
+        ],
+        "required_initial_conditions": true,
+        "required_boundary_conditions": true,
+        "assumptions": [
+          "Diffusion acts concurrently with a first-order decay reaction",
+          "No significant advective transport",
+          "Boundary values remain near zero"
+        ],
+        "mechanism": "Combined diffusion and linear exponential decay, accounting for both spatial smoothing and accelerated overall amplitude reduction beyond what diffusion alone might cause.",
+        "rationale": "While pure diffusion smooths and lowers amplitude, a combined reaction term allows independent control over the rate of total mass/amplitude loss versus spatial spreading.",
+        "testable_predictions": [
+          "The total integral of u across the domain will decay exponentially faster than under pure diffusion.",
+          "Spatial variance expansion will be constrained by the decay term."
+        ],
+        "confidence": 0.75
+      }
+    },
+    {
+      "id": "H3",
+      "origin": "llm",
+      "equation": "u_t + c * u_x = D * u_xx",
+      "hypothesis": {
+        "id": "H3",
+        "name": "Advection-Diffusion Model",
+        "domain": "1D scalar-field transport/reaction",
+        "equation": "u_t + c * u_x = D * u_xx",
+        "latex": "\\frac{\\partial u}{\\partial t} + c \\frac{\\partial u}{\\partial x} = D \\frac{\\partial^2 u}{\\partial x^2}",
+        "dependent_variables": [
+          "u"
+        ],
+        "independent_variables": [
+          "x",
+          "t"
+        ],
+        "parameters": [
+          {
+            "name": "c",
+            "description": "Constant advective transport velocity",
+            "trainable": true,
+            "initial_value": -0.1,
+            "units": "m/s",
+            "lower_bound": null,
+            "upper_bound": null
+          },
+          {
+            "name": "D",
+            "description": "Diffusion coefficient",
+            "trainable": true,
+            "initial_value": 0.03,
+            "units": "m^2/s",
+            "lower_bound": null,
+            "upper_bound": null
+          }
+        ],
+        "required_derivatives": [
+          "u_t",
+          "u_x",
+          "u_xx"
+        ],
+        "required_initial_conditions": true,
+        "required_boundary_conditions": true,
+        "assumptions": [
+          "Medium exhibits uniform directional flow at velocity c",
+          "Diffusion is isotropic",
+          "No internal source or sink terms"
+        ],
+        "mechanism": "Simultaneous transport of the scalar field by a constant velocity field and spreading via diffusion.",
+        "rationale": "Although the centroid only shifts slightly from 0.53 to 0.41 over a long time window, a small advection velocity coupled with diffusion could explain both the minor drift and the amplitude reduction due to boundary leakage or spreading.",
+        "testable_predictions": [
+          "Asymmetric spreading of the wavepacket over time.",
+          "Centroid drift rate will remain strictly constant proportional to c."
+        ],
+        "confidence": 0.5
+      }
+    },
+    {
+      "id": "H4",
+      "origin": "llm",
+      "equation": "u_t = D * u_xx + r * u * (1.0 - u / K)",
+      "hypothesis": {
+        "id": "H4",
+        "name": "Damped Fisher-KPP Type Reaction-Diffusion Model",
+        "domain": "1D scalar-field transport/reaction",
+        "equation": "u_t = D * u_xx + r * u * (1.0 - u / K)",
+        "latex": "\\frac{\\partial u}{\\partial t} = D \\frac{\\partial^2 u}{\\partial x^2} + r u \\left(1 - \\frac{u}{K}\\right)",
+        "dependent_variables": [
+          "u"
+        ],
+        "independent_variables": [
+          "x",
+          "t"
+        ],
+        "parameters": [
+          {
+            "name": "D",
+            "description": "Diffusion coefficient",
+            "trainable": true,
+            "initial_value": 0.02,
+            "units": "m^2/s",
+            "lower_bound": null,
+            "upper_bound": null
+          },
+          {
+            "name": "r",
+            "description": "Reaction rate parameter",
+            "trainable": true,
+            "initial_value": 0.1,
+            "units": "1/s",
+            "lower_bound": null,
+            "upper_bound": null
+          },
+          {
+            "name": "K",
+            "description": "Carrying capacity or saturation parameter",
+            "trainable": true,
+            "initial_value": 1.0,
+            "units": "1",
+            "lower_bound": null,
+            "upper_bound": null
+          }
+        ],
+        "required_derivatives": [
+          "u_t",
+          "u_xx"
+        ],
+        "required_initial_conditions": true,
+        "required_boundary_conditions": true,
+        "assumptions": [
+          "Nonlinear local growth or decay kinetics governed by logistic-type feedback",
+          "Isotropic spatial diffusion",
+          "Zero-flux or absorbing boundaries near domain edges"
+        ],
+        "mechanism": "Nonlinear reaction-diffusion where local amplitude dynamics interact with spatial diffusion, capable of stabilizing or reshaping localized structures.",
+        "rationale": "Given that the amplitude drops from near 1.0 to ~0.4, a nonlinear reaction term that drives the field toward an equilibrium (or decays when above/below certain thresholds) combined with diffusion provides a structurally rich alternative to linear models.",
+        "testable_predictions": [
+          "Non-exponential decay rates where the rate of amplitude decrease changes non-linearly as u approaches specific intermediate values.",
+          "Self-regularization of steep gradients."
+        ],
+        "confidence": 0.4
+      }
+    },
+    {
+      "id": "K1",
+      "origin": "kg_template",
+      "equation": "u_t + c*u_x = 0",
+      "hypothesis": {
+        "id": "K1",
+        "name": "KG template: advection",
+        "domain": "from knowledge graph",
+        "equation": "u_t + c*u_x = 0",
+        "latex": null,
+        "dependent_variables": [
+          "u"
+        ],
+        "independent_variables": [
+          "x",
+          "t"
+        ],
+        "parameters": [
+          {
+            "name": "c",
+            "description": "",
+            "trainable": true,
+            "initial_value": 0.2,
+            "units": null,
+            "lower_bound": null,
+            "upper_bound": null
+          }
+        ],
+        "required_derivatives": [
+          "u_t",
+          "u_x"
+        ],
+        "required_initial_conditions": true,
+        "required_boundary_conditions": true,
+        "assumptions": [],
+        "mechanism": "advection",
+        "rationale": "Equation form documented for 'advection' in the knowledge graph (evidence-derived template, not an LLM proposal).",
+        "testable_predictions": [],
+        "confidence": null
+      }
+    },
+    {
+      "id": "K3",
+      "origin": "kg_template",
+      "equation": "u_t = r*u*(1-u/K)",
+      "hypothesis": {
+        "id": "K3",
+        "name": "KG template: reaction",
+        "domain": "from knowledge graph",
+        "equation": "u_t = r*u*(1-u/K)",
+        "latex": null,
+        "dependent_variables": [
+          "u"
+        ],
+        "independent_variables": [
+          "x",
+          "t"
+        ],
+        "parameters": [
+          {
+            "name": "K",
+            "description": "",
+            "trainable": true,
+            "initial_value": 1.0,
+            "units": null,
+            "lower_bound": null,
+            "upper_bound": null
+          },
+          {
+            "name": "r",
+            "description": "",
+            "trainable": true,
+            "initial_value": 0.1,
+            "units": null,
+            "lower_bound": null,
+            "upper_bound": null
+          }
+        ],
+        "required_derivatives": [
+          "u_t"
+        ],
+        "required_initial_conditions": true,
+        "required_boundary_conditions": true,
+        "assumptions": [],
+        "mechanism": "reaction",
+        "rationale": "Equation form documented for 'reaction' in the knowledge graph (evidence-derived template, not an LLM proposal).",
+        "testable_predictions": [],
+        "confidence": null
+      }
+    }
+  ]
+}

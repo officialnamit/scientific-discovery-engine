@@ -1,0 +1,31 @@
+% flowchart 'p2' -- shared by project_guide.tex and submission_report.tex
+\begin{tikzpicture}[node distance=4mm and 7mm]
+  \node[fnw=cExp] (main) {02_equation_discovery.main};
+  \node[fnw=cExp, below=of main] (case) {run_case\\{\normalfont\tiny once per dataset: clean, sparse, noisy$\times$2}};
+  \node[dec=cEqd, below=7mm of case] (q) {on a grid\\already?};
+  \node[fnw=cEqd, right=of q, xshift=6mm] (scat) {discover_from_scatter};
+  \node[fnw=cEqd, below=of scat] (rec) {reconstruct_grid\\{\normalfont\tiny scipy griddata, linear}};
+  \node[fnw=cEqd, below=of rec] (sm) {smooth_grid\\{\normalfont\tiny Gaussian denoising (noisy only)}};
+  \node[fnw=cEqd, below=34mm of q] (grid) {discover_from_grid};
+  \node[fnw=cEqd, below=of grid] (fields) {_fields_from_grid};
+  \node[fnw=cEqd, below=of fields] (fdd) {finite_diff_derivatives\\{\normalfont\tiny central differences (np.gradient)}};
+  \node[fnw=cEqd, right=of fdd, xshift=6mm] (specs) {parse_term_specs\\{\normalfont\tiny config lists $\to$ term tuples}};
+  \node[fnw=cEqd, below=of fdd] (lib) {build_library + term_label\\{\normalfont\tiny the 8 columns of $\Theta$}};
+  \node[fnw=cEqd, below=of lib] (sindy) {run_sindy};
+  \node[fnw=cEqd, right=of sindy, xshift=6mm] (stlsq) {stlsq\\{\normalfont\tiny fit, zero small, refit, repeat}};
+  \node[fnw=cEqd, below=of sindy] (str) {equation_to_string};
+  \node[fnw=cEqd, below=of str] (gt) {evaluate_against_ground_truth\\{\normalfont\tiny grading only, after discovery}};
+  \node[fnw=cEqd, right=of str, xshift=6mm] (comp) {evaluate_competing_hypotheses\\{\normalfont\tiny diffusion-only vs advection-only fit}};
+  \node[fnw=cEqd, below=of comp] (restr) {fit_restricted\\{\normalfont\tiny least squares on fixed terms}};
+  \node[io, below=of gt] (out) {phase2\_discovery\_report.json, table, plot};
+  \draw[flow] (main) -- (case); \draw[flow] (case) -- (q);
+  \draw[flow] (q) -- node[note, above]{no} (scat);
+  \draw[flow] (q) -- node[note, right]{yes} (grid);
+  \draw[flow] (scat) -- (rec); \draw[flow] (rec) -- (sm); \draw[flow] (sm) |- (grid);
+  \draw[flow] (grid) -- (fields); \draw[flow] (fields) -- (fdd); \draw[flow] (fdd) -- (lib);
+  \draw[flow] (specs) |- (lib);
+  \draw[flow] (lib) -- (sindy); \draw[flow, <->] (sindy) -- node[note, above]{loop} (stlsq);
+  \draw[flow] (sindy) -- (str); \draw[flow] (str) -- (gt); \draw[flow] (gt) -- (out);
+  \draw[dflow] (case.east) -| ([xshift=4mm]comp.east) -- (comp.east);
+  \draw[flow] (comp) -- (restr);
+\end{tikzpicture}

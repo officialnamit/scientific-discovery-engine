@@ -1,0 +1,51 @@
+{
+  "id": "H2",
+  "equation": "u_t + c*u_x = 0",
+  "params": {
+    "c": 0.3685310184955597
+  },
+  "train_rmse": 0.06697687545055235,
+  "val_rmse": 0.06353182958912637,
+  "ood_obs_rmse": 0.11201696644123686,
+  "physics_residual": 0.0012920380104333162,
+  "data_loss": 0.00448590237647295,
+  "bc_loss": 3.479225370028871e-06,
+  "ic_loss": 0.0025157732889056206,
+  "physical_bounds": {
+    "passed": true,
+    "violations": []
+  },
+  "checks": {
+    "val_rmse": false,
+    "physics_residual": true,
+    "bc_loss": true,
+    "ic_loss": true,
+    "physical_bounds": true
+  },
+  "gate_passed": false,
+  "failed_checks": [
+    "val_rmse"
+  ],
+  "status": "rejected under the tested conditions",
+  "contributions": {
+    "c": 0.9957797851683752
+  },
+  "inactive_parameters": [],
+  "reduced_equation_if_inactive_terms_dropped": null,
+  "signature": "-_p0*u_x - u_t",
+  "reduced_signature": "-_p0*u_x - u_t",
+  "complexity": {
+    "n_terms": 1,
+    "n_free_parameters": 1,
+    "max_derivative_order": 1,
+    "n_nonlinear_terms": 0,
+    "expression_ops": 2,
+    "complexity_score": 3.2,
+    "rhs_expanded": "-c*u_x"
+  },
+  "bic": -1319.168594020315,
+  "n_train": 245,
+  "k_params": 1,
+  "decision_data": "held-out noisy observations only (no oracle)",
+  "complexity_score": 3.2
+}

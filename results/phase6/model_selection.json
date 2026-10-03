@@ -1,0 +1,125 @@
+{
+  "selected": "H1",
+  "best_val_rmse": 0.012135069720070805,
+  "equivalence_cutoff": 0.012741823206074346,
+  "equivalence_set": [
+    "H1",
+    "H4",
+    "H3"
+  ],
+  "bic_minimizer": "H1",
+  "bic_agrees_with_selection": true,
+  "explanations": [
+    {
+      "id": "H1",
+      "inactive_parameters": [],
+      "role": "selected"
+    },
+    {
+      "id": "H3",
+      "inactive_parameters": [
+        "r",
+        "K"
+      ],
+      "role": "fits equivalently but is more complex",
+      "reduces_to_selected": true
+    },
+    {
+      "id": "H4",
+      "inactive_parameters": [
+        "c"
+      ],
+      "role": "fits equivalently but is more complex",
+      "reduces_to_selected": true
+    }
+  ],
+  "rule": "gate -> val_rmse within 5% of best -> lowest complexity -> lowest BIC",
+  "reduction_applied": null,
+  "stability": {
+    "H1": {
+      "monomials": {
+        "u_xx": {
+          "mean": 0.11019305772330386,
+          "std": 0.002908258533303756,
+          "sign_consistency": 1.0
+        }
+      },
+      "n_boot": 20,
+      "subset_fraction": 0.8,
+      "all_terms_sign_stable": true,
+      "method": "bootstrap OLS on Phase-2 finite-difference derivatives (empirical stability, not Bayesian)"
+    },
+    "H2": {
+      "monomials": {
+        "u_x": {
+          "mean": -0.01031523295316512,
+          "std": 0.013442741556324767,
+          "sign_consistency": 0.85
+        }
+      },
+      "n_boot": 20,
+      "subset_fraction": 0.8,
+      "all_terms_sign_stable": false,
+      "method": "bootstrap OLS on Phase-2 finite-difference derivatives (empirical stability, not Bayesian)"
+    },
+    "H3": {
+      "monomials": {
+        "u_xx": {
+          "mean": 0.1127143271785769,
+          "std": 0.0038143553181480896,
+          "sign_consistency": 1.0
+        },
+        "u": {
+          "mean": -0.6717608264499747,
+          "std": 0.14663028911399387,
+          "sign_consistency": 1.0
+        },
+        "u**2": {
+          "mean": 1.1552187388205224,
+          "std": 0.20953422154472887,
+          "sign_consistency": 1.0
+        }
+      },
+      "n_boot": 20,
+      "subset_fraction": 0.8,
+      "all_terms_sign_stable": true,
+      "method": "bootstrap OLS on Phase-2 finite-difference derivatives (empirical stability, not Bayesian)"
+    },
+    "H4": {
+      "monomials": {
+        "u_xx": {
+          "mean": 0.11046638293105877,
+          "std": 0.003072014582409602,
+          "sign_consistency": 1.0
+        },
+        "u_x": {
+          "mean": 0.008768405030751898,
+          "std": 0.02836110366386943,
+          "sign_consistency": 0.8
+        }
+      },
+      "n_boot": 20,
+      "subset_fraction": 0.8,
+      "all_terms_sign_stable": false,
+      "method": "bootstrap OLS on Phase-2 finite-difference derivatives (empirical stability, not Bayesian)"
+    },
+    "K3": {
+      "monomials": {
+        "u": {
+          "mean": -1.7405161789100383,
+          "std": 0.14165365604879732,
+          "sign_consistency": 1.0
+        },
+        "u**2": {
+          "mean": 1.2028970994971901,
+          "std": 0.2775542777143856,
+          "sign_consistency": 1.0
+        }
+      },
+      "n_boot": 20,
+      "subset_fraction": 0.8,
+      "all_terms_sign_stable": true,
+      "method": "bootstrap OLS on Phase-2 finite-difference derivatives (empirical stability, not Bayesian)"
+    }
+  }
+}

@@ -1,0 +1,16 @@
+% flowchart 'p1' -- shared by project_guide.tex and submission_report.tex
+\begin{tikzpicture}[node distance=4mm and 6mm]
+  \node[fnw=cData] (main) {main\\{\normalfont\tiny generate\_diffusion.py}};
+  \node[fnw=cData, below=of main] (cfg) {load_config\\{\normalfont\tiny read config.yaml}};
+  \node[fnw=cData, below=of cfg] (full) {build_full_field\\{\normalfont\tiny x, t grids; call the solver}};
+  \node[fnw=cData, right=of full] (ic) {initial_condition\\{\normalfont\tiny one sine, two sines, or a Gaussian bump}};
+  \node[fnw=cData, below=of ic] (fd) {solve_diffusion_fd\\{\normalfont\tiny explicit FTCS steps, $D=0.1$}};
+  \node[fnw=cData, below=of full, yshift=-12mm] (flat) {flatten_field\\{\normalfont\tiny grid $\to$ (x, t, u) rows}};
+  \node[fnw=cData, below=of flat] (samp) {make_sparse_and_noisy\\{\normalfont\tiny 10\% subsample; 400 pts + 5\% noise}};
+  \node[io, below=of samp] (files) {full.npz\quad sparse.npz\quad noisy.npz};
+  \node[fnw=cData, right=of files, xshift=4mm] (test) {tests/test_diffusion_data\\{\normalfont\tiny sanity checks + verification plot}};
+  \draw[flow] (main) -- (cfg); \draw[flow] (cfg) -- (full);
+  \draw[flow] (full) -- (ic); \draw[flow] (ic) -- (fd); \draw[flow] (fd) |- (flat);
+  \draw[flow] (full) -- (flat); \draw[flow] (flat) -- (samp); \draw[flow] (samp) -- (files);
+  \draw[dflow] (files) -- (test);
+\end{tikzpicture}

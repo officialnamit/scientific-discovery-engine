@@ -1,0 +1,278 @@
+[
+  {
+    "id": "A01",
+    "target": "incorrect candidate",
+    "description": "Equation uses an undeclared symbol q.",
+    "expected": "rejected (structural)",
+    "actual": "rejected",
+    "passed": true,
+    "detail": {
+      "errors": [
+        "Equation 'u_t = D*u_xx + q*u' references undeclared symbol(s) ['q']. Declared parameters: ['D'], known fields: ['u', 'u_t', 'u_x', 'u_xx', 'u_xxx']."
+      ]
+    }
+  },
+  {
+    "id": "A02",
+    "target": "degenerate equation",
+    "description": "Steady-state equation with no time derivative.",
+    "expected": "rejected (not an evolution equation)",
+    "actual": "rejected",
+    "passed": true,
+    "detail": {
+      "errors": [
+        "Not an evolution equation: no u_t term, cannot be integrated from the given initial condition."
+      ]
+    }
+  },
+  {
+    "id": "A03",
+    "target": "degenerate equation",
+    "description": "Equation nonlinear in u_t.",
+    "expected": "rejected",
+    "actual": "rejected",
+    "passed": true,
+    "detail": {
+      "errors": [
+        "Not an evolution equation: no u_t term, cannot be integrated from the given initial condition.",
+        "Equation is nonlinear in u_t; not supported as an explicit evolution equation."
+      ]
+    }
+  },
+  {
+    "id": "A04",
+    "target": "physically invalid parameters",
+    "description": "Contradictory bounds 1.0 < D < 0.1.",
+    "expected": "rejected",
+    "actual": "rejected",
+    "passed": true,
+    "detail": {
+      "errors": [
+        "Parameter D: inconsistent bounds (1.0, 0.1).",
+        "Parameter D: initial value 0.5 violates bound > 1.0.",
+        "Parameter D: initial value 0.5 violates bound < 0.1."
+      ]
+    }
+  },
+  {
+    "id": "A05",
+    "target": "physically invalid parameters",
+    "description": "Negative initial diffusivity (backward heat equation).",
+    "expected": "rejected",
+    "actual": "rejected",
+    "passed": true,
+    "detail": {
+      "errors": [
+        "Parameter D: initial value -0.1 violates bound > 0.0."
+      ]
+    }
+  },
+  {
+    "id": "A06",
+    "target": "physically invalid parameters",
+    "description": "Time-reversed diffusion data: the best-fitting 'diffusion' needs D<0.",
+    "expected": "diffusion candidate rejected by the D>0 bound; no diffusion selected",
+    "actual": {
+      "fitted_D": -0.100287777944186,
+      "selected_family": null
+    },
+    "passed": true,
+    "detail": {
+      "violations": [
+        "D=-0.1003 violates physical bound D > 0.0"
+      ]
+    }
+  },
+  {
+    "id": "A07",
+    "target": "incorrect candidate",
+    "description": "Same equation under a renamed parameter and swapped sides.",
+    "expected": "1 unique candidate",
+    "actual": "1 unique",
+    "passed": true,
+    "detail": {
+      "removed": [
+        "H9",
+        "H10"
+      ]
+    }
+  },
+  {
+    "id": "A08",
+    "target": "incorrect candidate",
+    "description": "LLM returns prose instead of JSON; then fenced JSON with one schema-invalid item (confidence=7).",
+    "expected": "prose -> 0 candidates; invalid item dropped, valid kept",
+    "actual": {
+      "prose_candidates": 0,
+      "kept": [
+        "G1"
+      ]
+    },
+    "passed": true,
+    "detail": {}
+  },
+  {
+    "id": "A09",
+    "target": "degenerate equation",
+    "description": "Single-mode sine IC: u_xx = -pi^2 u exactly (Phase 1 trap).",
+    "expected": "identifiability diagnostic flags u vs u_xx as indistinguishable",
+    "actual": {
+      "max_abs_correlation": 1.0,
+      "pair": [
+        "u",
+        "u_xx"
+      ]
+    },
+    "passed": true,
+    "detail": {}
+  },
+  {
+    "id": "A10",
+    "target": "degenerate equation / nested model",
+    "description": "Two-mode diffusion: reaction-diffusion absorbs finite-difference error and fits to ~1e-14.",
+    "expected": "diffusion selected; reaction terms reported inactive",
+    "actual": {
+      "original_rule": "reaction-diffusion",
+      "revised_rule": "diffusion",
+      "reduction": {
+        "from": "H3",
+        "to": "H1",
+        "inactive_parameters": [
+          "r",
+          "K"
+        ]
+      }
+    },
+    "passed": true,
+    "detail": {
+      "note": "the ORIGINAL Phase 6 rule fails this case (selects reaction-diffusion)"
+    }
+  },
+  {
+    "id": "A11",
+    "target": "nested models",
+    "description": "Diffusion data; reaction-diffusion and advection-diffusion also fit.",
+    "expected": "diffusion selected; nesting candidates may be supported but not selected",
+    "actual": {
+      "selected": "diffusion",
+      "nesting_candidates_supported": 1
+    },
+    "passed": true,
+    "detail": {}
+  },
+  {
+    "id": "A12",
+    "target": "model-selection failure",
+    "description": "Advection-diffusion with small D=0.01: SINDy's threshold drops the real u_xx term.",
+    "expected": "full system selects advection-diffusion (not the simpler advection SINDy reports)",
+    "actual": {
+      "sindy_alone": "advection",
+      "full_system": "advection-diffusion"
+    },
+    "passed": true,
+    "detail": {}
+  },
+  {
+    "id": "A13",
+    "target": "nested models",
+    "description": "Reaction-diffusion data: simpler diffusion is tempting (Occam).",
+    "expected": "parsimony does NOT override fit: diffusion fails the gate, reaction-diffusion selected",
+    "actual": {
+      "selected": "reaction-diffusion",
+      "diffusion_gate": false,
+      "diffusion_rel_err": 0.851
+    },
+    "passed": true,
+    "detail": {}
+  },
+  {
+    "id": "A14",
+    "target": "incorrect candidate",
+    "description": "Advection data with a diffusion candidate in the pool.",
+    "expected": "diffusion rejected by the gate; advection selected",
+    "actual": {
+      "selected": "advection",
+      "diffusion_rel_err": 1.0,
+      "diffusion_gate": false
+    },
+    "passed": true,
+    "detail": {}
+  },
+  {
+    "id": "A15",
+    "target": "misleading correlation",
+    "description": "Diffusion data whose top-1 retrieved evidence describes ADVECTION (lexical overlap).",
+    "expected": "retrieval does not decide: diffusion still selected by validation",
+    "actual": {
+      "top1_retrieved": "advection",
+      "selected": "diffusion"
+    },
+    "passed": true,
+    "detail": {}
+  },
+  {
+    "id": "A16",
+    "target": "model-selection failure",
+    "description": "Negative-velocity advection-diffusion: pure advection explains most of u_t.",
+    "expected": "advection fails the gate (residual from missing diffusion > 5%); advection-diffusion selected",
+    "actual": {
+      "selected": "advection-diffusion",
+      "advection_rel_err": 0.457
+    },
+    "passed": true,
+    "detail": {}
+  },
+  {
+    "id": "A17",
+    "target": "noisy observations",
+    "description": "Diffusion data with 1% noise (no smoothing).",
+    "expected": "no false discovery: diffusion or nothing selected",
+    "actual": {
+      "selected": null,
+      "n_gate_passed": 0
+    },
+    "passed": true,
+    "detail": {}
+  },
+  {
+    "id": "A18",
+    "target": "noisy observations",
+    "description": "Diffusion data with 10% noise (no smoothing).",
+    "expected": "no false discovery: diffusion or nothing selected",
+    "actual": {
+      "selected": null,
+      "n_gate_passed": 0
+    },
+    "passed": true,
+    "detail": {}
+  },
+  {
+    "id": "A19",
+    "target": "sparse observations",
+    "description": "10% of grid points scattered, reconstructed by interpolation.",
+    "expected": "no false discovery: diffusion or nothing selected",
+    "actual": {
+      "selected": null,
+      "n_gate_passed": 0
+    },
+    "passed": true,
+    "detail": {}
+  },
+  {
+    "id": "A20",
+    "target": "answer leakage / injection",
+    "description": "Corpus is checked for every hidden benchmark value; an injected document states the answer and tries to override instructions.",
+    "expected": "real corpus: no leaks; poisoned doc flagged; it adds 0 KG relationships (no declared structure)",
+    "actual": {
+      "real_corpus_leaks": {},
+      "poison_flagged": {
+        "doc_poison": [
+          "0.1"
+        ]
+      },
+      "kg_relationships_added": 0
+    },
+    "passed": true,
+    "detail": {}
+  }
+]

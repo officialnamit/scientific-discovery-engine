@@ -1,0 +1,32 @@
+% flowchart 'p7' -- shared by project_guide.tex and submission_report.tex
+\begin{tikzpicture}[node distance=3.2mm and 7mm]
+  \node[fnw=cExp] (main) {09_evaluation.main};
+  \node[fnw=cEval, below=of main] (ds) {benchmark_datasets\\{\normalfont\tiny 12 datasets, cached to .npz}};
+  \node[fnw=cEval, right=of ds] (mk) {_diffusion, _advection\\_adv_diff, _reaction_diffusion};
+  \node[fnw=cEval, below=of ds] (res) {Resources\\{\normalfont\tiny corpus + RAG index + graph, built once}};
+  \node[fnw=cEval, below=7mm of res] (bp) {build_pool};
+  \node[fnw=cEval, right=of bp] (dsc) {describe_observations\\{\normalfont\tiny observation_stats $\to$ text}};
+  \node[fnw=cEval, below=of dsc] (ctx) {build_scientific_context\\+ evidence templates + mock LLM};
+  \node[fnw=cEval, below=10mm of bp] (vs) {validate_and_select};
+  \node[fnw=cEval, below=of ctx] (fit) {fit_candidate_on_grid\\{\normalfont\tiny OLS on grid_fields}};
+  \node[fnw=cVal, below=of fit] (sm) {select_model\\{\normalfont\tiny + _grid_param_contributions}};
+  \node[fnw=cEval, below=of vs, yshift=-9mm] (ood) {predict_ood\\{\normalfont\tiny solve_forward to $t=1.3$}};
+  \node[fnw=cEval, below=of ood] (sc) {score_run\\{\normalfont\tiny family_of, parameter + OOD error}};
+  \begin{scope}[on background layer]
+    \node[pkgbox=cEval, fit=(bp)(dsc)(sm)(sc), label={[pkglabel=cEval]above right:shared engine, run per dataset}] (eng) {};
+  \end{scope}
+  % suites
+  \node[fnw=cEval, below=8mm of sc, xshift=-26mm] (s1) {run_single_questions\\{\normalfont\tiny 50 questions}};
+  \node[fnw=cEval, right=4mm of s1] (s2) {run_multihop\\{\normalfont\tiny 25 multi-hop chains}};
+  \node[fnw=cEval, right=4mm of s2] (s3) {run_adversarial\\{\normalfont\tiny 20 attacks; find_leaks}};
+  \node[fnw=cEval, below=of s1] (s4) {run_ablation\\{\normalfont\tiny 7 arms; _discovery_only}};
+  \node[fnw=cEval, right=4mm of s4] (s5) {leakage_audit\\{\normalfont\tiny decision_functions}};
+  \node[fnw=cEval, right=4mm of s5] (s6) {real_llm + report\\{\normalfont\tiny phase7_report.md}};
+  \draw[flow] (main) -- (ds); \draw[flow] (ds) -- (mk); \draw[flow] (ds) -- (res); \draw[flow] (res) -- (bp);
+  \draw[flow] (bp) -- (dsc); \draw[flow] (dsc) -- (ctx); \draw[flow] (ctx) -- (bp.south east);
+  \draw[flow] (bp) -- (vs); \draw[flow] (vs) -- (fit.west); \draw[flow] (fit) -- (sm); \draw[flow] (sm.west) -- (vs.south east);
+  \draw[flow] (vs) -- (ood); \draw[flow] (ood) -- (sc);
+  \draw[dflow] (s1.north) -- (s1.north |- eng.south);
+  \draw[dflow] (s2.north) -- (s2.north |- eng.south);
+  \draw[dflow] (s3.north) -- (s3.north |- eng.south);
+\end{tikzpicture}

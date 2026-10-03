@@ -1,0 +1,137 @@
+{
+  "query": "We observe a scalar field u(x,t) on a 1D spatial domain x in [0,1] over a time window t in [0,1], measured via 400 sparse, noisy point samples (x_i, t_i, u_i) -- no dense grid or simulation is provided to you.\n\nObserved facts (computed directly from the data):\n- Near t=0.05, the field's peak absolute amplitude is approximately 0.983.\n- Near t=0.95, the field's peak absolute amplitude is approximately 0.395 (i.e. the amplitude has decreased substantially over the observation window).\n- Near the domain edges (x<0.03 or x>0.97), the field stays very close to zero at essentially all observed times (max |u| there is approximately 0.0711).\n- The amplitude-weighted spatial centroid of |u| is approximately x~0.53 near t=0.05 and x~0.41 near t=0.95 (i.e. little evidence of bulk translation of the field across the domain -- compare this to the amplitude decay above).\n- The spatial profile appears to smooth out over time: early-time samples show more fine-grained spatial structure (multiple local peaks) than late-time samples.\n\nPropose plausible governing mechanisms for this field's evolution.",
+  "top_k": 5,
+  "results": [
+    {
+      "evidence_id": "evidence_doc_advection_chunk_003",
+      "claim": "The standard one-dimensional linear advection equation is:\n\n    u_t + c*u_x = 0\n\nwhere u(x,t) is the transported quantity and c is the (constant)\nadvection velocity (units of length/time). Its exact solution is any\nfunction of the form u(x,t) = f(x - c*t): the initial profile f(x) is\nsimply translated by c*t without changing shape.",
+      "source": "benchmark fixture",
+      "chunk_id": "doc_advection_chunk_003",
+      "document_id": "doc_advection",
+      "section": "Governing equation",
+      "variables": [
+        "u",
+        "x",
+        "t"
+      ],
+      "mechanisms": [
+        "advection"
+      ],
+      "equations": [
+        "u_t + c*u_x = 0"
+      ],
+      "assumptions": [
+        "constant transport velocity",
+        "no diffusive spreading",
+        "no reaction/source terms"
+      ],
+      "confidence": 0.5467168497692326,
+      "provenance_type": "documented"
+    },
+    {
+      "evidence_id": "evidence_doc_advection_chunk_004",
+      "claim": "Systems governed by pure advection typically show: (a) the spatial\nprofile translates across the domain at a roughly constant apparent\nspeed; (b) the shape of local peaks/features is preserved rather than\nflattening or spreading; (c) the overall amplitude of the profile does\nnot decay on its own (in the absence of boundary losses or additional\nterms); (d) the amplitude-weighted spatial centroid of the quantity\nmoves roughly linearly in time.",
+      "source": "benchmark fixture",
+      "chunk_id": "doc_advection_chunk_004",
+      "document_id": "doc_advection",
+      "section": "Typical observational signatures",
+      "variables": [
+        "u",
+        "x",
+        "t"
+      ],
+      "mechanisms": [
+        "advection"
+      ],
+      "equations": [
+        "u_t + c*u_x = 0"
+      ],
+      "assumptions": [
+        "constant transport velocity",
+        "no diffusive spreading",
+        "no reaction/source terms"
+      ],
+      "confidence": 0.5330793765177753,
+      "provenance_type": "documented"
+    },
+    {
+      "evidence_id": "evidence_doc_diffusion_chunk_003",
+      "claim": "The standard one-dimensional model of diffusive transport is Fick's\nsecond law:\n\n    u_t = D * u_xx\n\nwhere u(x,t) is the diffusing quantity, x is a spatial coordinate, t\nis time, and D > 0 is the diffusion coefficient (units of\nlength^2/time), which characterizes how quickly the quantity spreads.",
+      "source": "benchmark fixture",
+      "chunk_id": "doc_diffusion_chunk_003",
+      "document_id": "doc_diffusion",
+      "section": "Governing equation",
+      "variables": [
+        "u",
+        "x",
+        "t"
+      ],
+      "mechanisms": [
+        "diffusion"
+      ],
+      "equations": [
+        "u_t = D*u_xx"
+      ],
+      "assumptions": [
+        "isotropic medium",
+        "no advective transport",
+        "no reaction/source terms",
+        "constant diffusion coefficient"
+      ],
+      "confidence": 0.5283236974273894,
+      "provenance_type": "documented"
+    },
+    {
+      "evidence_id": "evidence_doc_diffusion_chunk_004",
+      "claim": "Systems governed by diffusion typically show: (a) the spatial profile\nof the quantity smooths out over time -- sharp local features flatten\nand multiple local extrema tend to merge into fewer, broader ones; (b)\nthe overall amplitude of spatial variation decreases over time if\nthere is no external forcing; (c) there is no bulk translation of the\nprofile across the domain -- diffusion spreads a feature in place\nrather than carrying it sideways; (d) higher-spatial-frequency\nfeatures decay faster than lower-spatial-frequency features.",
+      "source": "benchmark fixture",
+      "chunk_id": "doc_diffusion_chunk_004",
+      "document_id": "doc_diffusion",
+      "section": "Typical observational signatures",
+      "variables": [
+        "u",
+        "x",
+        "t"
+      ],
+      "mechanisms": [
+        "diffusion"
+      ],
+      "equations": [
+        "u_t = D*u_xx"
+      ],
+      "assumptions": [
+        "isotropic medium",
+        "no advective transport",
+        "no reaction/source terms",
+        "constant diffusion coefficient"
+      ],
+      "confidence": 0.5202213479576518,
+      "provenance_type": "documented"
+    },
+    {
+      "evidence_id": "evidence_doc_reaction_chunk_003",
+      "claim": "A standard local logistic reaction model (no spatial transport) is:\n\n    u_t = r*u*(1 - u/K)\n\nwhere u(t) is the local quantity, r is a growth/decay rate (units of\n1/time), and K is a carrying capacity or saturation level (same units\nas u). For r > 0 and u starting below K, the quantity grows and\nasymptotically approaches K; for r < 0, it decays.",
+      "source": "benchmark fixture",
+      "chunk_id": "doc_reaction_chunk_003",
+      "document_id": "doc_reaction",
+      "section": "Governing equation",
+      "variables": [
+        "u",
+        "t"
+      ],
+      "mechanisms": [
+        "reaction"
+      ],
+      "equations": [
+        "u_t = r*u*(1-u/K)"
+      ],
+      "assumptions": [
+        "no spatial transport",
+        "spatially uncoupled local dynamics",
+        "logistic self-limiting growth/decay"
+      ],
+      "confidence": 0.47399750318085077,
+      "provenance_type": "documented"
+    }
+  ]
+}

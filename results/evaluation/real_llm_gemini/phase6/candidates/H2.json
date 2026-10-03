@@ -1,0 +1,53 @@
+{
+  "id": "H2",
+  "equation": "u_t = D * u_xx - r * u",
+  "params": {
+    "D": 0.09878971427679062,
+    "r": 0.013373078778386116
+  },
+  "train_rmse": 0.01138198748740537,
+  "val_rmse": 0.012187821833561941,
+  "ood_obs_rmse": 0.011828803183530334,
+  "physics_residual": 5.547072578337975e-05,
+  "data_loss": 0.00012954961857758462,
+  "bc_loss": 2.529232688175398e-06,
+  "ic_loss": 9.63561660682899e-07,
+  "physical_bounds": {
+    "passed": true,
+    "violations": []
+  },
+  "checks": {
+    "val_rmse": true,
+    "physics_residual": true,
+    "bc_loss": true,
+    "ic_loss": true,
+    "physical_bounds": true
+  },
+  "gate_passed": true,
+  "failed_checks": [],
+  "status": "supported by the available observations and physics constraints",
+  "contributions": {
+    "D": 0.9955374306202879,
+    "r": 0.006782351629831558
+  },
+  "inactive_parameters": [
+    "r"
+  ],
+  "reduced_equation_if_inactive_terms_dropped": "-D*u_xx + u_t = 0",
+  "signature": "-_p0*u_xx + _p1*u + u_t",
+  "reduced_signature": "-_p0*u_xx + u_t",
+  "complexity": {
+    "n_terms": 2,
+    "n_free_parameters": 2,
+    "max_derivative_order": 2,
+    "n_nonlinear_terms": 0,
+    "expression_ops": 3,
+    "complexity_score": 6.3,
+    "rhs_expanded": "D*u_xx - r*u"
+  },
+  "bic": -2208.931858701944,
+  "n_train": 248,
+  "k_params": 2,
+  "decision_data": "held-out noisy observations only (no oracle)",
+  "complexity_score": 6.3
+}

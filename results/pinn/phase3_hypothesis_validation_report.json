@@ -1,0 +1,65 @@
+{
+  "H1_diffusion": {
+    "hypothesis": "H1_diffusion",
+    "equation": "u_t = D*u_xx",
+    "status": "supported by the available observations and physics constraints",
+    "failed_checks": [],
+    "data_loss": 0.0001336091518169269,
+    "physics_residual": 8.240946772275493e-05,
+    "bc_loss": 2.400620360276662e-06,
+    "ic_loss": 8.415569823227997e-07,
+    "prediction_error": 0.0007813746588225919,
+    "ood_error": 0.0011457113266615199,
+    "parameter_estimate": {
+      "D": 0.09987153112888336
+    },
+    "parameter_true": {
+      "D": 0.1
+    },
+    "parameter_error": {
+      "D": {
+        "absolute_error": 0.00012846887111664373,
+        "relative_error": 0.0012846887111664373
+      }
+    },
+    "thresholds_used": {
+      "data_loss_max": 0.01,
+      "physics_residual_max": 0.01,
+      "bc_loss_max": 0.005,
+      "ic_loss_max": 0.01,
+      "prediction_error_max": 0.1
+    },
+    "in_distribution_rmse": 0.0007813746588225919,
+    "ood_rmse": 0.0011457113266615199
+  },
+  "H2_advection": {
+    "hypothesis": "H2_advection",
+    "equation": "u_t = c*u_x",
+    "status": "rejected under the tested conditions",
+    "failed_checks": [
+      "data_loss",
+      "ic_loss",
+      "prediction_error"
+    ],
+    "data_loss": 0.037753600627183914,
+    "physics_residual": 0.004988372791558504,
+    "bc_loss": 1.6159336155396886e-05,
+    "ic_loss": 0.025152698159217834,
+    "prediction_error": 0.20032978495365808,
+    "ood_error": 0.33145123702889207,
+    "parameter_estimate": {
+      "c": -0.0011870723683387041
+    },
+    "parameter_true": null,
+    "parameter_error": null,
+    "thresholds_used": {
+      "data_loss_max": 0.01,
+      "physics_residual_max": 0.01,
+      "bc_loss_max": 0.005,
+      "ic_loss_max": 0.01,
+      "prediction_error_max": 0.1
+    },
+    "in_distribution_rmse": 0.20032978495365808,
+    "ood_rmse": 0.33145123702889207
+  }
+}

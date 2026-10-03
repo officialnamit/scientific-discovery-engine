@@ -1,0 +1,16 @@
+numpy>=1.24
+scipy>=1.10
+matplotlib>=3.7
+pyyaml>=6.0
+pysindy>=1.7          # Phase 2: SINDy/STLSQ sparse regression
+pytest>=7.0            # for running tests/ via pytest
+torch>=2.1              # Phase 3: PINNs (CPU-only is sufficient for this project's scale)
+sympy>=1.12              # Phase 4: generic equation -> residual compiler (hypotheses/equation_compiler.py)
+pydantic>=2.0             # Phase 4: structured hypothesis schema (llm/schemas.py)
+google-genai>=1.0          # Phase 4+: real LLM provider (llm/gemini_provider.py); only imported if provider="gemini"
+networkx>=3.0              # Phase 5: knowledge graph backing (knowledge_graph/graph.py)
+
+# Added in later phases (kept here for reference, not required yet):
+# faiss-cpu / chromadb  # a real vector database, if PersistentVectorStore's JSON-backed
+#                         store (rag/vector_store.py) is ever outgrown
+# streamlit>=1.28       # app/

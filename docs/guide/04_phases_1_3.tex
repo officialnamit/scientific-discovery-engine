@@ -1,0 +1,154 @@
+% =====================================================================
+\section{Phase 1: making the data}\label{sec:p1}
+% =====================================================================
+
+\textbf{Goal.} Produce realistic observations of a known law, so that every later phase can be graded against
+a truth it is not allowed to see.
+
+\textbf{What happens.} \fn{data/generate_diffusion.py} simulates $u_t = 0.1\,u_{xx}$ on $x\in[0,1]$,
+$t\in[0,1]$ with the explicit finite-difference scheme (61 grid points $\times$ 800 time steps), starting
+from the double hump $\sin(\pi x) + 0.5\sin(3\pi x)$ with both ends held at zero. From the full field it
+saves three files:
+
+\begin{center}
+\small
+\begin{tabular}{@{}lp{11.5cm}@{}}
+\toprule
+\fn{full.npz} & the entire clean field (800$\times$61). For grading and plots only. \\
+\fn{sparse.npz} & a noise-free random 10\% of grid points (4880 points). For ablations of sparsity alone. \\
+\fn{noisy.npz} & \textbf{400 random points with Gaussian noise} (std = 5\% of the field's std, $\approx0.0116$).
+                 \textbf{The only file the discovery system may see}, and it uses only its $x,t,u$ columns. \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\begin{figure}[!htb]
+\centering
+\input{figures/p1}
+\pkglegend
+\caption{Phase~1 function flow: configuration $\to$ simulation $\to$ sampling $\to$ files $\to$ checks.}
+\label{fig:p1}
+\end{figure}
+
+\begin{figure}[!htb]
+\centering
+\includegraphics[width=0.95\textwidth]{data/generated/verification_plot.png}
+\caption{Phase~1 verification plot (from the project's results): the clean field (left), the sparse sample, and
+the 400 noisy points the system is allowed to see. The double hump decays and merges into one broad hump,
+because the faster-wiggling mode $\sin(3\pi x)$ decays 9 times faster than $\sin(\pi x)$.}
+\end{figure}
+
+\begin{lesson}[: the eigenfunction trap]
+The first version started from a single $\sin(\pi x)$. That turned out to be undiscoverable: for this profile
+$u_{xx}=-\pi^2u$ exactly, so ``$D\,u_{xx}$'' and ``$-D\pi^2u$'' are the same signal and no method can separate
+them. The two-mode start mixes two different curvatures and breaks the tie. The single-mode option is kept in
+the code as a documented cautionary example, and Phase~7's adversarial suite re-tests it (case A13).
+\end{lesson}
+
+% =====================================================================
+\section{Phase 2: equation discovery by sparse regression}\label{sec:p2}
+% =====================================================================
+
+\textbf{Goal.} Recover $u_t \approx D\,u_{xx}$ from data alone using SINDy (Section~\ref{sec:sindy}), and
+report honestly where it works and where it does not.
+
+\textbf{How it works.} For clean data (already a grid), take finite differences directly. For scattered data,
+first reconstruct a grid by linear interpolation (41$\times$150 nodes for 4880 sparse points, but only
+13$\times$25 for 400 noisy points), optionally smooth it with a Gaussian filter, then difference. Build the
+8-column library and run STLSQ with threshold 0.05.
+
+\begin{figure}[!htb]
+\centering
+\input{figures/p2}
+\pkglegend
+\caption{Phase~2 function flow. Scattered data is first put on a grid; then derivatives, library, sparse
+regression. The competing-hypothesis check (right) fits each single-term law separately.}
+\label{fig:p2}
+\end{figure}
+
+\textbf{Results.}
+\begin{center}
+\small
+\begin{tabular}{@{}lllc@{}}
+\toprule
+\textbf{Data} & \textbf{Discovered equation} & $\hat D$ (error) & \textbf{Right terms?} \\ \midrule
+Clean  & $u_t = 0.1009\,u_{xx}$ & 0.1009 (0.9\%) & yes \\
+Sparse & $u_t = 0.1013\,u_{xx}$ & 0.1013 (1.3\%) & yes \\
+Noisy, no smoothing & $0.50 - 3.42u + 4.15u^2 + \ldots$ (5 terms) & -- & no \\
+Noisy, smoothed & $0.55u + 0.20u_{xx} - 0.51u^2 + \ldots$ (5 terms) & -- & no \\
+\bottomrule
+\end{tabular}
+\end{center}
+On noisy data the free 8-term search fails. But the evidence is still there: fitting single-term laws gives
+diffusion $R^2 = 0.79$ ($\hat D = 0.107$) while advection has \emph{negative} $R^2$ (worse than predicting the
+mean) on every dataset. So advection is correctly disfavoured even when the unrestricted search is confused.
+
+\begin{figure}[!htb]
+\centering
+\includegraphics[width=0.88\textwidth]{results/equations/phase2_coefficients.png}
+\caption{Phase~2 coefficients found by STLSQ for each run (from \fn{results/equations/}). Clean and sparse data
+keep only $u_{xx}$; noisy data scatters weight over spurious terms.}
+\end{figure}
+
+\begin{lesson}[: a good fit is not the right law]
+Noisy SINDy produced equations with small residuals and wrong terms. Differentiating noisy data amplifies the
+noise (Section~\ref{sec:background}), and regression then explains noise with extra terms. This motivates
+Phase~3: test hypotheses with a method that never differentiates the data.
+\end{lesson}
+
+% =====================================================================
+\section{Phase 3: physics-informed neural networks}\label{sec:p3}
+% =====================================================================
+
+\textbf{Goal.} Build one reusable PINN (Section~\ref{sec:pinn}) and use it three ways: forward (known $D$),
+inverse (estimate $D$), and hypothesis validation (diffusion vs.\ advection).
+
+\textbf{How it works.} The network \fn{PINN} maps $(x,t)\mapsto u$ with four tanh layers of 64 units. The
+\emph{only} thing that changes between hypotheses is the residual function, looked up in
+\fn{RESIDUAL_REGISTRY} (diffusion, advection, reaction--diffusion). All derivatives come from autograd
+(\fn{compute_derivatives}). Training draws 2000 collocation points, 200 boundary and 200 initial points, runs
+3000 Adam steps then 300 L-BFGS iterations, and finally scores the result against fixed thresholds.
+
+\begin{figure}[!htb]
+\centering
+\input{figures/p3}
+\pkglegend
+\caption{Phase~3 function flow. Left: an experiment builds tensors, creates the network and trains it. Right: what
+happens inside every optimisation step. Bottom: scoring with fixed thresholds.}
+\label{fig:p3}
+\end{figure}
+
+\textbf{Results.}
+\begin{itemize}
+  \item \textbf{Forward} ($D=0.1$ known): the PINN's prediction differs from the clean field by RMSE
+        $0.000727$, even though it was trained on data with $\approx0.0116$ noise. The physics term denoises.
+  \item \textbf{Inverse} ($D$ unknown, started at 0.2): $\hat D = 0.09989$, a 0.11\% error. $D$ slides from 0.2
+        to 0.1 within about 1500 Adam steps and stays there.
+  \item \textbf{Validation}, both trained on $t\le0.7$ only with their parameter trainable:
+\end{itemize}
+\begin{center}
+\small
+\begin{tabular}{@{}lllllll@{}}
+\toprule
+\textbf{Hypothesis} & \textbf{Status} & \textbf{Data loss} & \textbf{Physics} & \textbf{IC loss} & \textbf{In-dist.\ RMSE} & \textbf{OOD RMSE} \\ \midrule
+H1 diffusion & supported & 0.00013 & 0.00008 & 0.000001 & 0.00078 & 0.00115 \\
+H2 advection & rejected  & 0.03775 & 0.00499 & 0.02515  & 0.20033 & 0.33145 \\
+\bottomrule
+\end{tabular}
+\end{center}
+Diffusion wins on every metric by 30--290$\times$. Advection simply cannot turn a decaying double hump into
+anything consistent with the data: its IC loss alone is 25{,}000 times worse.
+
+\begin{figure}[!htb]
+\centering
+\includegraphics[width=0.92\textwidth]{results/pinn/phase3_ood_comparison.png}
+\caption{Phase~3 hypothesis validation (from \fn{results/pinn/}). Training used only $t\le0.7$ (dashed line).
+Diffusion reproduces the field on both sides of the split; advection converges to a wrong, roughly static
+pattern.}
+\end{figure}
+
+\begin{caution}[: an audit note added in Phase 6]
+The Phase~3 accept/reject rule included one check against the clean truth field. Training never used it, but a
+decision did. Re-checking showed no outcome depended on it (H2 also fails its data and IC losses). Phase~6
+removed the issue: from then on, decisions use only held-out \emph{noisy} observations.
+\end{caution}

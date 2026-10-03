@@ -1,0 +1,35 @@
+% flowchart 'packages' -- shared by project_guide.tex and submission_report.tex
+\begin{tikzpicture}[
+   pk/.style={draw=#1!75!black, fill=#1!12, rounded corners=4pt, line width=0.8pt,
+              font=\ttfamily\small\bfseries, minimum width=3.3cm, minimum height=9mm, align=center},
+   dep/.style={->, line width=0.7pt, black!60},
+   mdep/.style={<->, line width=0.7pt, black!60}]
+  \node[pk=cRag]  (rag) at (0,0)     {rag\\[-1pt]{\normalfont\scriptsize Phase 5}};
+  \node[pk=cKg]   (kg)  at (0,-2.4)  {knowledge\_graph\\[-1pt]{\normalfont\scriptsize Phase 5}};
+  \node[pk=cLlm]  (llm) at (5,0)     {llm\\[-1pt]{\normalfont\scriptsize Phase 4}};
+  \node[pk=cHyp]  (hyp) at (5,-2.4)  {hypotheses\\[-1pt]{\normalfont\scriptsize Phases 4, 6}};
+  \node[pk=cVal]  (val) at (5,-4.8)  {validation\\[-1pt]{\normalfont\scriptsize Phases 3, 6, 7}};
+  \node[pk=cPinn] (pinn) at (0,-4.8) {pinn\\[-1pt]{\normalfont\scriptsize Phase 3}};
+  \node[pk=cData] (data) at (0,-7.2) {data\\[-1pt]{\normalfont\scriptsize Phase 1}};
+  \node[pk=cEqd]  (eqd) at (10,-4.8) {equation\_discovery\\[-1pt]{\normalfont\scriptsize Phase 2}};
+  \node[pk=cEval] (ev)  at (10,-1.2) {evaluation\\[-1pt]{\normalfont\scriptsize Phase 7}};
+  \node[pk=cExp]  (exp) at (5,-7.2)  {experiments\\[-1pt]{\normalfont\scriptsize 02--11 scripts}};
+
+  \draw[mdep] (rag) -- (kg);
+  \draw[mdep] (pinn) -- (data);
+  \draw[mdep] (hyp) -- (val);
+  \draw[dep] (hyp) -- (kg);
+  \draw[dep] (hyp) -- (llm);
+  \draw[dep] (hyp) -- (pinn);
+  \draw[dep] (val) -- (pinn);
+  \draw[dep] (val) -- (eqd);
+  \draw[dep] (val.east) .. controls +(1.6,1.2) and +(1.0,-0.6) .. (llm.south east);
+  \draw[dep, cEval!80!black] (ev) -- (llm);
+  \draw[dep, cEval!80!black] (ev) -- (hyp);
+  \draw[dep, cEval!80!black] (ev) -- (eqd);
+  \draw[dep, cEval!80!black] (ev) -- (val);
+  \draw[dep, cEval!80!black] (ev.north) .. controls +(0,1.6) and +(1.5,1.2) .. (rag.north east);
+  \draw[dep, cEval!80!black, rounded corners=6pt] (ev.west) -- (2.4,-1.2) -- (kg.north east);
+  \node[font=\scriptsize, align=center, text width=4.4cm, below=2mm of exp]
+       {\fn{experiments/} imports all nine packages; \fn{tests/} imports what each phase tests};
+\end{tikzpicture}

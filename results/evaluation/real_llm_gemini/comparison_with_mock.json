@@ -1,0 +1,142 @@
+{
+  "mock": {
+    "provider": "MockLLMProvider",
+    "llm_candidates": [
+      "u_t = D*u_xx",
+      "u_t + c*u_x = 0",
+      "u_t = D*u_xx + r*u*(1 - u/K)",
+      "u_t + c*u_x = D*u_xx"
+    ],
+    "pool": {
+      "H1": "u_t = D*u_xx",
+      "H2": "u_t + c*u_x = 0",
+      "H3": "u_t = D*u_xx + r*u*(1 - u/K)",
+      "H4": "u_t + c*u_x = D*u_xx",
+      "K3": "u_t = r*u*(1-u/K)"
+    },
+    "status": {
+      "H1": "supported by the available observations and physics constraints",
+      "H2": "rejected under the tested conditions",
+      "H3": "supported by the available observations and physics constraints",
+      "H4": "supported by the available observations and physics constraints",
+      "K3": "rejected under the tested conditions"
+    },
+    "passed_physics_validation": [
+      "H1",
+      "H3",
+      "H4"
+    ],
+    "selected": "H1",
+    "selected_equation": "u_t = D*u_xx",
+    "params": {
+      "D": 0.10002120584249496
+    },
+    "heldout_val_rmse": {
+      "H1": 0.01214285495164107,
+      "H2": 0.2268834250350449,
+      "H3": 0.012172113875012207,
+      "H4": 0.012135069720070805,
+      "K3": 0.11764810015224154,
+      "MLP_data_only": 0.060894781031826425
+    },
+    "ood_rmse_noisy_obs": {
+      "H1": 0.011440580151687385,
+      "H2": 0.3248621076839268,
+      "H3": 0.012101215299187305,
+      "H4": 0.011770953084384054,
+      "K3": 0.1025888444343082,
+      "MLP_data_only": 0.07267243158169617,
+      "forward_solve_H1": 0.011288495016776999
+    },
+    "oracle": {
+      "note": "ORACLE evaluation on the synthetic benchmark -- computed AFTER selection, never used for it.",
+      "D_true": 0.1,
+      "selected_D_relative_error": 0.00021205842494959048,
+      "pinn_ood_rmse_vs_clean_field_t_gt_cutoff": {
+        "H1": 0.0018133925610189317,
+        "H2": 0.3337050572163649,
+        "H3": 0.003805487018879542,
+        "H4": 0.003082893031710461,
+        "K3": 0.09852706542189558,
+        "MLP_data_only": 0.07122661026319539
+      },
+      "forward_solve_rmse_vs_truth": {
+        "t_in_(cutoff,1.0]": 0.00032502604162279605,
+        "t_in_(1.0,t_end]_novel": 0.0002461208657525148
+      }
+    }
+  },
+  "gemini": {
+    "provider": "GeminiProvider",
+    "llm_candidates": [
+      "u_t = D * u_xx",
+      "u_t = D * u_xx - r * u",
+      "u_t + c * u_x = D * u_xx",
+      "u_t = D * u_xx + r * u * (1.0 - u / K)"
+    ],
+    "pool": {
+      "H1": "u_t = D * u_xx",
+      "H2": "u_t = D * u_xx - r * u",
+      "H3": "u_t + c * u_x = D * u_xx",
+      "H4": "u_t = D * u_xx + r * u * (1.0 - u / K)",
+      "K1": "u_t + c*u_x = 0",
+      "K3": "u_t = r*u*(1-u/K)"
+    },
+    "status": {
+      "H1": "supported by the available observations and physics constraints",
+      "H2": "supported by the available observations and physics constraints",
+      "H3": "supported by the available observations and physics constraints",
+      "H4": "supported by the available observations and physics constraints",
+      "K1": "rejected under the tested conditions",
+      "K3": "rejected under the tested conditions"
+    },
+    "passed_physics_validation": [
+      "H1",
+      "H2",
+      "H3",
+      "H4"
+    ],
+    "selected": "H1",
+    "selected_equation": "u_t = D * u_xx",
+    "params": {
+      "D": 0.10001096874475479
+    },
+    "heldout_val_rmse": {
+      "H1": 0.012176912355965725,
+      "H2": 0.012187821833561941,
+      "H3": 0.012178500288228797,
+      "H4": 0.012193039544239314,
+      "K1": 0.2266739924564961,
+      "K3": 0.11694310262580708,
+      "MLP_data_only": 0.021386321647735903
+    },
+    "ood_rmse_noisy_obs": {
+      "H1": 0.011596151490312123,
+      "H2": 0.011828803183530334,
+      "H3": 0.01148815394267762,
+      "H4": 0.011712124039429036,
+      "K1": 0.32473458919327536,
+      "K3": 0.10261918721876268,
+      "MLP_data_only": 0.017803231537347697,
+      "forward_solve_H1": 0.011287364166939472
+    },
+    "oracle": {
+      "note": "ORACLE evaluation on the synthetic benchmark -- computed AFTER selection, never used for it.",
+      "D_true": 0.1,
+      "selected_D_relative_error": 0.00010968744754785709,
+      "pinn_ood_rmse_vs_clean_field_t_gt_cutoff": {
+        "H1": 0.002006177044208626,
+        "H2": 0.002950094285941032,
+        "H3": 0.0017057803371298913,
+        "H4": 0.002494197885178662,
+        "K1": 0.33176959064683653,
+        "K3": 0.09899001706037672,
+        "MLP_data_only": 0.013890328049147204
+      },
+      "forward_solve_rmse_vs_truth": {
+        "t_in_(cutoff,1.0]": 0.0003511351981146005,
+        "t_in_(1.0,t_end]_novel": 0.0002701871084437925
+      }
+    }
+  }
+}

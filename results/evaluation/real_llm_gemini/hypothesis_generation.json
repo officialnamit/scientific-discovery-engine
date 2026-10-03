@@ -1,0 +1,80 @@
+{
+  "available": true,
+  "model": "gemini-3.5-flash-lite",
+  "results": [
+    {
+      "dataset": "diffusion_D0.1",
+      "truth_family": "diffusion",
+      "mode_a": [
+        "u_t = D * u_xx - gamma * u",
+        "u_t = D * u_xx + r * u * (1 - u)"
+      ],
+      "mode_a_families": [
+        "other",
+        "reaction-diffusion"
+      ],
+      "mode_b": [
+        "u_t = D*u_xx",
+        "u_t = D*u_xx - k*u"
+      ],
+      "mode_b_families": [
+        "diffusion",
+        "other"
+      ],
+      "schema_errors": [
+        0,
+        0
+      ],
+      "rag_changed_hypotheses": true,
+      "rag_changed_families": true
+    },
+    {
+      "dataset": "reacdiff_D0.05_r1.0_K1.0",
+      "truth_family": "reaction-diffusion",
+      "mode_a": [
+        "u_t = D*u_xx + r*u*(1 - u/K)"
+      ],
+      "mode_a_families": [
+        "reaction-diffusion"
+      ],
+      "mode_b": [],
+      "mode_b_families": [],
+      "schema_errors": [
+        0,
+        1
+      ],
+      "rag_changed_hypotheses": true,
+      "rag_changed_families": true
+    },
+    {
+      "dataset": "advdiff_c0.4_D0.02",
+      "truth_family": "advection-diffusion",
+      "mode_a": [
+        "u_t + v*u_x = D*u_xx",
+        "u_t + u*u_x = nu*u_xx",
+        "u_t = D*u_xx - k*u"
+      ],
+      "mode_a_families": [
+        "advection-diffusion",
+        "other",
+        "other"
+      ],
+      "mode_b": [
+        "u_t + c*u_x = D*u_xx",
+        "u_t + u*u_x = nu*u_xx",
+        "u_t + c*u_x = D*u_xx - k*u"
+      ],
+      "mode_b_families": [
+        "advection-diffusion",
+        "other",
+        "other"
+      ],
+      "schema_errors": [
+        0,
+        0
+      ],
+      "rag_changed_hypotheses": true,
+      "rag_changed_families": false
+    }
+  ]
+}
